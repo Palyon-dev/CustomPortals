@@ -1,0 +1,45 @@
+{
+  "schemaVersion": 1,
+  "id": "customportals",
+  "custom": {
+    "cardinal-components": [
+      "customportals:portals"
+    ]
+  },
+  "version": "1.0.0",
+
+  "name": "Custom Portals",
+  "description": "Build portals to anywhere out of any material!",
+  "authors": [
+    "Palyon"
+  ],
+  "contact": {
+    "homepage": "https://fabricmc.net/",
+    "sources": "https://github.com/FabricMC/fabric-example-mod"
+  },
+
+  "license": "CC0-1.0",
+  "icon": "assets/customportals/icon.png",
+
+  "environment": "*",
+  "entrypoints": {
+    "main": [
+      "dev.custom.portals.CustomPortals"
+    ],
+    "cardinal-components-world": [
+      "dev.custom.portals.CustomPortals"
+    ]
+  },
+  "mixins": [
+    "customportals.mixins.json"
+  ],
+
+  "depends": {
+    "fabricloader": ">=0.7.4",
+    "fabric": "*",
+    "minecraft": "1.16.x"
+  },
+  "suggests": {
+    "flamingo": "*"
+  }
+}

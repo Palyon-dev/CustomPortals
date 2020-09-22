@@ -1,0 +1,13 @@
+{
+    "variants": {
+      "axis=x": {
+        "model": "customportals:block/brown_portal_ns"
+      },
+      "axis=z": {
+        "model": "customportals:block/brown_portal_ew"
+      },
+      "axis=y": {
+        "model": "customportals:block/brown_portal_ud"
+      }
+    }
+}

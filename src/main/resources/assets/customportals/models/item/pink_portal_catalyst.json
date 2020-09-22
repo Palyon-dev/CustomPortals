@@ -1,0 +1,6 @@
+{
+    "parent":"item/generated",
+    "textures": {
+        "layer0": "customportals:item/pink_portal_catalyst"
+    }
+}

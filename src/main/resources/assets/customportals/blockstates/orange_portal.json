@@ -1,0 +1,13 @@
+{
+    "variants": {
+      "axis=x": {
+        "model": "customportals:block/orange_portal_ns"
+      },
+      "axis=z": {
+        "model": "customportals:block/orange_portal_ew"
+      },
+      "axis=y": {
+        "model": "customportals:block/orange_portal_ud"
+      }
+    }
+}
