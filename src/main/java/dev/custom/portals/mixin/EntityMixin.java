@@ -6,6 +6,7 @@ import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import dev.custom.portals.util.EntityMixinAccess;
 import dev.custom.portals.data.Portal;
@@ -15,6 +16,7 @@ import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.registry.RegistryKey;
+import net.minecraft.world.TeleportTarget;
 import net.minecraft.world.World;
 
 @Mixin(Entity.class)
@@ -32,7 +34,9 @@ public abstract class EntityMixin implements EntityMixinAccess {
     @Shadow
     public World world;
     @Shadow
-    protected BlockPos lastNetherPortalPosition;
+    public float yaw;
+    @Shadow
+    public float pitch;
 
     @Shadow
     public abstract boolean method_30230(); // returns true if netherPortalCooldown > 0, false otherwise
@@ -50,12 +54,27 @@ public abstract class EntityMixin implements EntityMixinAccess {
     public abstract Entity moveToWorld(ServerWorld destination);
     @Shadow 
     public abstract Vec3d getVelocity();
-    @Shadow
-    public abstract void setYaw(float yaw);
 
     @Inject(method = "baseTick", at = @At("TAIL"))
     public void baseTick(CallbackInfo ci) {
         this.tickCustomPortal();
+    }
+
+    @Inject(method = "getTeleportTarget", at = @At("HEAD"), cancellable = true)
+    protected void getTeleportTarget(ServerWorld destination, CallbackInfoReturnable<TeleportTarget> ci) {
+        if(this.inCustomPortal) {
+            BlockPos dest = destPortal.getSpawnPos();
+            double destX = dest.getX();
+            double destY = dest.getY();
+            double destZ = dest.getZ();
+            if(destPortal.width == 0)
+                destZ += 0.5;
+            if(destPortal.length == 0 || destPortal.length % 2 != 0)
+                destX += 0.5;
+            if(destPortal.width % 2 != 0) 
+                destZ -= 0.5;
+            ci.setReturnValue(new TeleportTarget(new Vec3d(destX, destY, destZ), this.getVelocity(), this.yaw, this.pitch));
+        }
     }
 
     @Unique
@@ -78,16 +97,6 @@ public abstract class EntityMixin implements EntityMixinAccess {
                 MinecraftServer minecraftServer = serverWorld.getServer();
                 if (!this.hasVehicle() && this.customPortalTime++ >= i && this.destPortal != null) {
                     this.world.getProfiler().push("portal");
-                    BlockPos dest = destPortal.getSpawnPos();
-                    double destX = dest.getX();
-                    double destY = dest.getY();
-                    double destZ = dest.getZ();
-                    if(destPortal.width == 0)
-                        destZ += 0.5;
-                    if(destPortal.length == 0 || destPortal.length % 2 != 0)
-                        destX += 0.5;
-                    if(destPortal.width % 2 != 0) 
-                        destZ -= 0.5;
                     this.customPortalTime = i;
                     this.method_30229();
                     String destDimensionId = destPortal.getDimensionId();
@@ -96,13 +105,24 @@ public abstract class EntityMixin implements EntityMixinAccess {
                             if(registryKey.getValue().toString().equals(destDimensionId)) {
                                 ServerWorld serverWorld2 = minecraftServer.getWorld(registryKey);
                                 if(serverWorld2 != null) {
-                                    this.lastNetherPortalPosition = destPortal.getLinked().getSpawnPos();
                                     this.moveToWorld(serverWorld2);
                                 }
                             }
                         }
                     }
-                    this.teleport(destX, destY, destZ);
+                    else {
+                        BlockPos dest = destPortal.getSpawnPos();
+                        double destX = dest.getX();
+                        double destY = dest.getY();
+                        double destZ = dest.getZ();
+                        if(destPortal.width == 0)
+                            destZ += 0.5;
+                        if(destPortal.length == 0 || destPortal.length % 2 != 0)
+                            destX += 0.5;
+                        if(destPortal.width % 2 != 0) 
+                            destZ -= 0.5;
+                        this.teleport(destX, destY, destZ);
+                    }
                     this.world.getProfiler().pop();
                 }
                 this.inCustomPortal = false;

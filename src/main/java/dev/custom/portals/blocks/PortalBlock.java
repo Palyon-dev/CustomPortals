@@ -17,6 +17,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.SpawnReason;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.particle.ParticleTypes;
@@ -101,7 +102,48 @@ public class PortalBlock extends Block {
          CustomPortals.PORTALS.get(world).unregisterPortal(portal);
          if(!world.isClient)
             CustomPortals.PORTALS.get(world).syncWithAll(((ServerWorld)world).getServer());
+         dropCatalyst(portal, world);
       }
+   }
+
+   private void dropCatalyst(Portal portal, World world) {
+      Item catalyst;
+      switch(this.getDefaultMaterialColor().id) {
+         case 29: catalyst = CustomPortals.BLACK_PORTAL_CATALYST;
+         break;
+         case 25: catalyst = CustomPortals.BLUE_PORTAL_CATALYST;
+         break;
+         case 26: catalyst = CustomPortals.BROWN_PORTAL_CATALYST;
+         break;
+         case 23: catalyst = CustomPortals.CYAN_PORTAL_CATALYST;
+         break;
+         case 21: catalyst = CustomPortals.GRAY_PORTAL_CATALYST;
+         break;
+         case 27: catalyst = CustomPortals.GREEN_PORTAL_CATALYST;
+         break;
+         case 17: catalyst = CustomPortals.LIGHT_BLUE_PORTAL_CATALYST;
+         break;
+         case 22: catalyst = CustomPortals.LIGHT_GRAY_PORTAL_CATALYST;
+         break;
+         case 19: catalyst = CustomPortals.LIME_PORTAL_CATALYST;
+         break;
+         case 16: catalyst = CustomPortals.MAGENTA_PORTAL_CATALYST;
+         break;
+         case 15: catalyst = CustomPortals.ORANGE_PORTAL_CATALYST;
+         break;
+         case 20: catalyst = CustomPortals.PINK_PORTAL_CATALYST;
+         break;
+         case 24: catalyst = CustomPortals.PURPLE_PORTAL_CATALYST;
+         break;
+         case 28: catalyst = CustomPortals.RED_PORTAL_CATALYST;
+         break;
+         case 8: catalyst = CustomPortals.WHITE_PORTAL_CATALYST;
+         break;
+         case 18: 
+         default: catalyst = CustomPortals.YELLOW_PORTAL_CATALYST;
+      }
+      ItemStack itemStack = new ItemStack(catalyst);
+      Block.dropStack((World) world, portal.getSpawnPos(), itemStack);
    }
    
    @Override
@@ -115,6 +157,7 @@ public class PortalBlock extends Block {
             CustomPortals.PORTALS.get((World)world).unregisterPortal(portal);
             if(!((World)world).isClient)
                CustomPortals.PORTALS.get((World)world).syncWithAll(((ServerWorld)world).getServer());
+            dropCatalyst(portal, (World)world);
          }
          return Blocks.AIR.getDefaultState();
       }
