@@ -6,7 +6,7 @@
       "customportals:portals"
     ]
   },
-  "version": "1.0.0",
+  "version": "1.1.0",
 
   "name": "Custom Portals",
   "description": "Build portals to anywhere out of any material!",
@@ -14,8 +14,8 @@
     "Palyon"
   ],
   "contact": {
-    "homepage": "https://fabricmc.net/",
-    "sources": "https://github.com/FabricMC/fabric-example-mod"
+    "homepage": "https://www.curseforge.com/minecraft/mc-mods/custom-portals",
+    "sources": "https://github.com/Palyon-dev/CustomPortals"
   },
 
   "license": "CC0-1.0",

@@ -114,37 +114,37 @@ public class CustomPortals implements ModInitializer, WorldComponentInitializer 
                         return 11;
                     }));
     public static final Item BLACK_PORTAL_CATALYST = new PortalCatalyst(
-            new Item.Settings().maxCount(1).group(PORTALS_ITEM_GROUP), BLACK_PORTAL);
+            new Item.Settings().maxCount(16).group(PORTALS_ITEM_GROUP), BLACK_PORTAL);
     public static final Item BLUE_PORTAL_CATALYST = new PortalCatalyst(
-            new Item.Settings().maxCount(1).group(PORTALS_ITEM_GROUP), BLUE_PORTAL);
+            new Item.Settings().maxCount(16).group(PORTALS_ITEM_GROUP), BLUE_PORTAL);
     public static final Item BROWN_PORTAL_CATALYST = new PortalCatalyst(
-            new Item.Settings().maxCount(1).group(PORTALS_ITEM_GROUP), BROWN_PORTAL);
+            new Item.Settings().maxCount(16).group(PORTALS_ITEM_GROUP), BROWN_PORTAL);
     public static final Item CYAN_PORTAL_CATALYST = new PortalCatalyst(
-            new Item.Settings().maxCount(1).group(PORTALS_ITEM_GROUP), CYAN_PORTAL);
+            new Item.Settings().maxCount(16).group(PORTALS_ITEM_GROUP), CYAN_PORTAL);
     public static final Item GRAY_PORTAL_CATALYST = new PortalCatalyst(
-            new Item.Settings().maxCount(1).group(PORTALS_ITEM_GROUP), GRAY_PORTAL);
+            new Item.Settings().maxCount(16).group(PORTALS_ITEM_GROUP), GRAY_PORTAL);
     public static final Item GREEN_PORTAL_CATALYST = new PortalCatalyst(
-            new Item.Settings().maxCount(1).group(PORTALS_ITEM_GROUP), GREEN_PORTAL);
+            new Item.Settings().maxCount(16).group(PORTALS_ITEM_GROUP), GREEN_PORTAL);
     public static final Item LIGHT_BLUE_PORTAL_CATALYST = new PortalCatalyst(
-            new Item.Settings().maxCount(1).group(PORTALS_ITEM_GROUP), LIGHT_BLUE_PORTAL);
+            new Item.Settings().maxCount(16).group(PORTALS_ITEM_GROUP), LIGHT_BLUE_PORTAL);
     public static final Item LIGHT_GRAY_PORTAL_CATALYST = new PortalCatalyst(
-            new Item.Settings().maxCount(1).group(PORTALS_ITEM_GROUP), LIGHT_GRAY_PORTAL);
+            new Item.Settings().maxCount(16).group(PORTALS_ITEM_GROUP), LIGHT_GRAY_PORTAL);
     public static final Item LIME_PORTAL_CATALYST = new PortalCatalyst(
-            new Item.Settings().maxCount(1).group(PORTALS_ITEM_GROUP), LIME_PORTAL);
+            new Item.Settings().maxCount(16).group(PORTALS_ITEM_GROUP), LIME_PORTAL);
     public static final Item MAGENTA_PORTAL_CATALYST = new PortalCatalyst(
-            new Item.Settings().maxCount(1).group(PORTALS_ITEM_GROUP), MAGENTA_PORTAL);
+            new Item.Settings().maxCount(16).group(PORTALS_ITEM_GROUP), MAGENTA_PORTAL);
     public static final Item ORANGE_PORTAL_CATALYST = new PortalCatalyst(
-            new Item.Settings().maxCount(1).group(PORTALS_ITEM_GROUP), ORANGE_PORTAL);
+            new Item.Settings().maxCount(16).group(PORTALS_ITEM_GROUP), ORANGE_PORTAL);
     public static final Item PINK_PORTAL_CATALYST = new PortalCatalyst(
-            new Item.Settings().maxCount(1).group(PORTALS_ITEM_GROUP), PINK_PORTAL);
+            new Item.Settings().maxCount(16).group(PORTALS_ITEM_GROUP), PINK_PORTAL);
     public static final Item PURPLE_PORTAL_CATALYST = new PortalCatalyst(
-            new Item.Settings().maxCount(1).group(PORTALS_ITEM_GROUP), PURPLE_PORTAL);
+            new Item.Settings().maxCount(16).group(PORTALS_ITEM_GROUP), PURPLE_PORTAL);
     public static final Item RED_PORTAL_CATALYST = new PortalCatalyst(
-            new Item.Settings().maxCount(1).group(PORTALS_ITEM_GROUP), RED_PORTAL);
+            new Item.Settings().maxCount(16).group(PORTALS_ITEM_GROUP), RED_PORTAL);
     public static final Item WHITE_PORTAL_CATALYST = new PortalCatalyst(
-            new Item.Settings().maxCount(1).group(PORTALS_ITEM_GROUP), WHITE_PORTAL);
+            new Item.Settings().maxCount(16).group(PORTALS_ITEM_GROUP), WHITE_PORTAL);
     public static final Item YELLOW_PORTAL_CATALYST = new PortalCatalyst(
-            new Item.Settings().maxCount(1).group(PORTALS_ITEM_GROUP), YELLOW_PORTAL);
+            new Item.Settings().maxCount(16).group(PORTALS_ITEM_GROUP), YELLOW_PORTAL);
 
     @Override
     public void onInitialize() {
