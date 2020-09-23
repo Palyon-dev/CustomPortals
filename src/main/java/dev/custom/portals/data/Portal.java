@@ -9,15 +9,16 @@ public class Portal {
 
     public final int length;
     public final int width;
-
-    private String frameId;
-    private String dimensionId;
-    private MaterialColor color;
-    private BlockPos spawnPos;
-    private List<BlockPos> portalBlocks;
+    private final String frameId;
+    private final String dimensionId;
+    private final MaterialColor color;
+    private final BlockPos spawnPos;
+    private final List<BlockPos> portalBlocks;
+    
     private Portal linked;
 
-    public Portal(String frameId, String dimensionId, MaterialColor color, BlockPos spawnPos, List<BlockPos> portalBlocks, int length, int width) {
+    public Portal(final String frameId, final String dimensionId, final MaterialColor color, final BlockPos spawnPos,
+            final List<BlockPos> portalBlocks, final int length, final int width) {
         this.frameId = frameId;
         this.dimensionId = dimensionId;
         this.color = color;
@@ -27,23 +28,43 @@ public class Portal {
         this.width = width;
     }
 
-    public String getFrameId() { return frameId; }
+    public String getFrameId() {
+        return frameId;
+    }
 
-    public String getDimensionId() { return dimensionId; }
+    public String getDimensionId() {
+        return dimensionId;
+    }
 
-    public MaterialColor getColor() { return color; }
+    public MaterialColor getColor() {
+        return color;
+    }
 
-    public Portal getLinked() { return linked; }
+    public Portal getLinked() {
+        return linked;
+    }
 
-    public BlockPos getSpawnPos() { return spawnPos; }
+    public BlockPos getSpawnPos() {
+        return spawnPos;
+    }
 
-    public List<BlockPos> getPortalBlocks() { return portalBlocks; }
+    public List<BlockPos> getPortalBlocks() {
+        return portalBlocks;
+    }
 
-    public boolean hasLinked() { return linked != null; }
+    public boolean hasLinked() {
+        return linked != null;
+    }
 
-    public void setLinked(Portal portal) { linked = portal; }
+    public boolean isInterdimensional() {
+        return hasLinked() && !dimensionId.equals(linked.getDimensionId());
+    }
 
-    public void tryLink(Portal portal) {
+    public void setLinked(final Portal portal) {
+        linked = portal;
+    }
+
+    public void tryLink(final Portal portal) {
         if(portal.getColor() == color && portal.getFrameId().equals(frameId) && portal != this) {
             linked = portal;
             portal.setLinked(this);

@@ -65,7 +65,7 @@ public class PortalBlock extends Block {
       Portal portal = CustomPortals.PORTALS.get(world).getPortalFromPos(pos);
       if(portal == null)
          return;
-      if(portal.hasLinked() && !portal.getLinked().getDimensionId().equals(portal.getDimensionId())) {
+      if(portal.isInterdimensional()) {
          if (portal.getLinked().getDimensionId().equals("minecraft:the_nether") && world.getDimension().isNatural() && world.getGameRules().getBoolean(GameRules.DO_MOB_SPAWNING) && random.nextInt(2000) < world.getDifficulty().getId()) {
             while(world.getBlockState(pos).isOf(this)) {
                pos = pos.down();
@@ -124,9 +124,8 @@ public class PortalBlock extends Block {
    @Override
    public void onEntityCollision(BlockState state, World world, BlockPos pos, Entity entity) {
       Portal portal = CustomPortals.PORTALS.get(world).getPortalFromPos(pos);
-      if(portal != null && entity.canUsePortals()) {
+      if(portal != null && entity.canUsePortals())
          ((EntityMixinAccess)entity).setInCustomPortal(portal);
-      }
 
       // For debugging purposes
       /*(if(portal != null) {
@@ -161,8 +160,8 @@ public class PortalBlock extends Block {
             f = (double)pos.getZ() + 0.5D + 0.25D * (double)k;
             j = (double)(random.nextFloat() * 2.0F * (float)k);
          }
-         
-         if(CustomPortals.PORTALS.get(world).getPortalFromPos(pos).hasLinked())
+         Portal portal = CustomPortals.PORTALS.get(world).getPortalFromPos(pos);
+         if(portal != null && portal.hasLinked())
             world.addParticle(ParticleTypes.PORTAL, d, e, f, g, h, j);
       }
    

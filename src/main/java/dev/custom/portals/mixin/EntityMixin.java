@@ -10,8 +10,6 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import dev.custom.portals.util.EntityMixinAccess;
 import dev.custom.portals.data.Portal;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.BlockPos;
@@ -35,8 +33,6 @@ public abstract class EntityMixin implements EntityMixinAccess {
     public World world;
     @Shadow
     protected BlockPos lastNetherPortalPosition;
-    @Shadow
-    public float yaw;
 
     @Shadow
     public abstract boolean method_30230(); // returns true if netherPortalCooldown > 0, false otherwise
@@ -60,12 +56,6 @@ public abstract class EntityMixin implements EntityMixinAccess {
     @Inject(method = "baseTick", at = @At("TAIL"))
     public void baseTick(CallbackInfo ci) {
         this.tickCustomPortal();
-    }
-
-    @Inject(method = "refreshPositionAndAngles(DDDFF)V", at = @At("TAIL"))
-    public void refreshPositionAndAngles(double x, double y, double z, float yaw, float pitch, CallbackInfo ci) {
-        if(this.inCustomPortal)
-            this.yaw = 0;
     }
 
     @Unique
@@ -92,11 +82,9 @@ public abstract class EntityMixin implements EntityMixinAccess {
                     double destX = dest.getX();
                     double destY = dest.getY();
                     double destZ = dest.getZ();
-                    if(destPortal.length == 0)
-                        destX += 0.5;
                     if(destPortal.width == 0)
                         destZ += 0.5;
-                    if(destPortal.length % 2 != 0)
+                    if(destPortal.length == 0 || destPortal.length % 2 != 0)
                         destX += 0.5;
                     if(destPortal.width % 2 != 0) 
                         destZ -= 0.5;
