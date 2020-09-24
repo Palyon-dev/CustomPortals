@@ -6,7 +6,7 @@
       "customportals:portals"
     ]
   },
-  "version": "1.2.0",
+  "version": "1.2.1",
 
   "name": "Custom Portals",
   "description": "Build portals to anywhere out of any material!",
@@ -24,6 +24,9 @@
   "environment": "*",
   "entrypoints": {
     "main": [
+      "dev.custom.portals.CustomPortals"
+    ],
+    "client": [
       "dev.custom.portals.CustomPortals"
     ],
     "cardinal-components-world": [

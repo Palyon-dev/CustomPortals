@@ -8,6 +8,7 @@ import dev.onyxstudios.cca.api.v3.world.WorldComponentFactoryRegistry;
 import dev.onyxstudios.cca.api.v3.world.WorldComponentInitializer;
 import nerdhub.cardinal.components.api.ComponentRegistry;
 import nerdhub.cardinal.components.api.ComponentType;
+import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.blockrenderlayer.v1.BlockRenderLayerMap;
 import net.fabricmc.fabric.api.client.itemgroup.FabricItemGroupBuilder;
@@ -24,7 +25,7 @@ import net.minecraft.sound.BlockSoundGroup;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.Registry;
 
-public class CustomPortals implements ModInitializer, WorldComponentInitializer {
+public class CustomPortals implements ModInitializer, ClientModInitializer, WorldComponentInitializer {
 
     public static final ComponentType<BasePortalComponent> PORTALS = ComponentRegistry.INSTANCE
             .registerIfAbsent(new Identifier("customportals:portals"), BasePortalComponent.class);
@@ -190,6 +191,10 @@ public class CustomPortals implements ModInitializer, WorldComponentInitializer 
         Registry.register(Registry.BLOCK, new Identifier("customportals", "red_portal"), RED_PORTAL);
         Registry.register(Registry.BLOCK, new Identifier("customportals", "white_portal"), WHITE_PORTAL);
         Registry.register(Registry.BLOCK, new Identifier("customportals", "yellow_portal"), YELLOW_PORTAL);
+    }
+
+    @Override
+    public void onInitializeClient() {
         BlockRenderLayerMap.INSTANCE.putBlock(CustomPortals.BLACK_PORTAL, RenderLayer.getTranslucent());
         BlockRenderLayerMap.INSTANCE.putBlock(CustomPortals.BLUE_PORTAL, RenderLayer.getTranslucent());
         BlockRenderLayerMap.INSTANCE.putBlock(CustomPortals.BROWN_PORTAL, RenderLayer.getTranslucent());
@@ -212,4 +217,5 @@ public class CustomPortals implements ModInitializer, WorldComponentInitializer 
     public void registerWorldComponentFactories(WorldComponentFactoryRegistry registry) {
         registry.register(PORTALS, WorldPortals.class, WorldPortals::new);
     }
+
 }

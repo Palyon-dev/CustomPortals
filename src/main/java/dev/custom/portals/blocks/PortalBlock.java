@@ -143,7 +143,7 @@ public class PortalBlock extends Block {
          default: catalyst = CustomPortals.YELLOW_PORTAL_CATALYST;
       }
       ItemStack itemStack = new ItemStack(catalyst);
-      Block.dropStack((World) world, portal.getSpawnPos(), itemStack);
+      Block.dropStack(world, portal.getSpawnPos(), itemStack);
    }
    
    @Override
@@ -183,6 +183,10 @@ public class PortalBlock extends Block {
       if (random.nextInt(100) == 0) {
          world.playSound((double)pos.getX() + 0.5D, (double)pos.getY() + 0.5D, (double)pos.getZ() + 0.5D, SoundEvents.BLOCK_PORTAL_AMBIENT, SoundCategory.BLOCKS, 0.5F, random.nextFloat() * 0.4F + 0.8F, false);
       }
+
+      Portal portal = CustomPortals.PORTALS.get(world).getPortalFromPos(pos);
+      if(portal == null || !portal.hasLinked())
+         return;
   
       for(int i = 0; i < 4; ++i) {
          double d = (double)pos.getX() + random.nextDouble();
@@ -192,7 +196,7 @@ public class PortalBlock extends Block {
          double h = ((double)random.nextFloat() - 0.5D) * 0.5D;
          double j = ((double)random.nextFloat() - 0.5D) * 0.5D;
          int k = random.nextInt(2) * 2 - 1;
-         if (!world.getBlockState(pos.west()).isOf(this) && !world.getBlockState(pos.east()).isOf(this)) {
+         if (!world.getBlockState(pos.west()).isOf(this) && !world.getBlockState(pos.east()).isOf(this) && portal.length != 1) {
             d = (double)pos.getX() + 0.5D + 0.25D * (double)k;
             g = (double)(random.nextFloat() * 2.0F * (float)k);
          } 
@@ -203,9 +207,7 @@ public class PortalBlock extends Block {
             f = (double)pos.getZ() + 0.5D + 0.25D * (double)k;
             j = (double)(random.nextFloat() * 2.0F * (float)k);
          }
-         Portal portal = CustomPortals.PORTALS.get(world).getPortalFromPos(pos);
-         if(portal != null && portal.hasLinked())
-            world.addParticle(ParticleTypes.PORTAL, d, e, f, g, h, j);
+         world.addParticle(ParticleTypes.PORTAL, d, e, f, g, h, j);
       }
    
    }
