@@ -61,7 +61,7 @@ public abstract class ServerPlayerEntityMixin extends PlayerEntity {
         super(world, pos, yaw, profile);
     }
 
-    /* This is necessary to avoid unwanted consequences of using the normal moveToWorld(),
+    /* This is necessary to avoid unwanted side effects from using the normal moveToWorld(),
      * such as how moving from the end to the overworld causes the credits to play and
      * resets the player's position to the world spawn. Most of this is simply copied from
      * vanilla code.

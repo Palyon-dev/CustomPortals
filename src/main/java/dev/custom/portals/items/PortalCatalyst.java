@@ -284,12 +284,6 @@ public class PortalCatalyst extends Item {
     public ActionResult useOnBlock(ItemUsageContext ctx) {
         PlayerEntity playerEntity = ctx.getPlayer();
         World world = ctx.getWorld();
-        /*if(playerEntity.isSneaking()) {
-            CustomPortals.PORTALS.get(world).clearPortals();
-            if(!world.isClient)
-                CustomPortals.PORTALS.get(world).syncWithAll(((ServerWorld)world).getServer());
-            return ActionResult.SUCCESS;
-        }*/
         BlockPos pos = new BlockPos(ctx.getHitPos());
         Direction dir = ctx.getSide();
         if(dir == Direction.NORTH)

@@ -73,6 +73,11 @@ public abstract class EntityMixin implements EntityMixinAccess {
                 destX += 0.5;
             if(destPortal.width % 2 != 0) 
                 destZ -= 0.5;
+            /* For some reason, when the player is going from the Overworld to the End, the Y coordinate somehow gets
+             * decreased by 1. I have no idea why this happens or how to fix it directly, so this is here to correct it.
+             */
+            if(destPortal.getDimensionId().equals("minecraft:the_end") && this.world.getRegistryKey() == World.OVERWORLD)
+                destY += 1.0;
             ci.setReturnValue(new TeleportTarget(new Vec3d(destX, destY, destZ), this.getVelocity(), this.yaw, this.pitch));
         }
     }

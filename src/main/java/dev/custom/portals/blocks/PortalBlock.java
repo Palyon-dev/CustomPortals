@@ -207,7 +207,39 @@ public class PortalBlock extends Block {
             f = (double)pos.getZ() + 0.5D + 0.25D * (double)k;
             j = (double)(random.nextFloat() * 2.0F * (float)k);
          }
-         world.addParticle(ParticleTypes.PORTAL, d, e, f, g, h, j);
+         switch(this.getDefaultMaterialColor().id) {
+            case 29: world.addParticle(CustomPortals.BLACK_PORTAL_PARTICLE, d, e, f, g, h, j);
+            break;
+            case 25: world.addParticle(CustomPortals.BLUE_PORTAL_PARTICLE, d, e, f, g, h, j);
+            break;
+            case 26: world.addParticle(CustomPortals.BROWN_PORTAL_PARTICLE, d, e, f, g, h, j);
+            break;
+            case 23: world.addParticle(CustomPortals.CYAN_PORTAL_PARTICLE, d, e, f, g, h, j);
+            break;
+            case 21: world.addParticle(CustomPortals.GRAY_PORTAL_PARTICLE, d, e, f, g, h, j);
+            break;
+            case 27: world.addParticle(CustomPortals.GREEN_PORTAL_PARTICLE, d, e, f, g, h, j);
+            break;
+            case 17: world.addParticle(CustomPortals.LIGHT_BLUE_PORTAL_PARTICLE, d, e, f, g, h, j);
+            break;
+            case 22: world.addParticle(CustomPortals.LIGHT_GRAY_PORTAL_PARTICLE, d, e, f, g, h, j);
+            break;
+            case 19: world.addParticle(CustomPortals.LIME_PORTAL_PARTICLE, d, e, f, g, h, j);
+            break;
+            case 16: world.addParticle(CustomPortals.MAGENTA_PORTAL_PARTICLE, d, e, f, g, h, j);
+            break;
+            case 15: world.addParticle(CustomPortals.ORANGE_PORTAL_PARTICLE, d, e, f, g, h, j);
+            break;
+            case 20: world.addParticle(CustomPortals.PINK_PORTAL_PARTICLE, d, e, f, g, h, j);
+            break;
+            case 24: world.addParticle(ParticleTypes.PORTAL, d, e, f, g, h, j);
+            break;
+            case 28: world.addParticle(CustomPortals.RED_PORTAL_PARTICLE, d, e, f, g, h, j);
+            break;
+            case 8: world.addParticle(CustomPortals.WHITE_PORTAL_PARTICLE, d, e, f, g, h, j);
+            break;
+            case 18: world.addParticle(CustomPortals.YELLOW_PORTAL_PARTICLE, d, e, f, g, h, j);
+         }
       }
    
    }
