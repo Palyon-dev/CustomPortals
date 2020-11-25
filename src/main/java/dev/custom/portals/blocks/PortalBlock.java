@@ -102,7 +102,7 @@ public class PortalBlock extends Block {
          CustomPortals.PORTALS.get(world).unregisterPortal(portal);
          if(!world.isClient)
             CustomPortals.PORTALS.get(world).syncWithAll(((ServerWorld)world).getServer());
-         dropCatalyst(portal, world);
+         //dropCatalyst(portal, world);
       }
    }
 
@@ -169,9 +169,8 @@ public class PortalBlock extends Block {
       Portal portal = CustomPortals.PORTALS.get(world).getPortalFromPos(pos);
       if(portal != null && entity.canUsePortals())
          ((EntityMixinAccess)entity).setInCustomPortal(portal);
-
       // For debugging purposes
-      /*(if(portal != null) {
+      /*if(portal != null) {
          if(portal.hasLinked())
             System.out.println("Linked Portal at " + portal.getLinked().getSpawnPos().getX() + ", " + portal.getLinked().getSpawnPos().getY() + ", " + portal.getLinked().getSpawnPos().getZ());
          else System.out.println("Portal is not linked!");
@@ -187,7 +186,6 @@ public class PortalBlock extends Block {
       Portal portal = CustomPortals.PORTALS.get(world).getPortalFromPos(pos);
       if(portal == null || !portal.hasLinked())
          return;
-  
       for(int i = 0; i < 4; ++i) {
          double d = (double)pos.getX() + random.nextDouble();
          double e = (double)pos.getY() + random.nextDouble();

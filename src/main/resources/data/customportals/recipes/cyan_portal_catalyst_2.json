@@ -1,0 +1,60 @@
+{
+    "type": "minecraft:crafting_shapeless",
+    "group": "portal_catalyst",
+    "ingredients": [
+        [
+            {
+                "item":"customportals:black_portal_catalyst"
+            },
+            {
+                "item":"customportals:blue_portal_catalyst"
+            },
+            {
+                "item":"customportals:brown_portal_catalyst"
+            },
+            {
+                "item":"customportals:gray_portal_catalyst"
+            },
+            {
+                "item":"customportals:green_portal_catalyst"
+            },
+            {
+                "item":"customportals:light_blue_portal_catalyst"
+            },
+            {
+                "item":"customportals:light_gray_portal_catalyst"
+            },
+            {
+                "item":"customportals:lime_portal_catalyst"
+            },
+            {
+                "item":"customportals:magenta_portal_catalyst"
+            },
+            {
+                "item":"customportals:orange_portal_catalyst"
+            },
+            {
+                "item":"customportals:pink_portal_catalyst"
+            },
+            {
+                "item":"customportals:purple_portal_catalyst"
+            },
+            {
+                "item":"customportals:red_portal_catalyst"
+            },
+            {
+                "item":"customportals:white_portal_catalyst"
+            },
+            {
+                "item":"customportals:yellow_portal_catalyst"
+            }
+        ],
+        {
+            "item": "minecraft:cyan_dye"
+        }
+    ],
+    "result": 
+        { 
+            "item": "customportals:cyan_portal_catalyst"
+        }
+}
