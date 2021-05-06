@@ -1,24 +1,17 @@
 package dev.custom.portals.data;
 
 import dev.custom.portals.CustomPortals;
-import nerdhub.cardinal.components.api.ComponentType;
-import nerdhub.cardinal.components.api.util.sync.WorldSyncedComponent;
+import dev.onyxstudios.cca.api.v3.component.sync.AutoSyncedComponent;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.world.World;
 
-public class WorldPortals extends PortalComponent implements WorldSyncedComponent {
+public class WorldPortals extends PortalComponent implements AutoSyncedComponent {
     private World world;
 
     public WorldPortals(World world) { this.world = world; }
 
-    @Override
     public World getWorld() { return world; }
-
-    @Override
-    public ComponentType<?> getComponentType() {
-        return (ComponentType<BasePortalComponent>)CustomPortals.PORTALS;
-    }
 
     @Override
     public void syncWithAll(MinecraftServer server) {

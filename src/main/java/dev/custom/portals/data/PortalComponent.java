@@ -42,7 +42,7 @@ public class PortalComponent implements BasePortalComponent {
     }
 
     @Override
-    public void fromTag(CompoundTag tag) {
+    public void readFromNbt(CompoundTag tag) {
         ListTag portalData = tag.getList("portals", 10);
         for(int i = 0; i < portalData.size(); i++) {
             CompoundTag curTag = portalData.getCompound(i);
@@ -64,7 +64,7 @@ public class PortalComponent implements BasePortalComponent {
     }
 
     @Override
-    public CompoundTag toTag(CompoundTag tag) {
+    public void writeToNbt(CompoundTag tag) {
         ListTag portalData = new ListTag();
         for(Portal curPortal : portalRegistry.getPortals()) {
             CompoundTag curTag = new CompoundTag();
@@ -88,7 +88,6 @@ public class PortalComponent implements BasePortalComponent {
             portalData.add(curTag);
         }
         tag.put("portals", portalData);
-        return tag;
     }
     
     @Override

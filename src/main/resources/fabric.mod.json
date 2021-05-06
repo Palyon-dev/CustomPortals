@@ -6,7 +6,7 @@
       "customportals:portals"
     ]
   },
-  "version": "1.3.0",
+  "version": "1.4.1",
 
   "name": "Custom Portals",
   "description": "Build portals to anywhere out of any material!",
@@ -15,7 +15,8 @@
   ],
   "contact": {
     "homepage": "https://www.curseforge.com/minecraft/mc-mods/custom-portals",
-    "sources": "https://github.com/Palyon-dev/CustomPortals"
+    "sources": "https://github.com/Palyon-dev/CustomPortals",
+    "issues": "https://github.com/Palyon-dev/CustomPortals/issues"
   },
 
   "license": "CC0-1.0",

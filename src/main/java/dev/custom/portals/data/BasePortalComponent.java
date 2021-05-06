@@ -1,10 +1,10 @@
 package dev.custom.portals.data;
 
-import nerdhub.cardinal.components.api.component.Component;
+import dev.onyxstudios.cca.api.v3.component.ComponentV3;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.math.BlockPos;
 
-public interface BasePortalComponent extends Component {
+public interface BasePortalComponent extends ComponentV3 {
     PortalRegistry getPortalRegistry();
     Portal getPortalFromPos(BlockPos pos);
     void setPortalRegistry(PortalRegistry portalRegistry);

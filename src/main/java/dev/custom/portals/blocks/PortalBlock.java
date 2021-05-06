@@ -7,7 +7,6 @@ import dev.custom.portals.util.EntityMixinAccess;
 import dev.custom.portals.data.Portal;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.minecraft.AreaHelper;
 import net.minecraft.block.AbstractBlock;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
@@ -35,6 +34,7 @@ import net.minecraft.world.BlockView;
 import net.minecraft.world.GameRules;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldAccess;
+import net.minecraft.world.dimension.AreaHelper;
 import net.minecraft.server.world.ServerWorld;
 
 public class PortalBlock extends Block {
@@ -75,7 +75,7 @@ public class PortalBlock extends Block {
             if (world.getBlockState(pos).allowsSpawning(world, pos, EntityType.ZOMBIFIED_PIGLIN)) {
                Entity entity = EntityType.ZOMBIFIED_PIGLIN.spawn(world, (CompoundTag)null, (Text)null, (PlayerEntity)null, pos.up(), SpawnReason.STRUCTURE, false, false);
                if (entity != null) {
-                  entity.method_30229();
+                  entity.resetNetherPortalCooldown();
                }
             }
          }
@@ -87,7 +87,7 @@ public class PortalBlock extends Block {
             if (world.getBlockState(pos).allowsSpawning(world, pos, EntityType.ENDERMAN)) {
                Entity entity = EntityType.ENDERMAN.spawn(world, (CompoundTag)null, (Text)null, (PlayerEntity)null, pos.up(), SpawnReason.STRUCTURE, false, false);
                if (entity != null) {
-                  entity.method_30229();
+                  entity.resetNetherPortalCooldown();
                }
             }
          }
