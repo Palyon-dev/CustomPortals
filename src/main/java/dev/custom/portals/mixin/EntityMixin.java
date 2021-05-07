@@ -11,6 +11,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import dev.custom.portals.util.EntityMixinAccess;
 import dev.custom.portals.data.Portal;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.BlockPos;
@@ -42,8 +43,8 @@ public abstract class EntityMixin implements EntityMixinAccess {
     public abstract boolean method_30230(); // returns true if netherPortalCooldown > 0, false otherwise
     @Shadow
     public abstract void method_30229(); // sets netherPortalCooldown to value returned by getDefaultNetherPortalCooldown()
-    @Shadow
-    public abstract int getMaxNetherPortalTime();
+    //@Shadow
+    //public abstract int getMaxNetherPortalTime();
     @Shadow
     protected abstract void tickNetherPortalCooldown();
     @Shadow
@@ -96,7 +97,10 @@ public abstract class EntityMixin implements EntityMixinAccess {
     @Unique
     public void tickCustomPortal() {
         if (this.world instanceof ServerWorld) {
-            int i = this.getMaxNetherPortalTime();
+            int i; 
+            if ((Entity)((Object)this) instanceof PlayerEntity)
+                i = ((PlayerEntity)((Object)this)).abilities.invulnerable ? 1 : 80;
+            else i = 0;
             ServerWorld serverWorld = (ServerWorld)this.world;
             if (this.inCustomPortal) {
                 MinecraftServer minecraftServer = serverWorld.getServer();
