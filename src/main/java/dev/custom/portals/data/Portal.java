@@ -147,14 +147,14 @@ public class Portal {
                         return;
                     if (portal.getDimensionId().equals("minecraft:the_nether")) {
                         int translatedX = portal.getSpawnPos().getX() * 8;
-                        int translatedZ = portal.getSpawnPos().getX() * 8;
+                        int translatedZ = portal.getSpawnPos().getZ() * 8;
                         BlockPos translatedSpawnPos = new BlockPos(new Vec3d(
                             (double)translatedX, (double)portal.getSpawnPos().getY(), (double)translatedZ));
                         distance = distance(spawnPos, translatedSpawnPos);
                     }
                     else if (this.dimensionId.equals("minecraft:the_nether")) {
                         int translatedX = spawnPos.getX() * 8;
-                        int translatedZ = spawnPos.getX() * 8;
+                        int translatedZ = spawnPos.getZ() * 8;
                         BlockPos translatedSpawnPos = new BlockPos(new Vec3d(
                             (double)translatedX, (double)spawnPos.getY(), (double)translatedZ));
                         distance = distance(translatedSpawnPos, portal.getSpawnPos());
