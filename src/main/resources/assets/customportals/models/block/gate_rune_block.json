@@ -1,0 +1,16 @@
+{
+    "textures": {
+        "texture":"customportals:block/gate_rune_block",
+        "particle": "#texture"
+    },
+    "elements": [
+        {
+            "from": [1, 0, 1],
+            "to": [15, 0.1, 15],
+            "faces": {
+                "down":  { "uv": [ 15,  1, 1, 15 ], "texture": "#texture", "cullface": "down" },
+                "up":    { "uv": [ 15, 15, 1,  1 ], "texture": "#texture" }
+            }
+        }
+    ]
+}

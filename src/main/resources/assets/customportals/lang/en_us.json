@@ -15,5 +15,20 @@
     "item.customportals.brown_portal_catalyst": "Portal Catalyst (Brown)",
     "item.customportals.green_portal_catalyst": "Portal Catalyst (Green)",
     "item.customportals.red_portal_catalyst": "Portal Catalyst (Red)",
-    "itemGroup.customportals.general": "Portal Catalysts"
+    "item.customportals.haste_rune.tooltip": "Allows for instantaneous portal travel",
+    "item.customportals.gate_rune.tooltip": "Allows portals to link across dimensions",
+    "item.customportals.weak_enhancer_rune.tooltip": "Expands portal range to %d blocks",
+    "item.customportals.strong_enhancer_rune.tooltip": "Expands portal range to %d blocks",
+    "item.customportals.infinity_rune.tooltip": "Expands portal range indefinitely",
+    "block.customportals.haste_rune_block": "Haste Rune",
+    "block.customportals.gate_rune_block": "Gate Rune",
+    "block.customportals.weak_enhancer_rune_block": "Enhancer Rune",
+    "block.customportals.strong_enhancer_rune_block": "Strong Enhancer Rune",
+    "block.customportals.infinity_rune_block": "Infinity Rune",
+    "itemGroup.customportals.general": "Custom Portals",
+    "config.customportals.cPSettings.portals_always_unlimited": "Portals Always Have Unlimited Range",
+    "config.customportals.cPSettings.default_range": "Default Portal Range (In Blocks)",
+    "config.customportals.cPSettings.range_with_enhancer": "Portal Range With Enhancer Rune",
+    "config.customportals.cPSettings.range_with_strong_enhancer": "Portal Range With Strong Enhancer Rune"
+    
 }

@@ -1,0 +1,23 @@
+{
+    "type": "minecraft:crafting_shaped",
+    "pattern": [
+        " # ",
+        "PW#",
+        "#P "
+    ],
+    "key": {
+        "#": {
+            "item": "minecraft:prismarine_shard"
+        },
+        "P": {
+            "item": "minecraft:prismarine_crystals"
+        },
+        "W": {
+            "item": "customportals:weak_enhancer_rune"
+        }
+    },
+    "result": {
+        "item": "customportals:strong_enhancer_rune",
+        "count": 1
+    }
+}

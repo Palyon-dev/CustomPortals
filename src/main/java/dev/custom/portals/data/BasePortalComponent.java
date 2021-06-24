@@ -10,6 +10,7 @@ public interface BasePortalComponent extends ComponentV3 {
     void setPortalRegistry(PortalRegistry portalRegistry);
     void registerPortal(Portal portal);
     void unregisterPortal(Portal portal);
+    void tryWithAll(Portal portal);
     void clearPortals();
     void syncWithAll(MinecraftServer server);
 }

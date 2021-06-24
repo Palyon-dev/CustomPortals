@@ -43,8 +43,8 @@ public abstract class EntityMixin implements EntityMixinAccess {
     public abstract boolean method_30230(); // returns true if netherPortalCooldown > 0, false otherwise
     @Shadow
     public abstract void method_30229(); // sets netherPortalCooldown to value returned by getDefaultNetherPortalCooldown()
-    //@Shadow
-    //public abstract int getMaxNetherPortalTime();
+    @Shadow
+    public abstract int getMaxNetherPortalTime();
     @Shadow
     protected abstract void tickNetherPortalCooldown();
     @Shadow
@@ -97,10 +97,11 @@ public abstract class EntityMixin implements EntityMixinAccess {
     @Unique
     public void tickCustomPortal() {
         if (this.world instanceof ServerWorld) {
-            int i; 
-            if ((Entity)((Object)this) instanceof PlayerEntity)
-                i = ((PlayerEntity)((Object)this)).abilities.invulnerable ? 1 : 80;
-            else i = 0;
+            int i;
+            if (((Entity)(Object)this) instanceof PlayerEntity && destPortal != null) {
+                i = destPortal.hasHaste() ? 1 : this.getMaxNetherPortalTime();
+            }
+            else i = this.getMaxNetherPortalTime();
             ServerWorld serverWorld = (ServerWorld)this.world;
             if (this.inCustomPortal) {
                 MinecraftServer minecraftServer = serverWorld.getServer();

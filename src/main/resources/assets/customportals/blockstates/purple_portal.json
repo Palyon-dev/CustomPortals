@@ -1,13 +1,22 @@
 {
   "variants": {
-    "axis=x": {
+    "axis=x,lit=true": {
       "model": "customportals:block/purple_portal_ns"
     },
-    "axis=z": {
+    "axis=z,lit=true": {
       "model": "customportals:block/purple_portal_ew"
     },
-    "axis=y": {
+    "axis=y,lit=true": {
       "model": "customportals:block/purple_portal_ud"
+    },
+    "axis=x,lit=false": {
+      "model": "customportals:block/purple_portal_inactive_ns"
+    },
+    "axis=z,lit=false": {
+      "model": "customportals:block/purple_portal_inactive_ew"
+    },
+    "axis=y,lit=false": {
+      "model": "customportals:block/purple_portal_inactive_ud"
     }
   }
 }

@@ -1,0 +1,23 @@
+{
+    "type": "minecraft:crafting_shaped",
+    "pattern": [
+        "#PP",
+        "PnP",
+        "PP#"
+    ],
+    "key": {
+        "#": {
+            "item": "customportals:strong_enhancer_rune"
+        },
+        "P": {
+            "item": "minecraft:popped_chorus_fruit"
+        },
+        "n": {
+            "item": "minecraft:netherite_ingot"
+        }
+    },
+    "result": {
+        "item": "customportals:infinity_rune",
+        "count": 1
+    }
+}

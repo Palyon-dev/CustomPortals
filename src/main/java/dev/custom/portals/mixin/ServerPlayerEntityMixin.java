@@ -29,6 +29,7 @@ import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.TeleportTarget;
 import net.minecraft.world.World;
+import net.minecraft.world.WorldEvents;
 import net.minecraft.world.WorldProperties;
 import net.minecraft.world.biome.source.BiomeAccess;
 
@@ -56,6 +57,8 @@ public abstract class ServerPlayerEntityMixin extends PlayerEntity {
     public abstract ServerWorld getServerWorld();
     @Shadow
     protected abstract void worldChanged(ServerWorld origin);
+    @Shadow
+    public abstract void setWorld(ServerWorld world);
 
     public ServerPlayerEntityMixin(World world, BlockPos pos, float yaw, GameProfile profile) {
         super(world, pos, yaw, profile);
@@ -76,11 +79,12 @@ public abstract class ServerPlayerEntityMixin extends PlayerEntity {
             this.networkHandler.sendPacket(new DifficultyS2CPacket(worldProperties.getDifficulty(), worldProperties.isDifficultyLocked()));
             PlayerManager playerManager = this.server.getPlayerManager();
             playerManager.sendCommandTree((ServerPlayerEntity)(Object)this);
-            serverWorld.removePlayer((ServerPlayerEntity)(Object)this);
-            this.removed = false;
+            serverWorld.removePlayer((ServerPlayerEntity)(Object)this, Entity.RemovalReason.CHANGED_DIMENSION);
+            this.unsetRemoved();
             TeleportTarget teleportTarget = this.getTeleportTarget(destination);
             if (teleportTarget != null) {
                 serverWorld.getProfiler().push("moving");
+   
                 serverWorld.getProfiler().pop();
                 serverWorld.getProfiler().push("placing");
                 this.setWorld(destination);
@@ -89,21 +93,20 @@ public abstract class ServerPlayerEntityMixin extends PlayerEntity {
                 this.refreshPositionAfterTeleport(teleportTarget.position.x, teleportTarget.position.y, teleportTarget.position.z);
                 serverWorld.getProfiler().pop();
                 this.worldChanged(serverWorld);
-                this.interactionManager.setWorld(destination);
-                this.networkHandler.sendPacket(new PlayerAbilitiesS2CPacket(this.abilities));
+                this.networkHandler.sendPacket(new PlayerAbilitiesS2CPacket(this.getAbilities()));
                 playerManager.sendWorldInfo((ServerPlayerEntity)(Object)this, destination);
                 playerManager.sendPlayerStatus((ServerPlayerEntity)(Object)this);
                 Iterator<StatusEffectInstance> var7 = this.getStatusEffects().iterator();
-
+   
                 while(var7.hasNext()) {
-                    StatusEffectInstance statusEffectInstance = (StatusEffectInstance)var7.next();
-                    this.networkHandler.sendPacket(new EntityStatusEffectS2CPacket(this.getEntityId(), statusEffectInstance));
+                   StatusEffectInstance statusEffectInstance = (StatusEffectInstance)var7.next();
+                   this.networkHandler.sendPacket(new EntityStatusEffectS2CPacket(this.getId(), statusEffectInstance));
                 }
-
-                this.networkHandler.sendPacket(new WorldEventS2CPacket(1032, BlockPos.ORIGIN, 0, false));
-                this.syncedExperience = -1;
-                this.syncedHealth = -1.0F;
-                this.syncedFoodLevel = -1;
+   
+               this.networkHandler.sendPacket(new WorldEventS2CPacket(WorldEvents.TRAVEL_THROUGH_PORTAL, BlockPos.ORIGIN, 0, false));
+               this.syncedExperience = -1;
+               this.syncedHealth = -1.0F;
+               this.syncedFoodLevel = -1;
             }
             ci.setReturnValue((ServerPlayerEntity)(Object)this);
         }

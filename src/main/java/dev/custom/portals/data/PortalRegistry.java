@@ -16,9 +16,7 @@ public class PortalRegistry {
     }
     
     public void register(Portal portal) {
-        for (Portal p : portals) {
-            portal.tryLink(p);
-        }
+        tryWithAll(portal);
         for (BlockPos blockPos : portal.getPortalBlocks()) {
             portalPositions.put(blockPos, portal);
         }
@@ -27,14 +25,18 @@ public class PortalRegistry {
 
     public void unregister(Portal portal) {
         portals.remove(portal);
-        if(portal.hasLinked()) {
-            portal.getLinked().setLinked(null);
-            for (Portal p : portals) {
-                portal.getLinked().tryLink(p);
-            }
+        if (portal.hasLinked()) {
+            tryWithAll(portal.getLinked());
         }
         for (BlockPos blockPos : portal.getPortalBlocks()) {
             portalPositions.remove(blockPos);
+        }
+    }
+
+    public void tryWithAll(Portal portal) {
+        portal.setLinked(null);
+        for (Portal p : portals) {
+            portal.tryLink(p);
         }
     }
 

@@ -2,10 +2,9 @@ package dev.custom.portals.data;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import net.minecraft.block.MaterialColor;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.ListTag;
+import net.minecraft.block.MapColor;
+import net.minecraft.nbt.NbtCompound;
+import net.minecraft.nbt.NbtList;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.math.BlockPos;
 
@@ -37,46 +36,63 @@ public class PortalComponent implements BasePortalComponent {
     }
 
     @Override
+    public void tryWithAll(Portal portal) {
+        portalRegistry.tryWithAll(portal);
+    }
+
+    @Override
     public void clearPortals() {
         portalRegistry.clear();
     }
 
     @Override
-    public void readFromNbt(CompoundTag tag) {
-        ListTag portalData = tag.getList("portals", 10);
+    public void readFromNbt(NbtCompound tag) {
+        NbtList portalData = tag.getList("portals", 10);
         for(int i = 0; i < portalData.size(); i++) {
-            CompoundTag curTag = portalData.getCompound(i);
+            NbtCompound curTag = portalData.getCompound(i);
             String frameId = curTag.getString("frameId");
             String dimensionId = curTag.getString("dimensionId");
             BlockPos spawnPos = new BlockPos(curTag.getInt("xSpawn"), curTag.getInt("ySpawn"), curTag.getInt("zSpawn"));
-            MaterialColor color = MaterialColor.COLORS[curTag.getInt("color")];
+            MapColor color = MapColor.COLORS[curTag.getInt("color")];
             List<BlockPos> portalBlocks = new ArrayList<BlockPos>();
-            ListTag portalBlocksData = curTag.getList("blocks", 10);
+            NbtList portalBlocksData = curTag.getList("blocks", 10);
             for(int j = 0; j < portalBlocksData.size(); j++) {
-                CompoundTag curBlockTag = portalBlocksData.getCompound(j);
+                NbtCompound curBlockTag = portalBlocksData.getCompound(j);
                 portalBlocks.add(new BlockPos(curBlockTag.getInt("xPos"), curBlockTag.getInt("yPos"), curBlockTag.getInt("zPos")));
             }
             int length = curTag.getInt("length");
             int width = curTag.getInt("width");
-            registerPortal(new Portal(frameId, dimensionId, color, spawnPos, portalBlocks, length, width));
+            int hasteRunes = curTag.getInt("haste");
+            int gateRunes = curTag.getInt("gate");
+            int weakEnhancerRunes = curTag.getInt("weak");
+            int strongEnhancerRunes = curTag.getInt("strong");
+            int infinityRunes = curTag.getInt("infinity");
+            Portal portal = new Portal(frameId, dimensionId, color, spawnPos, portalBlocks, length, width, 
+                hasteRunes, gateRunes, weakEnhancerRunes, strongEnhancerRunes, infinityRunes);
+            registerPortal(portal);
         }
         
     }
 
     @Override
-    public void writeToNbt(CompoundTag tag) {
-        ListTag portalData = new ListTag();
+    public void writeToNbt(NbtCompound tag) {
+        NbtList portalData = new NbtList();
         for(Portal curPortal : portalRegistry.getPortals()) {
-            CompoundTag curTag = new CompoundTag();
+            NbtCompound curTag = new NbtCompound();
             curTag.putString("frameId", curPortal.getFrameId());
             curTag.putString("dimensionId", curPortal.getDimensionId());
             curTag.putInt("xSpawn", curPortal.getSpawnPos().getX());
             curTag.putInt("ySpawn", curPortal.getSpawnPos().getY());
             curTag.putInt("zSpawn", curPortal.getSpawnPos().getZ());
             curTag.putInt("color", curPortal.getColor().id);
-            ListTag portalBlockData = new ListTag();
+            curTag.putInt("haste", curPortal.getHasteRunes());
+            curTag.putInt("gate", curPortal.getGateRunes());
+            curTag.putInt("weak", curPortal.getWeakEnhancerRunes());
+            curTag.putInt("strong", curPortal.getStrongEnhancerRunes());
+            curTag.putInt("infinity", curPortal.getInfinityRunes());
+            NbtList portalBlockData = new NbtList();
             for (BlockPos blockPos : curPortal.getPortalBlocks()) {
-                CompoundTag blockTag = new CompoundTag();
+                NbtCompound blockTag = new NbtCompound();
                 blockTag.putInt("xPos", blockPos.getX());
                 blockTag.putInt("yPos", blockPos.getY());
                 blockTag.putInt("zPos", blockPos.getZ());
