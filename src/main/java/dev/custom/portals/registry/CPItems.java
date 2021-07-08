@@ -2,20 +2,16 @@ package dev.custom.portals.registry;
 
 import dev.custom.portals.CustomPortals;
 import dev.custom.portals.items.PortalCatalyst;
-import net.fabricmc.fabric.api.client.itemgroup.FabricItemGroupBuilder;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.Registry;
 
 public class CPItems {
-    public static final ItemGroup PORTALS_ITEM_GROUP = FabricItemGroupBuilder.build(
-        new Identifier(CustomPortals.MOD_ID, "general"),
-        () -> new ItemStack(Items.ENDER_PEARL));
 
+    public static final ItemGroup PORTALS_ITEM_GROUP = CustomPortals.PORTALS_ITEM_GROUP;
+    
     // Items
     public static final Item WHITE_PORTAL_CATALYST = new PortalCatalyst(
         new Item.Settings().maxCount(16).group(PORTALS_ITEM_GROUP), CPBlocks.WHITE_PORTAL);

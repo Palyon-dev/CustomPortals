@@ -3,6 +3,7 @@ package dev.custom.portals.data;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+
 import net.minecraft.util.math.BlockPos;
 
 public class PortalRegistry {
@@ -37,6 +38,12 @@ public class PortalRegistry {
         portal.setLinked(null);
         for (Portal p : portals) {
             portal.tryLink(p);
+        }
+    }
+
+    public void refreshPortals() {
+        for (Portal portal : portals) {
+            tryWithAll(portal);
         }
     }
 

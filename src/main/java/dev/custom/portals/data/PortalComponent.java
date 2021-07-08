@@ -8,11 +8,23 @@ import net.minecraft.nbt.NbtList;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.math.BlockPos;
 
+import dev.custom.portals.config.CPSettings;
+
 public class PortalComponent implements BasePortalComponent {
+    private boolean portalsAlwaysUnlimited;
+    private int defaultRange;
+    private int rangeWithEnhancer;
+    private int rangeWithStrongEnhancer;
 
     private PortalRegistry portalRegistry;
 
-    public PortalComponent() { portalRegistry = new PortalRegistry(); }
+    public PortalComponent() { 
+        portalRegistry = new PortalRegistry();
+        portalsAlwaysUnlimited = CPSettings.PortalRangeSettings.portalsAlwaysUnlimited();
+        defaultRange = CPSettings.PortalRangeSettings.getDefaultRange();
+        rangeWithEnhancer = CPSettings.PortalRangeSettings.getRangeWithEnhancer();
+        rangeWithStrongEnhancer = CPSettings.PortalRangeSettings.getRangeWithStrongEnhancer();
+    }
 
     @Override
     public PortalRegistry getPortalRegistry() { return portalRegistry; }
@@ -20,6 +32,31 @@ public class PortalComponent implements BasePortalComponent {
     @Override
     public Portal getPortalFromPos(BlockPos pos) {
         return portalRegistry.getPortalFromPos(pos);
+    }
+
+    @Override
+    public boolean settingsChanged() {
+        boolean portalsAlwaysUnlimited = CPSettings.PortalRangeSettings.portalsAlwaysUnlimited();
+        int defaultRange = CPSettings.PortalRangeSettings.getDefaultRange();
+        int rangeWithEnhancer = CPSettings.PortalRangeSettings.getRangeWithEnhancer();
+        int rangeWithStrongEnhancer = CPSettings.PortalRangeSettings.getRangeWithStrongEnhancer();
+        if (portalsAlwaysUnlimited != this.portalsAlwaysUnlimited) {
+            this.portalsAlwaysUnlimited = portalsAlwaysUnlimited;
+            return true;
+        }
+        if (defaultRange != this.defaultRange) {
+            this.defaultRange = defaultRange;
+            return true;
+        }
+        if (rangeWithEnhancer != this.rangeWithEnhancer) {
+            this.rangeWithEnhancer = rangeWithEnhancer;
+            return true;
+        }
+        if (rangeWithStrongEnhancer != this.rangeWithStrongEnhancer) {
+            this.rangeWithStrongEnhancer = rangeWithStrongEnhancer;
+            return true;
+        }
+        return false;
     }
 
     @Override
@@ -38,6 +75,11 @@ public class PortalComponent implements BasePortalComponent {
     @Override
     public void tryWithAll(Portal portal) {
         portalRegistry.tryWithAll(portal);
+    }
+
+    @Override
+    public void refreshPortals() {
+        portalRegistry.refreshPortals();
     }
 
     @Override

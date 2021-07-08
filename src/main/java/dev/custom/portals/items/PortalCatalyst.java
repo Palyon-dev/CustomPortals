@@ -5,6 +5,7 @@ import java.util.List;
 
 import dev.custom.portals.CustomPortals;
 import dev.custom.portals.blocks.AbstractRuneBlock;
+import dev.custom.portals.config.CPSettings;
 import dev.custom.portals.data.Portal;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
@@ -17,6 +18,7 @@ import net.minecraft.util.BlockRotation;
 import net.minecraft.util.Pair;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
+import net.minecraft.util.registry.Registry;
 import net.minecraft.world.World;
 import net.minecraft.server.world.ServerWorld;
 
@@ -43,6 +45,15 @@ public class PortalCatalyst extends Item {
         if(!world.getBlockState(startPos.south()).isFullCube(world, startPos.south()))
             return invalid;
         Block frameMaterial = world.getBlockState(startPos.south()).getBlock();
+        String frameId = Registry.BLOCK.getId(frameMaterial).toString();
+        List<String> blockIds = CPSettings.BlockFilterSettings.getBlocks();
+        if (CPSettings.BlockFilterSettings.isWhitelist()) {
+            if (!blockIds.contains(frameId))
+                return invalid;
+        } else {
+            if (blockIds.contains(frameId))
+                return invalid;
+        }
         BlockPos curPos = startPos;
         for(int i = 0; world.getBlockState(curPos.west()).isAir(); i++) {
             if(i > 23 || !world.getBlockState(curPos.south()).isOf(frameMaterial))
@@ -95,6 +106,15 @@ public class PortalCatalyst extends Item {
         if(!world.getBlockState(startPos.down()).isFullCube(world, startPos.down()))
             return invalid;
         Block frameMaterial = world.getBlockState(startPos.down()).getBlock();
+        String frameId = Registry.BLOCK.getId(frameMaterial).toString();
+        List<String> blockIds = CPSettings.BlockFilterSettings.getBlocks();
+        if (CPSettings.BlockFilterSettings.isWhitelist()) {
+            if (!blockIds.contains(frameId))
+                return invalid;
+        } else {
+            if (blockIds.contains(frameId))
+                return invalid;
+        }
         BlockPos curPos = startPos;
         for(int i = 0; world.getBlockState(curPos.south()).isAir(); i++) {
             if(i > 23 || !world.getBlockState(curPos.down()).isOf(frameMaterial))
@@ -147,6 +167,15 @@ public class PortalCatalyst extends Item {
         if(!world.getBlockState(startPos.down()).isFullCube(world, startPos.down()))
             return invalid;
         Block frameMaterial = world.getBlockState(startPos.down()).getBlock();
+        String frameId = Registry.BLOCK.getId(frameMaterial).toString();
+        List<String> blockIds = CPSettings.BlockFilterSettings.getBlocks();
+        if (CPSettings.BlockFilterSettings.isWhitelist()) {
+            if (!blockIds.contains(frameId))
+                return invalid;
+        } else {
+            if (blockIds.contains(frameId))
+                return invalid;
+        }
         BlockPos curPos = startPos;
         for(int i = 0; world.getBlockState(curPos.west()).isAir(); i++) {
             if(i > 23 || !world.getBlockState(curPos.down()).isOf(frameMaterial))

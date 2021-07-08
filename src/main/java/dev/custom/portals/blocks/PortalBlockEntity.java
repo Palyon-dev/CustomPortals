@@ -16,6 +16,9 @@ public class PortalBlockEntity extends BlockEntity {
     }
     
     public static <T extends BlockEntity> void tick(World world, BlockPos pos, BlockState state, BlockEntity be) {
+        if (CustomPortals.PORTALS.get(world).settingsChanged()) {
+            CustomPortals.PORTALS.get(world).refreshPortals();
+        }
         Portal portal = CustomPortals.PORTALS.get(world).getPortalFromPos(pos);
         if (portal != null) {
             if (portal.hasLinked() && !(Boolean)state.get(PortalBlock.LIT))

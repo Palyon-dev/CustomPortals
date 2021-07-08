@@ -40,9 +40,9 @@ public abstract class EntityMixin implements EntityMixinAccess {
     public float pitch;
 
     @Shadow
-    public abstract boolean method_30230(); // returns true if netherPortalCooldown > 0, false otherwise
+    public abstract boolean hasNetherPortalCooldown();
     @Shadow
-    public abstract void method_30229(); // sets netherPortalCooldown to value returned by getDefaultNetherPortalCooldown()
+    public abstract void resetNetherPortalCooldown();
     @Shadow
     public abstract int getMaxNetherPortalTime();
     @Shadow
@@ -85,8 +85,8 @@ public abstract class EntityMixin implements EntityMixinAccess {
 
     @Unique
     public void setInCustomPortal(Portal portal) {
-        if (this.method_30230()) {
-            this.method_30229();
+        if (this.hasNetherPortalCooldown()) {
+            this.resetNetherPortalCooldown();
         } else {
             this.destPortal = portal.getLinked();
             this.inCustomPortal = true;
@@ -108,7 +108,7 @@ public abstract class EntityMixin implements EntityMixinAccess {
                 if (!this.hasVehicle() && this.customPortalTime++ >= i && this.destPortal != null) {
                     this.world.getProfiler().push("portal");
                     this.customPortalTime = i;
-                    this.method_30229();
+                    this.resetNetherPortalCooldown();
                     String destDimensionId = destPortal.getDimensionId();
                     if(!destDimensionId.equals(this.world.getRegistryKey().getValue().toString())) {
                         for(RegistryKey<World> registryKey : minecraftServer.getWorldRegistryKeys()) {

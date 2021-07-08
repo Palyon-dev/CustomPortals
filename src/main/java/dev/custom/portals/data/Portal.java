@@ -11,6 +11,7 @@ public class Portal {
 
     public final int length;
     public final int width;
+
     private final String frameId;
     private final String dimensionId;
     private final MapColor color;
@@ -136,8 +137,12 @@ public class Portal {
     }
 
     public void tryLink(final Portal portal) {
-        if (portal.getColor() == color && portal.getFrameId().equals(frameId) && portal != this && !portal.hasLinked()) {
-            if (CPSettings.portalsAlwaysUnlimited()) {
+        if (portal.getColor() == color && portal.getFrameId().equals(frameId) && portal != this) {
+            if (portal.hasLinked()) {
+                if (portal.getLinked() != this)
+                    return;
+            }
+            if (CPSettings.PortalRangeSettings.portalsAlwaysUnlimited()) {
                 linked = portal;
                 portal.setLinked(this);
             } else {
@@ -160,18 +165,18 @@ public class Portal {
                         distance = distance(translatedSpawnPos, portal.getSpawnPos());
                     } else distance = distance(spawnPos, portal.getSpawnPos());
                 } else distance = distance(spawnPos, portal.getSpawnPos());
-                int tier = this.getEnhanceTier();
+                int tier = portal.getEnhanceTier() > this.getEnhanceTier() ? portal.getEnhanceTier() : this.getEnhanceTier();
                 switch (tier) {
                     case 0:
-                        if (distance > CPSettings.getDefaultRange())
+                        if (distance > CPSettings.PortalRangeSettings.getDefaultRange())
                             return;
                         break;
                     case 1:
-                        if (distance > CPSettings.getRangeWithEnhancer())
+                        if (distance > CPSettings.PortalRangeSettings.getRangeWithEnhancer())
                             return;
                         break;
                     case 2:
-                        if (distance > CPSettings.getRangeWithStrongEnhancer())
+                        if (distance > CPSettings.PortalRangeSettings.getRangeWithStrongEnhancer())
                             return;
                 }
                 linked = portal;

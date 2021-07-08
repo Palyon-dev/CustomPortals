@@ -36,6 +36,6 @@ public class StrongEnhancerRuneBlock extends AbstractRuneBlock {
 
     @Override
     public void appendTooltip(ItemStack stack, BlockView world, List<Text> tooltip, TooltipContext options) {
-        tooltip.add(new TranslatableText("item.customportals.strong_enhancer_rune.tooltip", CPSettings.getRangeWithStrongEnhancer()).formatted(Formatting.GRAY));
+        tooltip.add(new TranslatableText("item.customportals.strong_enhancer_rune.tooltip", CPSettings.PortalRangeSettings.getRangeWithStrongEnhancer()).formatted(Formatting.GRAY));
     }
 }

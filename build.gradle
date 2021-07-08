@@ -36,9 +36,9 @@ dependencies {
 	modImplementation "net.fabricmc.fabric-api:fabric-api:0.35.2+1.17"
 
 	// Adds an API dependency on the base cardinal components module (required by every other module)
-	modApi "io.github.onyxstudios.Cardinal-Components-API:cardinal-components-base:3.0.0"
+	modApi "io.github.onyxstudios.Cardinal-Components-API:cardinal-components-base:3.0.1"
 	// Replace modImplementation with modApi if you expose components in your own API
-    modImplementation "io.github.onyxstudios.Cardinal-Components-API:cardinal-components-world:3.0.0"
+    modImplementation "io.github.onyxstudios.Cardinal-Components-API:cardinal-components-world:3.0.1"
 
 	modImplementation "com.gitlab.Lortseam:completeconfig:1.0.0"
 	include "com.gitlab.Lortseam:completeconfig:1.0.0"
