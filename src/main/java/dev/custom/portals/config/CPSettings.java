@@ -20,9 +20,26 @@ public final class CPSettings extends Config implements ConfigContainer {
 
     @ConfigEntries
     @Transitive
+    public static class PortalRuneSettings implements ConfigGroup {
+        private static boolean portals_always_unlimited = false;
+        private static boolean portals_always_interdimensional;
+        @ConfigEntry.Dropdown
+        private static Dropdown dropdown = Dropdown.CREATIVE;
+
+        public static boolean portalsAlwaysUnlimited() { return portals_always_unlimited; }
+        public static Dropdown portalsAlwaysHaste() { return dropdown; }
+        public static boolean portalsAlwaysInterdim() { return portals_always_interdimensional; }
+    }
+
+    public enum Dropdown {
+        YES, NO, CREATIVE
+    }
+
+    @ConfigEntries
+    @Transitive
     public static class PortalRangeSettings implements ConfigGroup {
 
-        private static boolean portals_always_unlimited;
+
         private static int default_range;
         private static int range_with_enhancer;
         private static int range_with_strong_enhancer;
@@ -32,8 +49,6 @@ public final class CPSettings extends Config implements ConfigContainer {
             range_with_enhancer = 1000;
             range_with_strong_enhancer = 10000;
         }
-
-        public static boolean portalsAlwaysUnlimited() { return portals_always_unlimited; }
         public static int getDefaultRange() { return default_range; }
         public static int getRangeWithEnhancer() { return range_with_enhancer; }
         public static int getRangeWithStrongEnhancer() { return range_with_strong_enhancer; }

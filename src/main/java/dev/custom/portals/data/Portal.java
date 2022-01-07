@@ -142,13 +142,13 @@ public class Portal {
                 if (portal.getLinked() != this)
                     return;
             }
-            if (CPSettings.PortalRangeSettings.portalsAlwaysUnlimited()) {
+            if (CPSettings.PortalRuneSettings.portalsAlwaysUnlimited() && CPSettings.PortalRuneSettings.portalsAlwaysInterdim()) {
                 linked = portal;
                 portal.setLinked(this);
             } else {
                 int distance;
                 if (!portal.getDimensionId().equals(dimensionId)) {
-                    if (!this.hasGate() && !portal.hasGate())
+                    if (!this.hasGate() && !portal.hasGate() && !CPSettings.PortalRuneSettings.portalsAlwaysInterdim())
                         return;
                     if (portal.getDimensionId().equals("minecraft:the_nether")) {
                         int translatedX = portal.getSpawnPos().getX() * 8;
@@ -165,19 +165,21 @@ public class Portal {
                         distance = distance(translatedSpawnPos, portal.getSpawnPos());
                     } else distance = distance(spawnPos, portal.getSpawnPos());
                 } else distance = distance(spawnPos, portal.getSpawnPos());
-                int tier = portal.getEnhanceTier() > this.getEnhanceTier() ? portal.getEnhanceTier() : this.getEnhanceTier();
-                switch (tier) {
-                    case 0:
-                        if (distance > CPSettings.PortalRangeSettings.getDefaultRange())
-                            return;
-                        break;
-                    case 1:
-                        if (distance > CPSettings.PortalRangeSettings.getRangeWithEnhancer())
-                            return;
-                        break;
-                    case 2:
-                        if (distance > CPSettings.PortalRangeSettings.getRangeWithStrongEnhancer())
-                            return;
+                if (!CPSettings.PortalRuneSettings.portalsAlwaysUnlimited()) {
+                    int tier = portal.getEnhanceTier() > this.getEnhanceTier() ? portal.getEnhanceTier() : this.getEnhanceTier();
+                    switch (tier) {
+                        case 0:
+                            if (distance > CPSettings.PortalRangeSettings.getDefaultRange())
+                                return;
+                            break;
+                        case 1:
+                            if (distance > CPSettings.PortalRangeSettings.getRangeWithEnhancer())
+                                return;
+                            break;
+                        case 2:
+                            if (distance > CPSettings.PortalRangeSettings.getRangeWithStrongEnhancer())
+                                return;
+                    }
                 }
                 linked = portal;
                 portal.setLinked(this);

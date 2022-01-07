@@ -77,7 +77,7 @@ public abstract class InGameHudMixin extends DrawableHelper {
                 break;
                 default: spriteModel = Blocks.NETHER_PORTAL;
             }
-            sprite = this.client.getBlockRenderManager().getModels().getSprite(spriteModel.getDefaultState().with(PortalBlock.LIT, true));
+            sprite = this.client.getBlockRenderManager().getModels().getModelParticleSprite(spriteModel.getDefaultState().with(PortalBlock.LIT, true));
             float f = sprite.getMinU();
             float g = sprite.getMinV();
             float h = sprite.getMaxU();

@@ -1,5 +1,6 @@
 package dev.custom.portals.mixin;
 
+import dev.custom.portals.config.CPSettings;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
@@ -99,7 +100,11 @@ public abstract class EntityMixin implements EntityMixinAccess {
         if (this.world instanceof ServerWorld) {
             int i;
             if (((Entity)(Object)this) instanceof PlayerEntity && destPortal != null) {
-                i = destPortal.hasHaste() ? 1 : this.getMaxNetherPortalTime();
+                if (CPSettings.PortalRuneSettings.portalsAlwaysHaste() == CPSettings.Dropdown.CREATIVE)
+                    i = destPortal.hasHaste() ? 1 : this.getMaxNetherPortalTime();
+                else if (CPSettings.PortalRuneSettings.portalsAlwaysHaste() == CPSettings.Dropdown.NO)
+                    i = destPortal.hasHaste() ? 1 : 80;
+                else i = 1;
             }
             else i = this.getMaxNetherPortalTime();
             ServerWorld serverWorld = (ServerWorld)this.world;

@@ -12,6 +12,7 @@ import dev.custom.portals.config.CPSettings;
 
 public class PortalComponent implements BasePortalComponent {
     private boolean portalsAlwaysUnlimited;
+    private boolean portalsAlwaysInterdim;
     private int defaultRange;
     private int rangeWithEnhancer;
     private int rangeWithStrongEnhancer;
@@ -20,7 +21,8 @@ public class PortalComponent implements BasePortalComponent {
 
     public PortalComponent() { 
         portalRegistry = new PortalRegistry();
-        portalsAlwaysUnlimited = CPSettings.PortalRangeSettings.portalsAlwaysUnlimited();
+        portalsAlwaysUnlimited = CPSettings.PortalRuneSettings.portalsAlwaysUnlimited();
+        portalsAlwaysInterdim = CPSettings.PortalRuneSettings.portalsAlwaysInterdim();
         defaultRange = CPSettings.PortalRangeSettings.getDefaultRange();
         rangeWithEnhancer = CPSettings.PortalRangeSettings.getRangeWithEnhancer();
         rangeWithStrongEnhancer = CPSettings.PortalRangeSettings.getRangeWithStrongEnhancer();
@@ -36,12 +38,17 @@ public class PortalComponent implements BasePortalComponent {
 
     @Override
     public boolean settingsChanged() {
-        boolean portalsAlwaysUnlimited = CPSettings.PortalRangeSettings.portalsAlwaysUnlimited();
+        boolean portalsAlwaysUnlimited = CPSettings.PortalRuneSettings.portalsAlwaysUnlimited();
+        boolean portalsAlwaysInterdim = CPSettings.PortalRuneSettings.portalsAlwaysInterdim();
         int defaultRange = CPSettings.PortalRangeSettings.getDefaultRange();
         int rangeWithEnhancer = CPSettings.PortalRangeSettings.getRangeWithEnhancer();
         int rangeWithStrongEnhancer = CPSettings.PortalRangeSettings.getRangeWithStrongEnhancer();
         if (portalsAlwaysUnlimited != this.portalsAlwaysUnlimited) {
             this.portalsAlwaysUnlimited = portalsAlwaysUnlimited;
+            return true;
+        }
+        if (portalsAlwaysInterdim != this.portalsAlwaysInterdim) {
+            this.portalsAlwaysInterdim = portalsAlwaysInterdim;
             return true;
         }
         if (defaultRange != this.defaultRange) {
@@ -95,7 +102,7 @@ public class PortalComponent implements BasePortalComponent {
             String frameId = curTag.getString("frameId");
             String dimensionId = curTag.getString("dimensionId");
             BlockPos spawnPos = new BlockPos(curTag.getInt("xSpawn"), curTag.getInt("ySpawn"), curTag.getInt("zSpawn"));
-            MapColor color = MapColor.COLORS[curTag.getInt("color")];
+            MapColor color = MapColor.get(curTag.getInt("color"));
             List<BlockPos> portalBlocks = new ArrayList<BlockPos>();
             NbtList portalBlocksData = curTag.getList("blocks", 10);
             for(int j = 0; j < portalBlocksData.size(); j++) {

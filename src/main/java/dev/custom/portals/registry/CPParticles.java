@@ -1,6 +1,21 @@
 package dev.custom.portals.registry;
 
 import dev.custom.portals.CustomPortals;
+import dev.custom.portals.registry.CPParticles.BlackPortalParticle;
+import dev.custom.portals.registry.CPParticles.BluePortalParticle;
+import dev.custom.portals.registry.CPParticles.BrownPortalParticle;
+import dev.custom.portals.registry.CPParticles.CyanPortalParticle;
+import dev.custom.portals.registry.CPParticles.GrayPortalParticle;
+import dev.custom.portals.registry.CPParticles.GreenPortalParticle;
+import dev.custom.portals.registry.CPParticles.LightBluePortalParticle;
+import dev.custom.portals.registry.CPParticles.LightGrayPortalParticle;
+import dev.custom.portals.registry.CPParticles.LimePortalParticle;
+import dev.custom.portals.registry.CPParticles.MagentaPortalParticle;
+import dev.custom.portals.registry.CPParticles.OrangePortalParticle;
+import dev.custom.portals.registry.CPParticles.PinkPortalParticle;
+import dev.custom.portals.registry.CPParticles.RedPortalParticle;
+import dev.custom.portals.registry.CPParticles.WhitePortalParticle;
+import dev.custom.portals.registry.CPParticles.YellowPortalParticle;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.client.particle.v1.FabricSpriteProvider;

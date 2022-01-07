@@ -54,7 +54,7 @@ public abstract class ServerPlayerEntityMixin extends PlayerEntity {
     private int syncedFoodLevel;
 
     @Shadow
-    public abstract ServerWorld getServerWorld();
+    public abstract ServerWorld getWorld();
     @Shadow
     protected abstract void worldChanged(ServerWorld origin);
     @Shadow
@@ -72,7 +72,7 @@ public abstract class ServerPlayerEntityMixin extends PlayerEntity {
     @Inject(method = "moveToWorld", at = @At("HEAD"), cancellable = true)
     public void moveToWorld(ServerWorld destination, CallbackInfoReturnable<Entity> ci) {
         this.inTeleportationState = true;
-        ServerWorld serverWorld = this.getServerWorld();
+        ServerWorld serverWorld = this.getWorld();
         if (((EntityMixinAccess)this).isInCustomPortal()) {
             WorldProperties worldProperties = destination.getLevelProperties();
             this.networkHandler.sendPacket(new PlayerRespawnS2CPacket(destination.getDimension(), destination.getRegistryKey(), BiomeAccess.hashSeed(destination.getSeed()), this.interactionManager.getGameMode(), this.interactionManager.getPreviousGameMode(), destination.isDebugWorld(), destination.isFlat(), true));

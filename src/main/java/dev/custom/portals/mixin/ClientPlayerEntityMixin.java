@@ -42,7 +42,7 @@ public abstract class ClientPlayerEntityMixin extends AbstractClientPlayerEntity
                     this.closeHandledScreen();
                 }
 
-                this.client.openScreen((Screen)null);
+                this.client.setScreen((Screen)null);
             }
 
             if (this.nextNauseaStrength == 0.0F) {
