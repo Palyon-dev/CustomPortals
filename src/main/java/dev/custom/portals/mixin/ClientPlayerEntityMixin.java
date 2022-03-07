@@ -2,6 +2,8 @@ package dev.custom.portals.mixin;
 
 import com.mojang.authlib.GameProfile;
 
+import net.minecraft.client.gui.screen.DeathScreen;
+import net.minecraft.client.gui.screen.DownloadingTerrainScreen;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -37,7 +39,7 @@ public abstract class ClientPlayerEntityMixin extends AbstractClientPlayerEntity
     private void updateNausea(CallbackInfo ci) {
         if(((EntityMixinAccess)this).isInCustomPortal() && ((EntityMixinAccess)this).getDestPortal() != null) {
             this.lastNauseaStrength = this.nextNauseaStrength;
-            if (this.client.currentScreen != null && !this.client.currentScreen.isPauseScreen()) {
+            if (!(this.client.currentScreen == null || this.client.currentScreen.shouldPause() || this.client.currentScreen instanceof DeathScreen || this.client.currentScreen instanceof DownloadingTerrainScreen)) {
                 if (this.client.currentScreen instanceof HandledScreen) {
                     this.closeHandledScreen();
                 }

@@ -9,7 +9,6 @@ import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.blockrenderlayer.v1.BlockRenderLayerMap;
 import net.fabricmc.fabric.api.object.builder.v1.block.FabricBlockSettings;
 import net.fabricmc.fabric.api.object.builder.v1.block.entity.FabricBlockEntityTypeBuilder;
-import net.fabricmc.fabric.api.tool.attribute.v1.FabricToolTags;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.MapColor;
@@ -26,19 +25,19 @@ public class CPBlocks {
         // Runes
         public static final Block HASTE_RUNE_BLOCK = new HasteRuneBlock(
                 FabricBlockSettings.of(Material.AMETHYST).sounds(BlockSoundGroup.AMETHYST_CLUSTER)
-                .nonOpaque().luminance(2).noCollision().strength(0.3F).breakByTool(FabricToolTags.PICKAXES));
+                .nonOpaque().luminance(2).noCollision().strength(0.3F));
         public static final Block GATE_RUNE_BLOCK = new GateRuneBlock(
                 FabricBlockSettings.of(Material.AMETHYST).sounds(BlockSoundGroup.AMETHYST_CLUSTER)
-                .nonOpaque().luminance(2).noCollision().strength(0.3F).breakByTool(FabricToolTags.PICKAXES));
+                .nonOpaque().luminance(2).noCollision().strength(0.3F));
         public static final Block WEAK_ENHANCER_RUNE_BLOCK = new EnhancerRuneBlock(
                 FabricBlockSettings.of(Material.AMETHYST).sounds(BlockSoundGroup.AMETHYST_CLUSTER)
-                .nonOpaque().luminance(2).noCollision().strength(0.3F).breakByTool(FabricToolTags.PICKAXES));
+                .nonOpaque().luminance(2).noCollision().strength(0.3F));
         public static final Block STRONG_ENHANCER_RUNE_BLOCK = new StrongEnhancerRuneBlock(
                 FabricBlockSettings.of(Material.AMETHYST).sounds(BlockSoundGroup.AMETHYST_CLUSTER)
-                .nonOpaque().luminance(2).noCollision().strength(0.3F).breakByTool(FabricToolTags.PICKAXES));
+                .nonOpaque().luminance(2).noCollision().strength(0.3F));
         public static final Block INFINITY_RUNE_BLOCK = new InfinityRuneBlock(
                 FabricBlockSettings.of(Material.AMETHYST).sounds(BlockSoundGroup.AMETHYST_CLUSTER)
-                .nonOpaque().luminance(2).noCollision().strength(0.3F).breakByTool(FabricToolTags.PICKAXES));
+                .nonOpaque().luminance(2).noCollision().strength(0.3F));
 
         // Portal Blocks
         public static final Block BLACK_PORTAL = new PortalBlock(

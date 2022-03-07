@@ -75,7 +75,7 @@ public abstract class ServerPlayerEntityMixin extends PlayerEntity {
         ServerWorld serverWorld = this.getWorld();
         if (((EntityMixinAccess)this).isInCustomPortal()) {
             WorldProperties worldProperties = destination.getLevelProperties();
-            this.networkHandler.sendPacket(new PlayerRespawnS2CPacket(destination.getDimension(), destination.getRegistryKey(), BiomeAccess.hashSeed(destination.getSeed()), this.interactionManager.getGameMode(), this.interactionManager.getPreviousGameMode(), destination.isDebugWorld(), destination.isFlat(), true));
+            this.networkHandler.sendPacket(new PlayerRespawnS2CPacket(destination.method_40134(), destination.getRegistryKey(), BiomeAccess.hashSeed(destination.getSeed()), this.interactionManager.getGameMode(), this.interactionManager.getPreviousGameMode(), destination.isDebugWorld(), destination.isFlat(), true));
             this.networkHandler.sendPacket(new DifficultyS2CPacket(worldProperties.getDifficulty(), worldProperties.isDifficultyLocked()));
             PlayerManager playerManager = this.server.getPlayerManager();
             playerManager.sendCommandTree((ServerPlayerEntity)(Object)this);

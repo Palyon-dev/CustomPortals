@@ -91,7 +91,7 @@ public class CPParticles {
             protected BlackPortalParticle(ClientWorld clientWorld, double d, double e, double f, double g, double h, double i, SpriteProvider sprites) {
                     super(clientWorld, d, e, f, g, h, i);
                     setSprite(sprites.getSprite(world.random));
-                    this.colorRed = this.colorGreen = this.colorBlue = 0.0F;
+                    this.red = this.green = this.blue = 0.0F;
             }
 
             @Environment(EnvType.CLIENT)
@@ -116,9 +116,9 @@ public class CPParticles {
                     super(clientWorld, d, e, f, g, h, i);
                     setSprite(sprites.getSprite(world.random));
                     float j = this.random.nextFloat() * 0.6F + 0.4F;
-                    this.colorRed = 0.2F * j;
-                    this.colorGreen = 0.2F * j;
-                    this.colorBlue = 1.0F * j;
+                    this.red = 0.2F * j;
+                    this.green = 0.2F * j;
+                    this.blue = 1.0F * j;
             }
 
             @Environment(EnvType.CLIENT)
@@ -143,9 +143,9 @@ public class CPParticles {
                     super(clientWorld, d, e, f, g, h, i);
                     setSprite(sprites.getSprite(world.random));
                     float j = this.random.nextFloat() * 0.6F + 0.4F;
-                    this.colorRed = 0.575F * j;
-                    this.colorGreen = 0.45F * j;
-                    this.colorBlue = 0.325F * j;
+                    this.red = 0.575F * j;
+                    this.green = 0.45F * j;
+                    this.blue = 0.325F * j;
             }
 
             @Environment(EnvType.CLIENT)
@@ -170,9 +170,9 @@ public class CPParticles {
                     super(clientWorld, d, e, f, g, h, i);
                     setSprite(sprites.getSprite(world.random));
                     float j = this.random.nextFloat() * 0.6F + 0.4F;
-                    this.colorBlue = 0.8F * j;
-                    this.colorRed = 0.2F * j;
-                    this.colorGreen = 0.65F * j;
+                    this.blue = 0.8F * j;
+                    this.red = 0.2F * j;
+                    this.green = 0.65F * j;
             }
 
             @Environment(EnvType.CLIENT)
@@ -197,7 +197,7 @@ public class CPParticles {
                     super(clientWorld, d, e, f, g, h, i);
                     setSprite(sprites.getSprite(world.random));
                     float j = this.random.nextFloat() * 0.6F + 0.4F;
-                    this.colorRed = this.colorGreen = this.colorBlue = 0.5F * j;
+                    this.red = this.green = this.blue = 0.5F * j;
             }
 
             @Environment(EnvType.CLIENT)
@@ -222,9 +222,9 @@ public class CPParticles {
                     super(clientWorld, d, e, f, g, h, i);
                     setSprite(sprites.getSprite(world.random));
                     float j = this.random.nextFloat() * 0.6F + 0.4F;
-                    this.colorRed = 0.2F * j;
-                    this.colorGreen = 0.5F * j;
-                    this.colorBlue = 0.2F * j;
+                    this.red = 0.2F * j;
+                    this.green = 0.5F * j;
+                    this.blue = 0.2F * j;
             }
 
             @Environment(EnvType.CLIENT)
@@ -249,9 +249,9 @@ public class CPParticles {
                     super(clientWorld, d, e, f, g, h, i);
                     setSprite(sprites.getSprite(world.random));
                     float j = this.random.nextFloat() * 0.6F + 0.4F;
-                    this.colorRed = 0.6F * j;
-                    this.colorBlue = 1.0F * j;
-                    this.colorGreen = 0.7F * j;
+                    this.red = 0.6F * j;
+                    this.blue = 1.0F * j;
+                    this.green = 0.7F * j;
             }
 
             @Environment(EnvType.CLIENT)
@@ -276,7 +276,7 @@ public class CPParticles {
                     super(clientWorld, d, e, f, g, h, i);
                     setSprite(sprites.getSprite(world.random));
                     float j = this.random.nextFloat() * 0.6F + 0.4F;
-                    this.colorRed = this.colorGreen = this.colorBlue = 0.7F * j;
+                    this.red = this.green = this.blue = 0.7F * j;
             }
 
             @Environment(EnvType.CLIENT)
@@ -301,9 +301,9 @@ public class CPParticles {
                     super(clientWorld, d, e, f, g, h, i);
                     setSprite(sprites.getSprite(world.random));
                     float j = this.random.nextFloat() * 0.6F + 0.4F;
-                    this.colorRed = 0.5F * j;
-                    this.colorGreen = 1.0F * j;
-                    this.colorBlue = 0.3F * j;
+                    this.red = 0.5F * j;
+                    this.green = 1.0F * j;
+                    this.blue = 0.3F * j;
             }
 
             @Environment(EnvType.CLIENT)
@@ -328,9 +328,9 @@ public class CPParticles {
                     super(clientWorld, d, e, f, g, h, i);
                     setSprite(sprites.getSprite(world.random));
                     float j = this.random.nextFloat() * 0.6F + 0.4F;
-                    this.colorRed = 1.0F * j;
-                    this.colorGreen = 0.4F * j;
-                    this.colorBlue = 1.0F * j;
+                    this.red = 1.0F * j;
+                    this.green = 0.4F * j;
+                    this.blue = 1.0F * j;
             }
 
             @Environment(EnvType.CLIENT)
@@ -355,9 +355,9 @@ public class CPParticles {
                     super(clientWorld, d, e, f, g, h, i);
                     setSprite(sprites.getSprite(world.random));
                     float j = this.random.nextFloat() * 0.6F + 0.4F;
-                    this.colorRed = 1.0F * j;
-                    this.colorGreen = 0.7F * j;
-                    this.colorBlue = 0.2F * j;
+                    this.red = 1.0F * j;
+                    this.green = 0.7F * j;
+                    this.blue = 0.2F * j;
             }
 
             @Environment(EnvType.CLIENT)
@@ -382,9 +382,9 @@ public class CPParticles {
                     super(clientWorld, d, e, f, g, h, i);
                     setSprite(sprites.getSprite(world.random));
                     float j = this.random.nextFloat() * 0.6F + 0.4F;
-                    this.colorRed = 1.0F * j;
-                    this.colorGreen = 0.6F * j;
-                    this.colorBlue = 0.9F * j;
+                    this.red = 1.0F * j;
+                    this.green = 0.6F * j;
+                    this.blue = 0.9F * j;
             }
 
             @Environment(EnvType.CLIENT)
@@ -409,9 +409,9 @@ public class CPParticles {
                     super(clientWorld, d, e, f, g, h, i);
                     setSprite(sprites.getSprite(world.random));
                     float j = this.random.nextFloat() * 0.6F + 0.4F;
-                    this.colorRed = 1.0F * j;
-                    this.colorGreen = 0.2F * j;
-                    this.colorBlue = 0.2F * j;
+                    this.red = 1.0F * j;
+                    this.green = 0.2F * j;
+                    this.blue = 0.2F * j;
             }
 
             @Environment(EnvType.CLIENT)
@@ -436,7 +436,7 @@ public class CPParticles {
                     super(clientWorld, d, e, f, g, h, i);
                     setSprite(sprites.getSprite(world.random));
                     float j = this.random.nextFloat() * 0.6F + 0.4F;
-                    this.colorRed = this.colorGreen = this.colorBlue = 1.0F * j;
+                    this.red = this.green = this.blue = 1.0F * j;
             }
 
             @Environment(EnvType.CLIENT)
@@ -461,9 +461,9 @@ public class CPParticles {
                     super(clientWorld, d, e, f, g, h, i);
                     setSprite(sprites.getSprite(world.random));
                     float j = this.random.nextFloat() * 0.6F + 0.4F;
-                    this.colorRed = 1.0F * j;
-                    this.colorGreen = 1.0F * j;
-                    this.colorBlue = 0.2F * j;
+                    this.red = 1.0F * j;
+                    this.green = 1.0F * j;
+                    this.blue = 0.2F * j;
             }
 
             @Environment(EnvType.CLIENT)
