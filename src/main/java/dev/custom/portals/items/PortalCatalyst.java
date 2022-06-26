@@ -436,6 +436,11 @@ public class PortalCatalyst extends Item {
             for (BlockPos blockPos : portalBlocks) {
                 world.setBlockState(blockPos, state);
             }
+            if (portalBlocks.size() == 1) {
+                BlockPos blockPos = portalBlocks.get(0);
+                if (world.isReceivingRedstonePower(blockPos))
+                    portal.setHasRedstoneSignal(true);
+            }
             checkForRunesNS(portal, world, ns.getRight());
             return true;
         }
@@ -462,6 +467,11 @@ public class PortalCatalyst extends Item {
             for (BlockPos blockPos : portalBlocks) {
                 world.setBlockState(blockPos, state);
             }
+            if (portalBlocks.size() == 1) {
+                BlockPos blockPos = portalBlocks.get(0);
+                if (world.isReceivingRedstonePower(blockPos))
+                    portal.setHasRedstoneSignal(true);
+            }
             checkForRunesEW(portal, world, ew.getRight());
             return true;
         }
@@ -487,6 +497,11 @@ public class PortalCatalyst extends Item {
                 CustomPortals.PORTALS.get(world).syncWithAll(((ServerWorld)world).getServer());
             for (BlockPos blockPos : portalBlocks) {
                 world.setBlockState(blockPos, state);
+            }
+            if (portalBlocks.size() == 1) {
+                BlockPos blockPos = portalBlocks.get(0);
+                if (world.isReceivingRedstonePower(blockPos))
+                    portal.setHasRedstoneSignal(true);
             }
             checkForRunesUD(portal, world, ud.getRight());
             return true;

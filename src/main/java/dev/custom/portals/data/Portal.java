@@ -15,14 +15,16 @@ public class Portal {
     private final String frameId;
     private final String dimensionId;
     private final MapColor color;
-    private final BlockPos spawnPos;
-    private final List<BlockPos> portalBlocks;
 
+    private BlockPos spawnPos;
+    private List<BlockPos> portalBlocks;
     private int hasteRunes;
     private int gateRunes;
     private int weakEnhancerRunes;
     private int strongEnhancerRunes;
     private int infinityRunes;
+
+    private boolean hasRedstoneSignal = false;
     
     private Portal linked;
 
@@ -89,6 +91,14 @@ public class Portal {
 
     public boolean isInterdimensional() {
         return hasLinked() && !dimensionId.equals(linked.getDimensionId());
+    }
+
+    public boolean hasRedstoneSignal() {
+        return hasRedstoneSignal;
+    }
+
+    public void setHasRedstoneSignal(boolean hasRedstoneSignal) {
+        this.hasRedstoneSignal = hasRedstoneSignal;
     }
 
     public void setLinked(final Portal portal) {

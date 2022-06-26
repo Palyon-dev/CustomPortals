@@ -4,6 +4,8 @@ import java.util.Iterator;
 
 import com.mojang.authlib.GameProfile;
 
+import net.minecraft.network.encryption.PlayerPublicKey;
+import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -60,8 +62,8 @@ public abstract class ServerPlayerEntityMixin extends PlayerEntity {
     @Shadow
     public abstract void setWorld(ServerWorld world);
 
-    public ServerPlayerEntityMixin(World world, BlockPos pos, float yaw, GameProfile profile) {
-        super(world, pos, yaw, profile);
+    public ServerPlayerEntityMixin(World world, BlockPos blockPos, float f, GameProfile gameProfile, @Nullable PlayerPublicKey playerPublicKey) {
+        super(world, blockPos, f, gameProfile, playerPublicKey);
     }
 
     /* This is necessary to avoid unwanted side effects from using the normal moveToWorld(),
@@ -75,7 +77,7 @@ public abstract class ServerPlayerEntityMixin extends PlayerEntity {
         ServerWorld serverWorld = this.getWorld();
         if (((EntityMixinAccess)this).isInCustomPortal()) {
             WorldProperties worldProperties = destination.getLevelProperties();
-            this.networkHandler.sendPacket(new PlayerRespawnS2CPacket(destination.method_40134(), destination.getRegistryKey(), BiomeAccess.hashSeed(destination.getSeed()), this.interactionManager.getGameMode(), this.interactionManager.getPreviousGameMode(), destination.isDebugWorld(), destination.isFlat(), true));
+            this.networkHandler.sendPacket(new PlayerRespawnS2CPacket(serverWorld.getDimensionKey(), serverWorld.getRegistryKey(), BiomeAccess.hashSeed(serverWorld.getSeed()), this.interactionManager.getGameMode(), this.interactionManager.getPreviousGameMode(), serverWorld.isDebugWorld(), serverWorld.isFlat(), true, this.getLastDeathPos()));
             this.networkHandler.sendPacket(new DifficultyS2CPacket(worldProperties.getDifficulty(), worldProperties.isDifficultyLocked()));
             PlayerManager playerManager = this.server.getPlayerManager();
             playerManager.sendCommandTree((ServerPlayerEntity)(Object)this);

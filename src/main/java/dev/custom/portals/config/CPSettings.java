@@ -18,7 +18,7 @@ public final class CPSettings extends Config implements ConfigContainer {
         super(CustomPortals.MOD_ID);
     }
 
-    @ConfigEntries
+    @ConfigEntries(includeAll = true)
     @Transitive
     public static class PortalRuneSettings implements ConfigGroup {
         private static boolean portals_always_unlimited = false;
@@ -35,7 +35,7 @@ public final class CPSettings extends Config implements ConfigContainer {
         YES, NO, CREATIVE
     }
 
-    @ConfigEntries
+    @ConfigEntries(includeAll = true)
     @Transitive
     public static class PortalRangeSettings implements ConfigGroup {
 
@@ -57,10 +57,9 @@ public final class CPSettings extends Config implements ConfigContainer {
     @Transitive
     public static class BlockFilterSettings implements ConfigGroup {
 
-        @ConfigEntry(tooltipTranslationKeys = {"listTooltipLine1", "listTooltipLine2"})
-        @Boolean(trueTranslationKey = "whitelistTrue", falseTranslationKey = "whitelistFalse")
+        @ConfigEntry(descriptionKey = "listTooltip")
         private static boolean whitelist;
-        @ConfigEntry(tooltipTranslationKeys = {"blocksTooltipLine1", "blocksTooltipLine2"})
+        @ConfigEntry(descriptionKey = "blocksTooltip")
         private static List<String> filteredBlocks = new ArrayList<>();
         
         public static boolean isWhitelist() { return whitelist; }

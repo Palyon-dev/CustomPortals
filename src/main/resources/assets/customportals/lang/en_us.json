@@ -54,13 +54,9 @@
     "config.customportals.portalRangeSettings.range_with_enhancer": "Portal Range With Enhancer Rune",
     "config.customportals.portalRangeSettings.range_with_strong_enhancer": "Portal Range With Strong Enhancer Rune",
     "config.customportals.blockFilterSettings": "Portal Frames",
-    "config.customportals.blockFilterSettings.whitelist": "Blacklist/Whitelist",
-    "config.customportals.whitelistTrue": "Whitelist",
-    "config.customportals.whitelistFalse": "Blacklist",
-    "config.customportals.listTooltipLine1": "Whether the below list of filtered", 
-    "config.customportals.listTooltipLine2": "blocks is a blacklist or whitelist",
+    "config.customportals.blockFilterSettings.whitelist": "Whitelist",
+    "config.customportals.listTooltip": "Whether the below list of filtered\nblocks is a blacklist or whitelist",
     "config.customportals.blockFilterSettings.filteredBlocks": "Filtered Blocks",
-    "config.customportals.blocksTooltipLine1": "Allows customizing which blocks may be used as portal frames.",
-    "config.customportals.blocksTooltipLine2": "Takes the block's id, e.g. \"minecraft:stone\" for stone block."
+    "config.customportals.blocksTooltip": "Allows customizing which blocks\nmay be used as portal frames.\nTakes the block's id, e.g.\n\"minecraft:stone\" for stone block."
     
 }

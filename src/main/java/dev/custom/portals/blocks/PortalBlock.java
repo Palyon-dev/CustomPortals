@@ -1,6 +1,6 @@
 package dev.custom.portals.blocks;
 
-import java.util.Random;
+import net.minecraft.util.math.random.Random;
 
 import dev.custom.portals.CustomPortals;
 import dev.custom.portals.util.EntityMixinAccess;
@@ -75,7 +75,7 @@ public class PortalBlock extends Block implements BlockEntityProvider {
       if(portal == null)
          return;
       if(portal.isInterdimensional()) {
-         if (portal.getLinked().getDimensionId().equals("minecraft:the_nether") && world.getDimension().isNatural() && world.getGameRules().getBoolean(GameRules.DO_MOB_SPAWNING) && random.nextInt(2000) < world.getDifficulty().getId()) {
+         if (portal.getLinked().getDimensionId().equals("minecraft:the_nether") && world.getDimension().comp_645() && world.getGameRules().getBoolean(GameRules.DO_MOB_SPAWNING) && random.nextInt(2000) < world.getDifficulty().getId()) {
             while(world.getBlockState(pos).isOf(this)) {
                pos = pos.down();
             }
@@ -87,7 +87,7 @@ public class PortalBlock extends Block implements BlockEntityProvider {
                }
             }
          }
-         if (portal.getLinked().getDimensionId().equals("minecraft:the_end") && world.getDimension().isNatural() && world.getGameRules().getBoolean(GameRules.DO_MOB_SPAWNING) && random.nextInt(2000) < world.getDifficulty().getId()) {
+         if (portal.getLinked().getDimensionId().equals("minecraft:the_end") && world.getDimension().comp_645() && world.getGameRules().getBoolean(GameRules.DO_MOB_SPAWNING) && random.nextInt(2000) < world.getDifficulty().getId()) {
             while(world.getBlockState(pos).isOf(this)) {
                pos = pos.down();
             }
@@ -161,6 +161,8 @@ public class PortalBlock extends Block implements BlockEntityProvider {
       if(!bl && !newState.isOf(this) && !(new AreaHelper(world, pos, axis2)).wasAlreadyValid()) {
          Portal portal = CustomPortals.PORTALS.get((World)world).getPortalFromPos(pos);
          if(portal != null) {
+            if (newState.getBlock().getTranslationKey().equals(portal.getFrameId()))
+               return super.getStateForNeighborUpdate(state, direction, newState, world, pos, posFrom);
             CustomPortals.PORTALS.get((World)world).unregisterPortal(portal);
             if(!((World)world).isClient)
                CustomPortals.PORTALS.get((World)world).syncWithAll(((ServerWorld)world).getServer());
@@ -170,9 +172,30 @@ public class PortalBlock extends Block implements BlockEntityProvider {
       }
       return super.getStateForNeighborUpdate(state, direction, newState, world, pos, posFrom);
    }
-   
+
+   private boolean checkRedstoneSignal(World world, Portal portal) {
+      for (BlockPos pos : portal.getPortalBlocks()) {
+         if (world.isReceivingRedstonePower(pos))
+            return true;
+      }
+      return false;
+   }
+
+   @Override
+   public void neighborUpdate(BlockState blockState, World world, BlockPos blockPos, Block block, BlockPos blockPos2, boolean bl) {
+      Portal portal = CustomPortals.PORTALS.get(world).getPortalFromPos(blockPos);
+      if (portal == null)
+         return;
+      boolean bl2 = checkRedstoneSignal(world, portal);
+      if (bl2 != portal.hasRedstoneSignal()) {
+         portal.setHasRedstoneSignal(bl2);
+      }
+   }
+
    @Override
    public void onEntityCollision(BlockState state, World world, BlockPos pos, Entity entity) {
+      if (!state.get(LIT))
+         return;
       Portal portal = CustomPortals.PORTALS.get(world).getPortalFromPos(pos);
       if(portal != null && entity.canUsePortals())
          ((EntityMixinAccess)entity).setInCustomPortal(portal);
