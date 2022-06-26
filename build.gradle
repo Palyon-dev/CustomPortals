@@ -45,8 +45,11 @@ dependencies {
     modImplementation "dev.onyxstudios.cardinal-components-api:cardinal-components-world:5.0.0-beta.1"
 	include "dev.onyxstudios.cardinal-components-api:cardinal-components-world:5.0.0-beta.1"
 
-	modImplementation "com.gitlab.Lortseam:completeconfig:2.0.0"
-	include "com.gitlab.Lortseam:completeconfig:2.0.0"
+	modImplementation("com.gitlab.Lortseam.completeconfig:base:2.0.0")
+	include "com.gitlab.Lortseam.completeconfig:base:2.0.0"
+
+	modImplementation("com.gitlab.Lortseam.completeconfig:gui-cloth:2.0.0")
+	include "com.gitlab.Lortseam.completeconfig:gui-cloth:2.0.0"
 
 	// PSA: Some older mods, compiled on Loom 0.2.1, might have outdated Maven POMs.
 	// You may need to force-disable transitiveness on them.

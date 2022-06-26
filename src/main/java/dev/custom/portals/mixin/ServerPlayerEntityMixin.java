@@ -72,43 +72,48 @@ public abstract class ServerPlayerEntityMixin extends PlayerEntity {
      * vanilla code.
      */
     @Inject(method = "moveToWorld", at = @At("HEAD"), cancellable = true)
-    public void moveToWorld(ServerWorld destination, CallbackInfoReturnable<Entity> ci) {
+    public void moveToWorld(ServerWorld serverWorld, CallbackInfoReturnable<Entity> ci) {
         this.inTeleportationState = true;
-        ServerWorld serverWorld = this.getWorld();
+        ServerWorld serverWorld2 = this.getWorld();
         if (((EntityMixinAccess)this).isInCustomPortal()) {
-            WorldProperties worldProperties = destination.getLevelProperties();
+            WorldProperties worldProperties = serverWorld.getLevelProperties();
             this.networkHandler.sendPacket(new PlayerRespawnS2CPacket(serverWorld.getDimensionKey(), serverWorld.getRegistryKey(), BiomeAccess.hashSeed(serverWorld.getSeed()), this.interactionManager.getGameMode(), this.interactionManager.getPreviousGameMode(), serverWorld.isDebugWorld(), serverWorld.isFlat(), true, this.getLastDeathPos()));
             this.networkHandler.sendPacket(new DifficultyS2CPacket(worldProperties.getDifficulty(), worldProperties.isDifficultyLocked()));
             PlayerManager playerManager = this.server.getPlayerManager();
-            playerManager.sendCommandTree((ServerPlayerEntity)(Object)this);
-            serverWorld.removePlayer((ServerPlayerEntity)(Object)this, Entity.RemovalReason.CHANGED_DIMENSION);
+            playerManager.sendCommandTree(((ServerPlayerEntity)(Object)this));
+            serverWorld2.removePlayer(((ServerPlayerEntity)(Object)this), RemovalReason.CHANGED_DIMENSION);
             this.unsetRemoved();
-            TeleportTarget teleportTarget = this.getTeleportTarget(destination);
+            TeleportTarget teleportTarget = this.getTeleportTarget(serverWorld);
             if (teleportTarget != null) {
-                serverWorld.getProfiler().push("moving");
-   
-                serverWorld.getProfiler().pop();
-                serverWorld.getProfiler().push("placing");
-                this.setWorld(destination);
-                destination.onPlayerChangeDimension((ServerPlayerEntity)(Object)this);
+                serverWorld2.getProfiler().push("moving");
+                /*if (registryKey == World.OVERWORLD && serverWorld.getRegistryKey() == World.NETHER) {
+                    this.enteredNetherPos = this.getPos();
+                } else if (serverWorld.getRegistryKey() == World.END) {
+                    this.createEndSpawnPlatform(serverWorld, new BlockPos(teleportTarget.position));
+                }*/
+
+                serverWorld2.getProfiler().pop();
+                serverWorld2.getProfiler().push("placing");
+                this.setWorld(serverWorld);
+                serverWorld.onPlayerChangeDimension(((ServerPlayerEntity)(Object)this));
                 this.setRotation(teleportTarget.yaw, teleportTarget.pitch);
                 this.refreshPositionAfterTeleport(teleportTarget.position.x, teleportTarget.position.y, teleportTarget.position.z);
-                serverWorld.getProfiler().pop();
-                this.worldChanged(serverWorld);
+                serverWorld2.getProfiler().pop();
+                this.worldChanged(serverWorld2);
                 this.networkHandler.sendPacket(new PlayerAbilitiesS2CPacket(this.getAbilities()));
-                playerManager.sendWorldInfo((ServerPlayerEntity)(Object)this, destination);
-                playerManager.sendPlayerStatus((ServerPlayerEntity)(Object)this);
-                Iterator<StatusEffectInstance> var7 = this.getStatusEffects().iterator();
-   
+                playerManager.sendWorldInfo(((ServerPlayerEntity)(Object)this), serverWorld);
+                playerManager.sendPlayerStatus(((ServerPlayerEntity)(Object)this));
+                Iterator var7 = this.getStatusEffects().iterator();
+
                 while(var7.hasNext()) {
-                   StatusEffectInstance statusEffectInstance = (StatusEffectInstance)var7.next();
-                   this.networkHandler.sendPacket(new EntityStatusEffectS2CPacket(this.getId(), statusEffectInstance));
+                    StatusEffectInstance statusEffectInstance = (StatusEffectInstance)var7.next();
+                    this.networkHandler.sendPacket(new EntityStatusEffectS2CPacket(this.getId(), statusEffectInstance));
                 }
-   
-               this.networkHandler.sendPacket(new WorldEventS2CPacket(WorldEvents.TRAVEL_THROUGH_PORTAL, BlockPos.ORIGIN, 0, false));
-               this.syncedExperience = -1;
-               this.syncedHealth = -1.0F;
-               this.syncedFoodLevel = -1;
+
+                this.networkHandler.sendPacket(new WorldEventS2CPacket(1032, BlockPos.ORIGIN, 0, false));
+                this.syncedExperience = -1;
+                this.syncedHealth = -1.0F;
+                this.syncedFoodLevel = -1;
             }
             ci.setReturnValue((ServerPlayerEntity)(Object)this);
         }
