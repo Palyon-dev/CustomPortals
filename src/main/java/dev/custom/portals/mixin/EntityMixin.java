@@ -41,13 +41,13 @@ public abstract class EntityMixin implements EntityMixinAccess {
     public float pitch;
 
     @Shadow
-    public abstract boolean hasNetherPortalCooldown();
+    public abstract boolean hasPortalCooldown();
     @Shadow
-    public abstract void resetNetherPortalCooldown();
+    public abstract void resetPortalCooldown();
     @Shadow
     public abstract int getMaxNetherPortalTime();
     @Shadow
-    protected abstract void tickNetherPortalCooldown();
+    protected abstract void tickPortalCooldown();
     @Shadow
     public abstract void teleport(double destX, double destY, double destZ);
     @Shadow
@@ -86,8 +86,8 @@ public abstract class EntityMixin implements EntityMixinAccess {
 
     @Unique
     public void setInCustomPortal(Portal portal) {
-        if (this.hasNetherPortalCooldown()) {
-            this.resetNetherPortalCooldown();
+        if (this.hasPortalCooldown()) {
+            this.resetPortalCooldown();
         } else {
             this.destPortal = portal.getLinked();
             this.inCustomPortal = true;
@@ -113,7 +113,7 @@ public abstract class EntityMixin implements EntityMixinAccess {
                 if (!this.hasVehicle() && this.customPortalTime++ >= i && this.destPortal != null) {
                     this.world.getProfiler().push("portal");
                     this.customPortalTime = i;
-                    this.resetNetherPortalCooldown();
+                    this.resetPortalCooldown();
                     String destDimensionId = destPortal.getDimensionId();
                     if(!destDimensionId.equals(this.world.getRegistryKey().getValue().toString())) {
                         for(RegistryKey<World> registryKey : minecraftServer.getWorldRegistryKeys()) {
@@ -153,7 +153,7 @@ public abstract class EntityMixin implements EntityMixinAccess {
                 }
             }
   
-           this.tickNetherPortalCooldown();
+           this.tickPortalCooldown();
         }
     }
 

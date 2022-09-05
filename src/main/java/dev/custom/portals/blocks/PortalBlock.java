@@ -53,12 +53,12 @@ public class PortalBlock extends Block implements BlockEntityProvider {
     
    public PortalBlock(AbstractBlock.Settings settings) {
       super(settings);
-      this.setDefaultState((BlockState)((BlockState)((BlockState)this.stateManager.getDefaultState()).with(AXIS, Direction.Axis.X).with(LIT, false)));
+      this.setDefaultState(this.stateManager.getDefaultState().with(AXIS, Direction.Axis.X).with(LIT, false));
    }
 
    @Override
    public VoxelShape getOutlineShape(BlockState state, BlockView world, BlockPos pos, ShapeContext context) {
-      switch((Direction.Axis)state.get(AXIS)) {
+      switch(state.get(AXIS)) {
       case Z:
          return Z_SHAPE;
       case Y:
@@ -83,7 +83,7 @@ public class PortalBlock extends Block implements BlockEntityProvider {
             if (world.getBlockState(pos).allowsSpawning(world, pos, EntityType.ZOMBIFIED_PIGLIN)) {
                Entity entity = EntityType.ZOMBIFIED_PIGLIN.spawn(world, (NbtCompound)null, (Text)null, (PlayerEntity)null, pos.up(), SpawnReason.STRUCTURE, false, false);
                if (entity != null) {
-                  entity.resetNetherPortalCooldown();
+                  entity.resetPortalCooldown();
                }
             }
          }
@@ -95,7 +95,7 @@ public class PortalBlock extends Block implements BlockEntityProvider {
             if (world.getBlockState(pos).allowsSpawning(world, pos, EntityType.ENDERMAN)) {
                Entity entity = EntityType.ENDERMAN.spawn(world, (NbtCompound)null, (Text)null, (PlayerEntity)null, pos.up(), SpawnReason.STRUCTURE, false, false);
                if (entity != null) {
-                  entity.resetNetherPortalCooldown();
+                  entity.resetPortalCooldown();
                }
             }
          }

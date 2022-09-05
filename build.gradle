@@ -31,25 +31,25 @@ repositories {
 }
 
 dependencies {
-	minecraft "com.mojang:minecraft:1.19"
-    mappings "net.fabricmc:yarn:1.19+build.4"
-    modImplementation "net.fabricmc:fabric-loader:0.14.8"
+	minecraft "com.mojang:minecraft:1.19.2"
+    mappings "net.fabricmc:yarn:1.19.2+build.9"
+    modImplementation "net.fabricmc:fabric-loader:0.14.9"
 
 	// Fabric API. This is technically optional, but you probably want it anyway.
-	modImplementation "net.fabricmc.fabric-api:fabric-api:0.56.1+1.19"
+	modImplementation "net.fabricmc.fabric-api:fabric-api:0.60.0+1.19.2"
 
 	// Adds an API dependency on the base cardinal components module (required by every other module)
-	modApi "dev.onyxstudios.cardinal-components-api:cardinal-components-base:5.0.0-beta.1"
-	include "dev.onyxstudios.cardinal-components-api:cardinal-components-base:5.0.0-beta.1"
+	modApi "dev.onyxstudios.cardinal-components-api:cardinal-components-base:5.0.2"
+	include "dev.onyxstudios.cardinal-components-api:cardinal-components-base:5.0.2"
 	// Replace modImplementation with modApi if you expose components in your own API
-    modImplementation "dev.onyxstudios.cardinal-components-api:cardinal-components-world:5.0.0-beta.1"
-	include "dev.onyxstudios.cardinal-components-api:cardinal-components-world:5.0.0-beta.1"
+    modImplementation "dev.onyxstudios.cardinal-components-api:cardinal-components-world:5.0.2"
+	include "dev.onyxstudios.cardinal-components-api:cardinal-components-world:5.0.2"
 
-	modImplementation("com.gitlab.Lortseam.completeconfig:base:2.0.0")
-	include "com.gitlab.Lortseam.completeconfig:base:2.0.0"
+	modImplementation("com.gitlab.Lortseam.completeconfig:base:2.0.1")
+	include "com.gitlab.Lortseam.completeconfig:base:2.0.1"
 
-	modImplementation("com.gitlab.Lortseam.completeconfig:gui-cloth:2.0.0")
-	include "com.gitlab.Lortseam.completeconfig:gui-cloth:2.0.0"
+	modImplementation("com.gitlab.Lortseam.completeconfig:gui-cloth:2.0.1")
+	include "com.gitlab.Lortseam.completeconfig:gui-cloth:2.0.1"
 
 	// PSA: Some older mods, compiled on Loom 0.2.1, might have outdated Maven POMs.
 	// You may need to force-disable transitiveness on them.
