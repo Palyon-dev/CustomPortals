@@ -9,8 +9,8 @@ import net.minecraft.util.math.Vec3d;
 
 public class Portal {
 
-    public final int length;
-    public final int width;
+    public float offsetX;
+    public float offsetZ;
 
     private final String frameId;
     private final String dimensionId;
@@ -29,14 +29,14 @@ public class Portal {
     private Portal linked;
 
     public Portal(final String frameId, final String dimensionId, final MapColor color, final BlockPos spawnPos,
-            final List<BlockPos> portalBlocks, final int length, final int width) {
+            final List<BlockPos> portalBlocks, final float offsetX, final float offsetZ) {
         this.frameId = frameId;
         this.dimensionId = dimensionId;
         this.color = color;
         this.spawnPos = spawnPos;
         this.portalBlocks = portalBlocks;
-        this.length = length;
-        this.width = width;
+        this.offsetX = offsetX;
+        this.offsetZ = offsetZ;
         hasteRunes = 0;
         gateRunes = 0;
         weakEnhancerRunes = 0;
@@ -45,15 +45,15 @@ public class Portal {
     }
 
     public Portal(final String frameId, final String dimensionId, final MapColor color, final BlockPos spawnPos,
-            final List<BlockPos> portalBlocks, final int length, final int width, int hasteRunes, int gateRunes,
+            final List<BlockPos> portalBlocks, final float offsetX, final float offsetZ, int hasteRunes, int gateRunes,
             int weakEnhancerRunes, int strongEnhancerRunes, int infinityRunes) {
         this.frameId = frameId;
         this.dimensionId = dimensionId;
         this.color = color;
         this.spawnPos = spawnPos;
         this.portalBlocks = portalBlocks;
-        this.length = length;
-        this.width = width;
+        this.offsetX = offsetX;
+        this.offsetZ = offsetZ;
         this.hasteRunes = hasteRunes;
         this.gateRunes = gateRunes;
         this.weakEnhancerRunes = weakEnhancerRunes;
@@ -105,6 +105,12 @@ public class Portal {
         linked = portal;
     }
 
+    public void setSpawnPos(BlockPos newSpawn) {
+        spawnPos = newSpawn;
+        offsetX = 0.5f;
+        offsetZ = 0.5f;
+    }
+
     public int getHasteRunes() { return hasteRunes; }
     public int getGateRunes() { return gateRunes; }
     public int getWeakEnhancerRunes() { return weakEnhancerRunes; }
@@ -152,10 +158,7 @@ public class Portal {
                 if (portal.getLinked() != this)
                     return;
             }
-            if (CPSettings.PortalRuneSettings.portalsAlwaysUnlimited() && CPSettings.PortalRuneSettings.portalsAlwaysInterdim()) {
-                linked = portal;
-                portal.setLinked(this);
-            } else {
+            if (!CPSettings.PortalRuneSettings.portalsAlwaysUnlimited() || !CPSettings.PortalRuneSettings.portalsAlwaysInterdim()) {
                 int distance;
                 if (!portal.getDimensionId().equals(dimensionId)) {
                     if (!this.hasGate() && !portal.hasGate() && !CPSettings.PortalRuneSettings.portalsAlwaysInterdim())
@@ -164,36 +167,36 @@ public class Portal {
                         int translatedX = portal.getSpawnPos().getX() * 8;
                         int translatedZ = portal.getSpawnPos().getZ() * 8;
                         BlockPos translatedSpawnPos = new BlockPos(new Vec3d(
-                            (double)translatedX, (double)portal.getSpawnPos().getY(), (double)translatedZ));
+                                (double) translatedX, (double) portal.getSpawnPos().getY(), (double) translatedZ));
                         distance = distance(spawnPos, translatedSpawnPos);
-                    }
-                    else if (this.dimensionId.equals("minecraft:the_nether")) {
+                    } else if (this.dimensionId.equals("minecraft:the_nether")) {
                         int translatedX = spawnPos.getX() * 8;
                         int translatedZ = spawnPos.getZ() * 8;
                         BlockPos translatedSpawnPos = new BlockPos(new Vec3d(
-                            (double)translatedX, (double)spawnPos.getY(), (double)translatedZ));
+                                (double) translatedX, (double) spawnPos.getY(), (double) translatedZ));
                         distance = distance(translatedSpawnPos, portal.getSpawnPos());
                     } else distance = distance(spawnPos, portal.getSpawnPos());
                 } else distance = distance(spawnPos, portal.getSpawnPos());
                 if (!CPSettings.PortalRuneSettings.portalsAlwaysUnlimited()) {
-                    int tier = portal.getEnhanceTier() > this.getEnhanceTier() ? portal.getEnhanceTier() : this.getEnhanceTier();
+                    int tier = Math.max(portal.getEnhanceTier(), this.getEnhanceTier());
                     switch (tier) {
-                        case 0:
+                        case 0 -> {
                             if (distance > CPSettings.PortalRangeSettings.getDefaultRange())
                                 return;
-                            break;
-                        case 1:
+                        }
+                        case 1 -> {
                             if (distance > CPSettings.PortalRangeSettings.getRangeWithEnhancer())
                                 return;
-                            break;
-                        case 2:
+                        }
+                        case 2 -> {
                             if (distance > CPSettings.PortalRangeSettings.getRangeWithStrongEnhancer())
                                 return;
+                        }
                     }
                 }
-                linked = portal;
-                portal.setLinked(this);
             }
+            linked = portal;
+            portal.setLinked(this);
         }
     }
 

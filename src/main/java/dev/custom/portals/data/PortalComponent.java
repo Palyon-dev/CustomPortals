@@ -109,14 +109,27 @@ public class PortalComponent implements BasePortalComponent {
                 NbtCompound curBlockTag = portalBlocksData.getCompound(j);
                 portalBlocks.add(new BlockPos(curBlockTag.getInt("xPos"), curBlockTag.getInt("yPos"), curBlockTag.getInt("zPos")));
             }
+
             int length = curTag.getInt("length");
             int width = curTag.getInt("width");
+            float offsetX, offsetZ;
+
+            // for backwards compatibility with earlier versions
+            if (length != 0 || width != 0) {
+                offsetX = length == 0 || length % 2 != 0 ? 0.5f : 0.0f;
+                offsetZ = width == 0 ? 0.5f : width % 2 != 0 ? -0.5f : 0.0f;
+            }
+            else {
+                offsetX = curTag.getFloat("offsetX");
+                offsetZ = curTag.getFloat("offsetZ");
+            }
+
             int hasteRunes = curTag.getInt("haste");
             int gateRunes = curTag.getInt("gate");
             int weakEnhancerRunes = curTag.getInt("weak");
             int strongEnhancerRunes = curTag.getInt("strong");
             int infinityRunes = curTag.getInt("infinity");
-            Portal portal = new Portal(frameId, dimensionId, color, spawnPos, portalBlocks, length, width, 
+            Portal portal = new Portal(frameId, dimensionId, color, spawnPos, portalBlocks, offsetX, offsetZ,
                 hasteRunes, gateRunes, weakEnhancerRunes, strongEnhancerRunes, infinityRunes);
             registerPortal(portal);
         }
@@ -133,6 +146,8 @@ public class PortalComponent implements BasePortalComponent {
             curTag.putInt("xSpawn", curPortal.getSpawnPos().getX());
             curTag.putInt("ySpawn", curPortal.getSpawnPos().getY());
             curTag.putInt("zSpawn", curPortal.getSpawnPos().getZ());
+            curTag.putFloat("offsetX", curPortal.offsetX);
+            curTag.putFloat("offsetZ", curPortal.offsetZ);
             curTag.putInt("color", curPortal.getColor().id);
             curTag.putInt("haste", curPortal.getHasteRunes());
             curTag.putInt("gate", curPortal.getGateRunes());
@@ -148,8 +163,7 @@ public class PortalComponent implements BasePortalComponent {
                 portalBlockData.add(blockTag);
             }
             curTag.put("blocks", portalBlockData);
-            curTag.putInt("length", curPortal.length);
-            curTag.putInt("width", curPortal.width);
+
             portalData.add(curTag);
         }
         tag.put("portals", portalData);

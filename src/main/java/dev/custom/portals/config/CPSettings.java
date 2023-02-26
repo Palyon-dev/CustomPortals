@@ -24,15 +24,24 @@ public final class CPSettings extends Config implements ConfigContainer {
         private static boolean portals_always_unlimited = false;
         private static boolean portals_always_interdimensional;
         @ConfigEntry.Dropdown
-        private static Dropdown dropdown = Dropdown.CREATIVE;
+        private static HasteDropdown hasteDropdown = HasteDropdown.CREATIVE;
+        @ConfigEntry.Dropdown
+        @ConfigEntry(descriptionKey = "redstoneTooltip")
+        private static RedstoneDropdown redstoneDropdown = RedstoneDropdown.OFF;
 
         public static boolean portalsAlwaysUnlimited() { return portals_always_unlimited; }
-        public static Dropdown portalsAlwaysHaste() { return dropdown; }
+        public static HasteDropdown portalsAlwaysHaste() { return hasteDropdown; }
+
+        public static RedstoneDropdown redstoneSetting() { return redstoneDropdown; }
         public static boolean portalsAlwaysInterdim() { return portals_always_interdimensional; }
     }
 
-    public enum Dropdown {
+    public enum HasteDropdown {
         YES, NO, CREATIVE
+    }
+
+    public enum RedstoneDropdown {
+        OFF, ON, NONE
     }
 
     @ConfigEntries(includeAll = true)

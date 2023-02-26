@@ -69,12 +69,8 @@ public abstract class EntityMixin implements EntityMixinAccess {
             double destX = dest.getX();
             double destY = dest.getY();
             double destZ = dest.getZ();
-            if(destPortal.width == 0)
-                destZ += 0.5;
-            if(destPortal.length == 0 || destPortal.length % 2 != 0)
-                destX += 0.5;
-            if(destPortal.width % 2 != 0) 
-                destZ -= 0.5;
+            destX += destPortal.offsetX;
+            destZ += destPortal.offsetZ;
             /* For some reason, when the player is going from the Overworld to the End, the Y coordinate somehow gets
              * decreased by 1. I have no idea why this happens or how to fix it directly, so this is here to correct it.
              */
@@ -100,9 +96,9 @@ public abstract class EntityMixin implements EntityMixinAccess {
         if (this.world instanceof ServerWorld) {
             int i;
             if (((Entity)(Object)this) instanceof PlayerEntity && destPortal != null) {
-                if (CPSettings.PortalRuneSettings.portalsAlwaysHaste() == CPSettings.Dropdown.CREATIVE)
+                if (CPSettings.PortalRuneSettings.portalsAlwaysHaste() == CPSettings.HasteDropdown.CREATIVE)
                     i = destPortal.hasHaste() ? 1 : this.getMaxNetherPortalTime();
-                else if (CPSettings.PortalRuneSettings.portalsAlwaysHaste() == CPSettings.Dropdown.NO)
+                else if (CPSettings.PortalRuneSettings.portalsAlwaysHaste() == CPSettings.HasteDropdown.NO)
                     i = destPortal.hasHaste() ? 1 : 80;
                 else i = 1;
             }
@@ -130,12 +126,8 @@ public abstract class EntityMixin implements EntityMixinAccess {
                         double destX = dest.getX();
                         double destY = dest.getY();
                         double destZ = dest.getZ();
-                        if(destPortal.width == 0)
-                            destZ += 0.5;
-                        if(destPortal.length == 0 || destPortal.length % 2 != 0)
-                            destX += 0.5;
-                        if(destPortal.width % 2 != 0) 
-                            destZ -= 0.5;
+                        destX += destPortal.offsetX;
+                        destZ += destPortal.offsetZ;
                         this.teleport(destX, destY, destZ);
                     }
                     this.world.getProfiler().pop();

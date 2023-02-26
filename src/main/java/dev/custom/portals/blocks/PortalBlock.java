@@ -1,5 +1,9 @@
 package dev.custom.portals.blocks;
 
+import net.minecraft.text.*;
+import net.minecraft.util.ActionResult;
+import net.minecraft.util.Hand;
+import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.random.Random;
 
 import dev.custom.portals.CustomPortals;
@@ -32,7 +36,6 @@ import net.minecraft.state.StateManager;
 import net.minecraft.state.property.BooleanProperty;
 import net.minecraft.state.property.EnumProperty;
 import net.minecraft.state.property.Properties;
-import net.minecraft.text.Text;
 import net.minecraft.util.BlockRotation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
@@ -43,6 +46,9 @@ import net.minecraft.world.World;
 import net.minecraft.world.WorldAccess;
 import net.minecraft.world.dimension.AreaHelper;
 import net.minecraft.server.world.ServerWorld;
+
+import java.util.List;
+import java.util.Optional;
 
 public class PortalBlock extends Block implements BlockEntityProvider {
    public static final BooleanProperty LIT;
@@ -69,6 +75,18 @@ public class PortalBlock extends Block implements BlockEntityProvider {
       }
    }
 
+   @Override
+   public ActionResult onUse(BlockState blockState, World world, BlockPos blockPos, PlayerEntity playerEntity, Hand hand, BlockHitResult blockHitResult) {
+      if (playerEntity.isSneaking() && playerEntity.getStackInHand(hand).isEmpty()) {
+         Portal portal = CustomPortals.PORTALS.get(world).getPortalFromPos(blockPos);
+         if (portal == null) return ActionResult.FAIL;
+         portal.setSpawnPos(blockPos);
+         if (world.isClient)
+            playerEntity.sendMessage(Text.of("Set portal's spawn position to " + CustomPortals.blockPosToString(blockPos)));
+         return ActionResult.SUCCESS;
+      }
+      return ActionResult.PASS;
+   }
    @Override
    public void randomTick(BlockState state, ServerWorld world, BlockPos pos, Random random) {
       Portal portal = CustomPortals.PORTALS.get(world).getPortalFromPos(pos);
