@@ -72,6 +72,7 @@ public class PortalHelper {
         }
         int xSpawn = (rightmost + leftmost) / 2;
         int length = rightmost - leftmost + 1;
+        if (length % 2 == 0 && leftmost >= 0) xSpawn++;
         List<BlockPos> midPortalBlocks = new ArrayList<>();
         for (BlockPos blockPos : portalBlocks) {
             int x = getTranslatedX(blockPos, axis);
@@ -107,16 +108,16 @@ public class PortalHelper {
                 if (length % 2 != 0) offsetZ = 0.5f;
             }
             case Y -> {
-                offsetX = length % 2 != 0 ? 0.5f : 1.0f;
+                if (length % 2 != 0) offsetX = 0.5f;
                 if (height % 2 != 0) offsetZ = 0.5f;
             }
             case Z -> {
                 offsetZ = 0.5f;
-                offsetX = length % 2 != 0 ? 0.5f : 1.0f;
+                if (length % 2 != 0) offsetX = 0.5f;
             }
         }
         BlockPos spawnPos = new BlockPos(new Vec3d(trueXSpawn, trueYSpawn, trueZSpawn));
-        System.out.println(CustomPortals.blockPosToString(spawnPos));
+        //System.out.println(CustomPortals.blockPosToString(spawnPos));
         return new SpawnPosData(spawnPos, offsetX, offsetZ);
     }
 

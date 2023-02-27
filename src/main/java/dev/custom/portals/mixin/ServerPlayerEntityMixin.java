@@ -86,12 +86,6 @@ public abstract class ServerPlayerEntityMixin extends PlayerEntity {
             TeleportTarget teleportTarget = this.getTeleportTarget(serverWorld);
             if (teleportTarget != null) {
                 serverWorld2.getProfiler().push("moving");
-                /*if (registryKey == World.OVERWORLD && serverWorld.getRegistryKey() == World.NETHER) {
-                    this.enteredNetherPos = this.getPos();
-                } else if (serverWorld.getRegistryKey() == World.END) {
-                    this.createEndSpawnPlatform(serverWorld, new BlockPos(teleportTarget.position));
-                }*/
-
                 serverWorld2.getProfiler().pop();
                 serverWorld2.getProfiler().push("placing");
                 this.setWorld(serverWorld);

@@ -7,6 +7,7 @@ import net.minecraft.item.ItemUsageContext;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Direction;
 import net.minecraft.world.World;
 public class PortalCatalyst extends Item {
 
@@ -22,6 +23,13 @@ public class PortalCatalyst extends Item {
         PlayerEntity playerEntity = ctx.getPlayer();
         World world = ctx.getWorld();
         BlockPos pos = new BlockPos(ctx.getHitPos());
+        Direction dir = ctx.getSide();
+        if (dir == Direction.NORTH)
+            pos = pos.north();
+        else if (dir == Direction.WEST)
+            pos = pos.west();
+        else if (dir == Direction.DOWN)
+            pos = pos.down();
         if (PortalHelper.buildPortal(pos, portalBlock, world)) {
             if (playerEntity != null) playerEntity.playSound(SoundEvents.ITEM_FLINTANDSTEEL_USE, 1.0F, 1.0F);
             ctx.getStack().decrement(1);
