@@ -44,7 +44,7 @@ import net.minecraft.world.BlockView;
 import net.minecraft.world.GameRules;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldAccess;
-import net.minecraft.world.dimension.AreaHelper;
+import net.minecraft.world.dimension.NetherPortal;
 import net.minecraft.server.world.ServerWorld;
 
 import java.util.List;
@@ -93,25 +93,25 @@ public class PortalBlock extends Block implements BlockEntityProvider {
       if(portal == null)
          return;
       if(portal.isInterdimensional()) {
-         if (portal.getLinked().getDimensionId().equals("minecraft:the_nether") && world.getDimension().comp_645() && world.getGameRules().getBoolean(GameRules.DO_MOB_SPAWNING) && random.nextInt(2000) < world.getDifficulty().getId()) {
+         if (portal.getLinked().getDimensionId().equals("minecraft:the_nether") && world.getGameRules().getBoolean(GameRules.DO_MOB_SPAWNING) && random.nextInt(2000) < world.getDifficulty().getId()) {
             while(world.getBlockState(pos).isOf(this)) {
                pos = pos.down();
             }
   
             if (world.getBlockState(pos).allowsSpawning(world, pos, EntityType.ZOMBIFIED_PIGLIN)) {
-               Entity entity = EntityType.ZOMBIFIED_PIGLIN.spawn(world, (NbtCompound)null, (Text)null, (PlayerEntity)null, pos.up(), SpawnReason.STRUCTURE, false, false);
+               Entity entity = EntityType.ZOMBIFIED_PIGLIN.spawn(world, pos.up(), SpawnReason.STRUCTURE);
                if (entity != null) {
                   entity.resetPortalCooldown();
                }
             }
          }
-         if (portal.getLinked().getDimensionId().equals("minecraft:the_end") && world.getDimension().comp_645() && world.getGameRules().getBoolean(GameRules.DO_MOB_SPAWNING) && random.nextInt(2000) < world.getDifficulty().getId()) {
+         if (portal.getLinked().getDimensionId().equals("minecraft:the_end") && world.getGameRules().getBoolean(GameRules.DO_MOB_SPAWNING) && random.nextInt(2000) < world.getDifficulty().getId()) {
             while(world.getBlockState(pos).isOf(this)) {
                pos = pos.down();
             }
   
             if (world.getBlockState(pos).allowsSpawning(world, pos, EntityType.ENDERMAN)) {
-               Entity entity = EntityType.ENDERMAN.spawn(world, (NbtCompound)null, (Text)null, (PlayerEntity)null, pos.up(), SpawnReason.STRUCTURE, false, false);
+               Entity entity = EntityType.ENDERMAN.spawn(world, pos.up(), SpawnReason.STRUCTURE);
                if (entity != null) {
                   entity.resetPortalCooldown();
                }
@@ -176,7 +176,7 @@ public class PortalBlock extends Block implements BlockEntityProvider {
       Direction.Axis axis = direction.getAxis();
       Direction.Axis axis2 = (Direction.Axis)state.get(AXIS);
       boolean bl = axis2 == Direction.Axis.Y ? axis2 == axis && axis.isVertical() : axis2 != axis && axis.isHorizontal();
-      if(!bl && !newState.isOf(this) && !(new AreaHelper(world, pos, axis2)).wasAlreadyValid()) {
+      if(!bl && !newState.isOf(this) && !(new NetherPortal(world, pos, axis2)).wasAlreadyValid()) {
          Portal portal = CustomPortals.PORTALS.get((World)world).getPortalFromPos(pos);
          if(portal != null) {
             if (newState.getBlock().getTranslationKey().equals(portal.getFrameId()))

@@ -62,8 +62,8 @@ public abstract class ServerPlayerEntityMixin extends PlayerEntity {
     @Shadow
     public abstract void setWorld(ServerWorld world);
 
-    public ServerPlayerEntityMixin(World world, BlockPos blockPos, float f, GameProfile gameProfile, @Nullable PlayerPublicKey playerPublicKey) {
-        super(world, blockPos, f, gameProfile, playerPublicKey);
+    public ServerPlayerEntityMixin(MinecraftServer minecraftServer, ServerWorld serverWorld, GameProfile gameProfile) {
+        super(serverWorld, serverWorld.getSpawnPos(), serverWorld.getSpawnAngle(), gameProfile);
     }
 
     /* This is necessary to avoid unwanted side effects from using the normal moveToWorld(),
@@ -77,7 +77,7 @@ public abstract class ServerPlayerEntityMixin extends PlayerEntity {
         ServerWorld serverWorld2 = this.getWorld();
         if (((EntityMixinAccess)this).isInCustomPortal()) {
             WorldProperties worldProperties = serverWorld.getLevelProperties();
-            this.networkHandler.sendPacket(new PlayerRespawnS2CPacket(serverWorld.getDimensionKey(), serverWorld.getRegistryKey(), BiomeAccess.hashSeed(serverWorld.getSeed()), this.interactionManager.getGameMode(), this.interactionManager.getPreviousGameMode(), serverWorld.isDebugWorld(), serverWorld.isFlat(), true, this.getLastDeathPos()));
+            this.networkHandler.sendPacket(new PlayerRespawnS2CPacket(serverWorld.getDimensionKey(), serverWorld.getRegistryKey(), BiomeAccess.hashSeed(serverWorld.getSeed()), this.interactionManager.getGameMode(), this.interactionManager.getPreviousGameMode(), serverWorld.isDebugWorld(), serverWorld.isFlat(), (byte)3, this.getLastDeathPos()));
             this.networkHandler.sendPacket(new DifficultyS2CPacket(worldProperties.getDifficulty(), worldProperties.isDifficultyLocked()));
             PlayerManager playerManager = this.server.getPlayerManager();
             playerManager.sendCommandTree(((ServerPlayerEntity)(Object)this));
@@ -85,6 +85,7 @@ public abstract class ServerPlayerEntityMixin extends PlayerEntity {
             this.unsetRemoved();
             TeleportTarget teleportTarget = this.getTeleportTarget(serverWorld);
             if (teleportTarget != null) {
+                serverWorld2.getProfiler().push("moving");
                 serverWorld2.getProfiler().push("moving");
                 serverWorld2.getProfiler().pop();
                 serverWorld2.getProfiler().push("placing");

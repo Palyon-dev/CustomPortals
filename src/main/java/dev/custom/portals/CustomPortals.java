@@ -11,7 +11,7 @@ import dev.onyxstudios.cca.api.v3.world.WorldComponentInitializer;
 import dev.onyxstudios.cca.api.v3.component.ComponentRegistryV3;
 import dev.onyxstudios.cca.api.v3.component.ComponentKey;
 import net.fabricmc.api.ModInitializer;
-import net.fabricmc.fabric.api.client.itemgroup.FabricItemGroupBuilder;
+import net.fabricmc.fabric.api.itemgroup.v1.FabricItemGroup;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Identifier;
@@ -26,9 +26,8 @@ public class CustomPortals implements ModInitializer, WorldComponentInitializer 
 
         private static CPSettings Config;
 
-        public static final ItemGroup PORTALS_ITEM_GROUP = FabricItemGroupBuilder.build(
-        new Identifier(CustomPortals.MOD_ID, "general"),
-        () -> new ItemStack(CPItems.PURPLE_PORTAL_CATALYST));
+        public static final ItemGroup PORTALS_ITEM_GROUP = FabricItemGroup.builder(
+        new Identifier(CustomPortals.MOD_ID, "general")).icon(() -> new ItemStack(CPItems.PURPLE_PORTAL_CATALYST)).build();
 
         @Override
         public void onInitialize() {

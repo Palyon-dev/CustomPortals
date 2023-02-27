@@ -7,12 +7,12 @@ import dev.custom.portals.data.Portal;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
+import net.minecraft.registry.Registries;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.BlockRotation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.Vec3d;
-import net.minecraft.util.registry.Registry;
 import net.minecraft.world.World;
 
 import java.util.*;
@@ -158,7 +158,7 @@ public class PortalHelper {
         }
 
         // verify that the frame block is a valid portal frame block
-        String frameId = Registry.BLOCK.getId(frameMaterial).toString();
+        String frameId = Registries.BLOCK.getId(frameMaterial).toString();
         List<String> blockIds = CPSettings.BlockFilterSettings.getBlocks();
         if (CPSettings.BlockFilterSettings.isWhitelist()) {
             if (!blockIds.contains(frameId)) return false;

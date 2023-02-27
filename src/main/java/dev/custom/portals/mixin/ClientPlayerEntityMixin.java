@@ -4,7 +4,10 @@ import com.mojang.authlib.GameProfile;
 
 import net.minecraft.client.gui.screen.DeathScreen;
 import net.minecraft.client.gui.screen.DownloadingTerrainScreen;
+import net.minecraft.client.network.ClientPlayNetworkHandler;
+import net.minecraft.client.recipebook.ClientRecipeBook;
 import net.minecraft.network.encryption.PlayerPublicKey;
+import net.minecraft.stat.StatHandler;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -33,8 +36,8 @@ public abstract class ClientPlayerEntityMixin extends AbstractClientPlayerEntity
     @Shadow
     public float nextNauseaStrength;
 
-    public ClientPlayerEntityMixin(ClientWorld clientWorld, GameProfile gameProfile, @Nullable PlayerPublicKey playerPublicKey) {
-        super(clientWorld, gameProfile, playerPublicKey);
+    public ClientPlayerEntityMixin(MinecraftClient minecraftClient, ClientWorld clientWorld, ClientPlayNetworkHandler clientPlayNetworkHandler, StatHandler statHandler, ClientRecipeBook clientRecipeBook, boolean bl, boolean bl2) {
+        super(clientWorld, clientPlayNetworkHandler.getProfile());
     }
 
     @Inject(method = "updateNausea", at = @At("HEAD"), cancellable = true)
