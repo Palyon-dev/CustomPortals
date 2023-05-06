@@ -1,5 +1,7 @@
 package dev.custom.portals.mixin;
 
+import net.minecraft.client.util.math.MatrixStack;
+import org.objectweb.asm.Opcodes;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -37,47 +39,34 @@ public abstract class InGameHudMixin extends DrawableHelper {
     @Shadow
     private int scaledHeight;
 
-    @Inject(method = "renderPortalOverlay", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/texture/Sprite;getMinU()F"), locals = LocalCapture.CAPTURE_FAILSOFT, cancellable = true)
-    private void renderPortalOverlay(float nauseaStrength, CallbackInfo ci, Sprite sprite) {
-        int color = ((EntityMixinAccess)this.client.player).getPortalColor();
-        if(color != 0) {
-            Block spriteModel;
-            switch(color) {
-                case 29: spriteModel = CPBlocks.BLACK_PORTAL;
-                break;
-                case 25: spriteModel = CPBlocks.BLUE_PORTAL;
-                break;
-                case 26: spriteModel = CPBlocks.BROWN_PORTAL;
-                break;
-                case 23: spriteModel = CPBlocks.CYAN_PORTAL;
-                break;
-                case 21: spriteModel = CPBlocks.GRAY_PORTAL;
-                break;
-                case 27: spriteModel = CPBlocks.GREEN_PORTAL;
-                break;
-                case 17: spriteModel = CPBlocks.LIGHT_BLUE_PORTAL;
-                break;
-                case 22: spriteModel = CPBlocks.LIGHT_GRAY_PORTAL;
-                break;
-                case 19: spriteModel = CPBlocks.LIME_PORTAL;
-                break;
-                case 16: spriteModel = CPBlocks.MAGENTA_PORTAL;
-                break;
-                case 15: spriteModel = CPBlocks.ORANGE_PORTAL;
-                break;
-                case 20: spriteModel = CPBlocks.PINK_PORTAL;
-                break;
-                case 24: spriteModel = CPBlocks.PURPLE_PORTAL;
-                break;
-                case 28: spriteModel = CPBlocks.RED_PORTAL;
-                break;
-                case 8: spriteModel = CPBlocks.WHITE_PORTAL;
-                break;
-                case 18: spriteModel = CPBlocks.YELLOW_PORTAL;
-                break;
-                default: spriteModel = Blocks.NETHER_PORTAL;
-            }
-            sprite = this.client.getBlockRenderManager().getModels().getModelParticleSprite(spriteModel.getDefaultState().with(PortalBlock.LIT, true));
+    @Inject(method = "renderPortalOverlay",
+            at = @At(value = "FIELD", target = "Lnet/minecraft/client/gui/hud/InGameHud;client:Lnet/minecraft/client/MinecraftClient;", opcode = Opcodes.GETFIELD),
+            locals = LocalCapture.NO_CAPTURE,
+            cancellable = true
+    )
+    private void renderPortalOverlay(MatrixStack matrices, float nauseaStrength, CallbackInfo ci) {
+        int color = (this.client.player != null) ? ((EntityMixinAccess)this.client.player).getPortalColor() : 0;
+        if (color != 0) {
+            Block spriteModel = switch (color) {
+                case 29 -> CPBlocks.BLACK_PORTAL;
+                case 25 -> CPBlocks.BLUE_PORTAL;
+                case 26 -> CPBlocks.BROWN_PORTAL;
+                case 23 -> CPBlocks.CYAN_PORTAL;
+                case 21 -> CPBlocks.GRAY_PORTAL;
+                case 27 -> CPBlocks.GREEN_PORTAL;
+                case 17 -> CPBlocks.LIGHT_BLUE_PORTAL;
+                case 22 -> CPBlocks.LIGHT_GRAY_PORTAL;
+                case 19 -> CPBlocks.LIME_PORTAL;
+                case 16 -> CPBlocks.MAGENTA_PORTAL;
+                case 15 -> CPBlocks.ORANGE_PORTAL;
+                case 20 -> CPBlocks.PINK_PORTAL;
+                case 24 -> CPBlocks.PURPLE_PORTAL;
+                case 28 -> CPBlocks.RED_PORTAL;
+                case 8  -> CPBlocks.WHITE_PORTAL;
+                case 18 -> CPBlocks.YELLOW_PORTAL;
+                default -> Blocks.NETHER_PORTAL;
+            };
+            Sprite sprite = this.client.getBlockRenderManager().getModels().getModelParticleSprite(spriteModel.getDefaultState().with(PortalBlock.LIT, true));
             float f = sprite.getMinU();
             float g = sprite.getMinV();
             float h = sprite.getMaxU();

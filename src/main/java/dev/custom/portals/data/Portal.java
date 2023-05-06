@@ -5,7 +5,7 @@ import java.util.List;
 import dev.custom.portals.config.CPSettings;
 import net.minecraft.block.MapColor;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.Vec3i;
 
 public class Portal {
 
@@ -166,14 +166,14 @@ public class Portal {
                     if (portal.getDimensionId().equals("minecraft:the_nether")) {
                         int translatedX = portal.getSpawnPos().getX() * 8;
                         int translatedZ = portal.getSpawnPos().getZ() * 8;
-                        BlockPos translatedSpawnPos = new BlockPos(new Vec3d(
-                                (double) translatedX, (double) portal.getSpawnPos().getY(), (double) translatedZ));
+                        BlockPos translatedSpawnPos = new BlockPos(new Vec3i(
+                                translatedX, portal.getSpawnPos().getY(), translatedZ));
                         distance = distance(spawnPos, translatedSpawnPos);
                     } else if (this.dimensionId.equals("minecraft:the_nether")) {
                         int translatedX = spawnPos.getX() * 8;
                         int translatedZ = spawnPos.getZ() * 8;
-                        BlockPos translatedSpawnPos = new BlockPos(new Vec3d(
-                                (double) translatedX, (double) spawnPos.getY(), (double) translatedZ));
+                        BlockPos translatedSpawnPos = new BlockPos(new Vec3i(
+                                translatedX, spawnPos.getY(), translatedZ));
                         distance = distance(translatedSpawnPos, portal.getSpawnPos());
                     } else distance = distance(spawnPos, portal.getSpawnPos());
                 } else distance = distance(spawnPos, portal.getSpawnPos());

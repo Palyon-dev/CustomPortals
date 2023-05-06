@@ -1,14 +1,11 @@
 package dev.custom.portals.mixin;
 
-import com.mojang.authlib.GameProfile;
-
 import net.minecraft.client.gui.screen.DeathScreen;
 import net.minecraft.client.gui.screen.DownloadingTerrainScreen;
 import net.minecraft.client.network.ClientPlayNetworkHandler;
 import net.minecraft.client.recipebook.ClientRecipeBook;
-import net.minecraft.network.encryption.PlayerPublicKey;
 import net.minecraft.stat.StatHandler;
-import org.jetbrains.annotations.Nullable;
+import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -30,7 +27,8 @@ import dev.custom.portals.util.EntityMixinAccess;
 public abstract class ClientPlayerEntityMixin extends AbstractClientPlayerEntity {
 
     @Shadow
-    private MinecraftClient client;
+    @Final
+    protected MinecraftClient client;
     @Shadow
     public float lastNauseaStrength;
     @Shadow
