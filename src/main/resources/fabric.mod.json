@@ -19,7 +19,7 @@
     "issues": "https://github.com/Palyon-dev/CustomPortals/issues"
   },
 
-  "license": "CC0-1.0",
+  "license": "MIT",
   "icon": "assets/customportals/icon.png",
 
   "environment": "*",
