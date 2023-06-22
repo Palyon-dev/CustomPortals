@@ -12,7 +12,7 @@ import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.BlockRotation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.Vec3i;
 import net.minecraft.world.World;
 
 import java.util.*;
@@ -116,7 +116,7 @@ public class PortalHelper {
                 if (length % 2 != 0) offsetX = 0.5f;
             }
         }
-        BlockPos spawnPos = new BlockPos(new Vec3d(trueXSpawn, trueYSpawn, trueZSpawn));
+        BlockPos spawnPos = new BlockPos(new Vec3i(trueXSpawn, trueYSpawn, trueZSpawn));
         //System.out.println(CustomPortals.blockPosToString(spawnPos));
         return new SpawnPosData(spawnPos, offsetX, offsetZ);
     }

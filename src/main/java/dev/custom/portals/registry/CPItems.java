@@ -8,11 +8,12 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
+import net.minecraft.registry.RegistryKey;
 import net.minecraft.util.Identifier;
 
 public class CPItems {
 
-    public static final ItemGroup PORTALS_ITEM_GROUP = CustomPortals.PORTALS_ITEM_GROUP;
+    public static final RegistryKey<ItemGroup> PORTALS_ITEM_GROUP = CustomPortals.PORTALS_ITEM_GROUP;
     
     // Items
     public static final Item WHITE_PORTAL_CATALYST = new PortalCatalyst(

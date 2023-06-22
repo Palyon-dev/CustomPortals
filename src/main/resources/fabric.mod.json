@@ -6,7 +6,7 @@
       "customportals:portals"
     ]
   },
-  "version": "3.2.0",
+  "version": "3.2.1",
 
   "name": "Custom Portals",
   "description": "Build portals to anywhere out of any material!",
@@ -32,6 +32,9 @@
     ],
     "cardinal-components-world": [
       "dev.custom.portals.CustomPortals"
+    ],
+    "modmenu": [
+      "dev.custom.portals.config.ModMenuIntegration"
     ]
   },
   "mixins": [
@@ -39,11 +42,13 @@
   ],
 
   "depends": {
-    "fabricloader": ">=0.7.4",
+    "fabricloader": ">=0.14.0",
     "fabric": "*",
-    "minecraft": ">=1.19"
+    "minecraft": ">=1.20",
+    "completeconfig": ">=2.4.0"
   },
-  "suggests": {
-    "flamingo": "*"
+  "recommends": {
+    "modmenu": ">=7.0.1",
+    "cloth-config": ">=11.0"
   }
 }

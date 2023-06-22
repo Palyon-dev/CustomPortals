@@ -1,6 +1,11 @@
 package dev.custom.portals.mixin;
 
+import dev.custom.portals.CustomPortals;
 import dev.custom.portals.config.CPSettings;
+import net.minecraft.network.packet.s2c.play.PlayerRespawnS2CPacket;
+import net.minecraft.server.PlayerManager;
+import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.world.biome.source.BiomeAccess;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
@@ -23,7 +28,7 @@ import net.minecraft.world.World;
 
 @Mixin(Entity.class)
 public abstract class EntityMixin implements EntityMixinAccess {
-    
+
     @Unique
     private int portalColor;
     @Unique
@@ -34,11 +39,13 @@ public abstract class EntityMixin implements EntityMixinAccess {
     private int customPortalTime;
 
     @Shadow
-    public World world;
+    private World world;
     @Shadow
     public float yaw;
     @Shadow
     public float pitch;
+    @Shadow
+    private BlockPos blockPos;
 
     @Shadow
     public abstract boolean hasPortalCooldown();
@@ -122,6 +129,15 @@ public abstract class EntityMixin implements EntityMixinAccess {
                         }
                     }
                     else {
+                        // Bit of a hack to ensure data is still shared with the client
+                        // even when we're not changing dimensions, as this is normally
+                        // done in moveToWorld()
+                        if (((Entity)(Object)this) instanceof ServerPlayerEntity) {
+                            PlayerManager playerManager = ((ServerPlayerEntity)(Object)this).server.getPlayerManager();
+                            ((ServerPlayerEntity)(Object)this).networkHandler.sendPacket(new PlayerRespawnS2CPacket(serverWorld.getDimensionKey(), serverWorld.getRegistryKey(), BiomeAccess.hashSeed(serverWorld.getSeed()), ((ServerPlayerEntity)(Object)this).interactionManager.getGameMode(), ((ServerPlayerEntity)(Object)this).interactionManager.getPreviousGameMode(), serverWorld.isDebugWorld(), serverWorld.isFlat(), (byte)3, ((ServerPlayerEntity)(Object)this).getLastDeathPos(), ((ServerPlayerEntity)(Object)this).getPortalCooldown()));
+                            playerManager.sendWorldInfo(((ServerPlayerEntity)(Object)this), serverWorld);
+                            playerManager.sendPlayerStatus(((ServerPlayerEntity)(Object)this));
+                        }
                         BlockPos dest = destPortal.getSpawnPos();
                         double destX = dest.getX();
                         double destY = dest.getY();
@@ -159,9 +175,15 @@ public abstract class EntityMixin implements EntityMixinAccess {
     public void notInCustomPortal() { inCustomPortal = false; }
 
     @Unique
-    public int getPortalColor() { return portalColor; }
+    public int getPortalColor() {
+        if (portalColor == 0) {
+            Portal portal = CustomPortals.PORTALS.get(world).getPortalFromPos(blockPos);
+            portalColor = portal == null ? 0 : portal.getColor().id;
+        }
+        return portalColor;
+    }
 
-    @Unique 
+    @Unique
     public void setPortalColor(int color) { this.portalColor = color; }
 
 }

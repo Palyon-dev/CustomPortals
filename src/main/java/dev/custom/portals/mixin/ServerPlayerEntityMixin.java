@@ -5,6 +5,8 @@ import java.util.Iterator;
 import com.mojang.authlib.GameProfile;
 
 import net.minecraft.network.encryption.PlayerPublicKey;
+import net.minecraft.registry.RegistryKey;
+import net.minecraft.util.math.Vec3d;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
@@ -56,11 +58,14 @@ public abstract class ServerPlayerEntityMixin extends PlayerEntity {
     private int syncedFoodLevel;
 
     @Shadow
-    public abstract ServerWorld getWorld();
+    private Vec3d enteredNetherPos;
+
     @Shadow
-    protected abstract void worldChanged(ServerWorld origin);
+    public abstract ServerWorld getServerWorld();
     @Shadow
-    public abstract void setWorld(ServerWorld world);
+    protected abstract void worldChanged(ServerWorld serverWorld);
+    @Shadow
+    public abstract void setServerWorld(ServerWorld world);
 
     public ServerPlayerEntityMixin(MinecraftServer minecraftServer, ServerWorld serverWorld, GameProfile gameProfile) {
         super(serverWorld, serverWorld.getSpawnPos(), serverWorld.getSpawnAngle(), gameProfile);
@@ -74,30 +79,30 @@ public abstract class ServerPlayerEntityMixin extends PlayerEntity {
     @Inject(method = "moveToWorld", at = @At("HEAD"), cancellable = true)
     public void moveToWorld(ServerWorld serverWorld, CallbackInfoReturnable<Entity> ci) {
         this.inTeleportationState = true;
-        ServerWorld serverWorld2 = this.getWorld();
+        ServerWorld serverWorld2 = this.getServerWorld();
+        RegistryKey<World> registryKey = serverWorld2.getRegistryKey();
         if (((EntityMixinAccess)this).isInCustomPortal()) {
             WorldProperties worldProperties = serverWorld.getLevelProperties();
-            this.networkHandler.sendPacket(new PlayerRespawnS2CPacket(serverWorld.getDimensionKey(), serverWorld.getRegistryKey(), BiomeAccess.hashSeed(serverWorld.getSeed()), this.interactionManager.getGameMode(), this.interactionManager.getPreviousGameMode(), serverWorld.isDebugWorld(), serverWorld.isFlat(), (byte)3, this.getLastDeathPos()));
+            this.networkHandler.sendPacket(new PlayerRespawnS2CPacket(serverWorld.getDimensionKey(), serverWorld.getRegistryKey(), BiomeAccess.hashSeed(serverWorld.getSeed()), this.interactionManager.getGameMode(), this.interactionManager.getPreviousGameMode(), serverWorld.isDebugWorld(), serverWorld.isFlat(), (byte)3, this.getLastDeathPos(), this.getPortalCooldown()));
             this.networkHandler.sendPacket(new DifficultyS2CPacket(worldProperties.getDifficulty(), worldProperties.isDifficultyLocked()));
             PlayerManager playerManager = this.server.getPlayerManager();
-            playerManager.sendCommandTree(((ServerPlayerEntity)(Object)this));
-            serverWorld2.removePlayer(((ServerPlayerEntity)(Object)this), RemovalReason.CHANGED_DIMENSION);
+            playerManager.sendCommandTree((ServerPlayerEntity)(Object)this);
+            serverWorld2.removePlayer((ServerPlayerEntity)(Object)this, RemovalReason.CHANGED_DIMENSION);
             this.unsetRemoved();
             TeleportTarget teleportTarget = this.getTeleportTarget(serverWorld);
             if (teleportTarget != null) {
                 serverWorld2.getProfiler().push("moving");
-                serverWorld2.getProfiler().push("moving");
                 serverWorld2.getProfiler().pop();
                 serverWorld2.getProfiler().push("placing");
-                this.setWorld(serverWorld);
-                serverWorld.onPlayerChangeDimension(((ServerPlayerEntity)(Object)this));
-                this.setRotation(teleportTarget.yaw, teleportTarget.pitch);
-                this.refreshPositionAfterTeleport(teleportTarget.position.x, teleportTarget.position.y, teleportTarget.position.z);
+                this.setServerWorld(serverWorld);
+                this.networkHandler.requestTeleport(teleportTarget.position.x, teleportTarget.position.y, teleportTarget.position.z, teleportTarget.yaw, teleportTarget.pitch);
+                this.networkHandler.syncWithPlayerPosition();
+                serverWorld.onPlayerChangeDimension((ServerPlayerEntity)(Object)this);
                 serverWorld2.getProfiler().pop();
                 this.worldChanged(serverWorld2);
                 this.networkHandler.sendPacket(new PlayerAbilitiesS2CPacket(this.getAbilities()));
-                playerManager.sendWorldInfo(((ServerPlayerEntity)(Object)this), serverWorld);
-                playerManager.sendPlayerStatus(((ServerPlayerEntity)(Object)this));
+                playerManager.sendWorldInfo((ServerPlayerEntity)(Object)this, serverWorld);
+                playerManager.sendPlayerStatus((ServerPlayerEntity)(Object)this);
                 Iterator var7 = this.getStatusEffects().iterator();
 
                 while(var7.hasNext()) {

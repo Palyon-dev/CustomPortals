@@ -22,14 +22,16 @@ public class PortalCatalyst extends Item {
     public ActionResult useOnBlock(ItemUsageContext ctx) {
         PlayerEntity playerEntity = ctx.getPlayer();
         World world = ctx.getWorld();
-        BlockPos pos = new BlockPos(ctx.getHitPos());
+        BlockPos pos = new BlockPos(ctx.getBlockPos());
         Direction dir = ctx.getSide();
-        if (dir == Direction.NORTH)
-            pos = pos.north();
-        else if (dir == Direction.WEST)
-            pos = pos.west();
-        else if (dir == Direction.DOWN)
-            pos = pos.down();
+        pos = switch (dir) {
+            case NORTH -> pos.north();
+            case SOUTH -> pos.south();
+            case EAST -> pos.east();
+            case WEST -> pos.west();
+            case UP -> pos.up();
+            case DOWN -> pos.down();
+        };
         if (PortalHelper.buildPortal(pos, portalBlock, world)) {
             if (playerEntity != null) playerEntity.playSound(SoundEvents.ITEM_FLINTANDSTEEL_USE, 1.0F, 1.0F);
             ctx.getStack().decrement(1);

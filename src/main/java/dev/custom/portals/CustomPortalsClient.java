@@ -11,9 +11,9 @@ public class CustomPortalsClient implements ClientModInitializer {
 
     @Override
     public void onInitializeClient() {
-        if (FabricLoader.getInstance().isModLoaded("cloth-config2")) {
+        /*if (FabricLoader.getInstance().isModLoaded("cloth-config2")) {
             ConfigScreenBuilder.setMain(CustomPortals.MOD_ID, new ClothConfigScreenBuilder());
-        }
+        }*/
         CPBlocks.setBlockRenderLayers();
         CPParticles.registerFactoryRegistries();
     }

@@ -32,9 +32,9 @@ public abstract class ClientPlayerEntityMixin extends AbstractClientPlayerEntity
     @Shadow
     private MinecraftClient client;
     @Shadow
-    public float lastNauseaStrength;
+    public float prevNauseaIntensity;
     @Shadow
-    public float nextNauseaStrength;
+    public float nauseaIntensity;
 
     public ClientPlayerEntityMixin(MinecraftClient minecraftClient, ClientWorld clientWorld, ClientPlayNetworkHandler clientPlayNetworkHandler, StatHandler statHandler, ClientRecipeBook clientRecipeBook, boolean bl, boolean bl2) {
         super(clientWorld, clientPlayNetworkHandler.getProfile());
@@ -42,8 +42,11 @@ public abstract class ClientPlayerEntityMixin extends AbstractClientPlayerEntity
 
     @Inject(method = "updateNausea", at = @At("HEAD"), cancellable = true)
     private void updateNausea(CallbackInfo ci) {
+        //if (((EntityMixinAccess)this).isInCustomPortal()) System.out.println("In custom portal.");
+        //if (((EntityMixinAccess)this).getDestPortal() != null) System.out.println("Dest portal found.");
         if(((EntityMixinAccess)this).isInCustomPortal() && ((EntityMixinAccess)this).getDestPortal() != null) {
-            this.lastNauseaStrength = this.nextNauseaStrength;
+            //System.out.println("(2) Nausea Intensity is " + this.nauseaIntensity);
+            this.prevNauseaIntensity = this.nauseaIntensity;
             if (!(this.client.currentScreen == null || this.client.currentScreen.shouldPause() || this.client.currentScreen instanceof DeathScreen || this.client.currentScreen instanceof DownloadingTerrainScreen)) {
                 if (this.client.currentScreen instanceof HandledScreen) {
                     this.closeHandledScreen();
@@ -52,18 +55,18 @@ public abstract class ClientPlayerEntityMixin extends AbstractClientPlayerEntity
                 this.client.setScreen((Screen)null);
             }
 
-            if (this.nextNauseaStrength == 0.0F) {
+            if (this.nauseaIntensity == 0.0F) {
                 this.client.getSoundManager().play(PositionedSoundInstance.ambient(SoundEvents.BLOCK_PORTAL_TRIGGER, this.random.nextFloat() * 0.4F + 0.8F, 0.25F));
             }
 
-            this.nextNauseaStrength += 0.0125F;
-            if (this.nextNauseaStrength >= 1.0F) {
-                this.nextNauseaStrength = 1.0F;
+            this.nauseaIntensity += 0.0125F;
+            if (this.nauseaIntensity >= 1.0F) {
+                this.nauseaIntensity = 1.0F;
             }
             ((EntityMixinAccess)this).notInCustomPortal();
             ci.cancel();
         }
-        if(this.lastNauseaStrength == 0.0F && ((EntityMixinAccess)this).getPortalColor() != 0)
-            ((EntityMixinAccess)this).setPortalColor(0);
+        /*if(this.prevNauseaIntensity == 0.0F && ((EntityMixinAccess)this).getPortalColor() != 0)
+            ((EntityMixinAccess)this).setPortalColor(0);*/
     }
 }

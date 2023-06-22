@@ -14,8 +14,15 @@ import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.itemgroup.v1.FabricItemGroup;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
+import net.minecraft.registry.Registries;
+import net.minecraft.registry.Registry;
+import net.minecraft.registry.RegistryKey;
+import net.minecraft.registry.RegistryKeys;
+import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
+
+import java.util.Optional;
 
 public class CustomPortals implements ModInitializer, WorldComponentInitializer {
 
@@ -26,11 +33,17 @@ public class CustomPortals implements ModInitializer, WorldComponentInitializer 
 
         private static CPSettings Config;
 
-        public static final ItemGroup PORTALS_ITEM_GROUP = FabricItemGroup.builder(
-        new Identifier(CustomPortals.MOD_ID, "general")).icon(() -> new ItemStack(CPItems.PURPLE_PORTAL_CATALYST)).build();
+        public static final RegistryKey<ItemGroup> PORTALS_ITEM_GROUP = RegistryKey.of(RegistryKeys.ITEM_GROUP,
+                new Identifier(CustomPortals.MOD_ID, "general"));
+
+        /*FabricItemGroup.builder(
+        new Identifier(CustomPortals.MOD_ID, "general")).icon(() -> new ItemStack(CPItems.PURPLE_PORTAL_CATALYST)).build();*/
 
         @Override
         public void onInitialize() {
+                Registry.register(Registries.ITEM_GROUP, PORTALS_ITEM_GROUP, FabricItemGroup.builder().icon(()
+                        -> new ItemStack(CPItems.PURPLE_PORTAL_CATALYST))
+                        .displayName(Text.translatable("itemGroup.customportals.general")).build());
                 Config = new CPSettings();
                 Config.load();
                 CPBlocks.registerBlocks();
@@ -42,6 +55,8 @@ public class CustomPortals implements ModInitializer, WorldComponentInitializer 
         public void registerWorldComponentFactories(WorldComponentFactoryRegistry registry) {
                 registry.register(PORTALS, WorldPortals.class, WorldPortals::new);
         }
+
+        public static Optional<CPSettings> getConfig() { return Optional.ofNullable(Config); }
 
         // for debugging purposes
         public static String blockPosToString(BlockPos pos) {
