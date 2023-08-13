@@ -3,6 +3,7 @@ package dev.custom.portals.mixin;
 import dev.custom.portals.CustomPortals;
 import dev.custom.portals.config.CPSettings;
 import net.minecraft.network.packet.s2c.play.PlayerRespawnS2CPacket;
+import net.minecraft.network.packet.s2c.play.PositionFlag;
 import net.minecraft.server.PlayerManager;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.world.biome.source.BiomeAccess;
@@ -26,6 +27,9 @@ import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.TeleportTarget;
 import net.minecraft.world.World;
 
+import java.util.Collections;
+import java.util.Set;
+
 @Mixin(Entity.class)
 public abstract class EntityMixin implements EntityMixinAccess {
 
@@ -41,9 +45,9 @@ public abstract class EntityMixin implements EntityMixinAccess {
     @Shadow
     private World world;
     @Shadow
-    public float yaw;
+    private float yaw;
     @Shadow
-    public float pitch;
+    private float pitch;
     @Shadow
     private BlockPos blockPos;
 
@@ -56,7 +60,7 @@ public abstract class EntityMixin implements EntityMixinAccess {
     @Shadow
     protected abstract void tickPortalCooldown();
     @Shadow
-    public abstract void teleport(double destX, double destY, double destZ);
+    public abstract boolean teleport(ServerWorld serverWorld, double d, double e, double f, Set<PositionFlag> set, float g, float h);
     @Shadow
     public abstract boolean hasVehicle();
     @Shadow
@@ -144,7 +148,7 @@ public abstract class EntityMixin implements EntityMixinAccess {
                         double destZ = dest.getZ();
                         destX += destPortal.offsetX;
                         destZ += destPortal.offsetZ;
-                        this.teleport(destX, destY, destZ);
+                        this.teleport(serverWorld, destX, destY, destZ, Collections.emptySet(), this.yaw, this.pitch);
                     }
                     this.world.getProfiler().pop();
                 }
