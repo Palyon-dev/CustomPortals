@@ -22,7 +22,7 @@ public class PortalCatalyst extends Item {
     public ActionResult useOnBlock(ItemUsageContext ctx) {
         PlayerEntity playerEntity = ctx.getPlayer();
         World world = ctx.getWorld();
-        BlockPos pos = new BlockPos(ctx.getHitPos());
+        BlockPos pos = BlockPos.ofFloored(ctx.getHitPos());
         Direction dir = ctx.getSide();
         if (dir == Direction.NORTH)
             pos = pos.north();
