@@ -44,11 +44,11 @@
   "depends": {
     "fabricloader": ">=0.14.0",
     "fabric": "*",
-    "minecraft": ">=1.20",
-    "completeconfig": ">=2.4.0"
+    "minecraft": ">=1.20.2",
+    "completeconfig": ">=2.5.0"
   },
   "recommends": {
-    "modmenu": ">=7.0.1",
+    "modmenu": ">=8.0.0",
     "cloth-config": ">=11.0"
   }
 }

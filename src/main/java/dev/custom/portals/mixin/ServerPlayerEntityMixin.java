@@ -5,6 +5,7 @@ import java.util.Iterator;
 import com.mojang.authlib.GameProfile;
 
 import net.minecraft.network.encryption.PlayerPublicKey;
+import net.minecraft.network.packet.s2c.play.*;
 import net.minecraft.registry.RegistryKey;
 import net.minecraft.util.math.Vec3d;
 import org.jetbrains.annotations.Nullable;
@@ -19,11 +20,6 @@ import dev.custom.portals.util.EntityMixinAccess;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.network.packet.s2c.play.DifficultyS2CPacket;
-import net.minecraft.network.packet.s2c.play.EntityStatusEffectS2CPacket;
-import net.minecraft.network.packet.s2c.play.PlayerAbilitiesS2CPacket;
-import net.minecraft.network.packet.s2c.play.PlayerRespawnS2CPacket;
-import net.minecraft.network.packet.s2c.play.WorldEventS2CPacket;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.PlayerManager;
 import net.minecraft.server.network.ServerPlayNetworkHandler;
@@ -66,6 +62,8 @@ public abstract class ServerPlayerEntityMixin extends PlayerEntity {
     protected abstract void worldChanged(ServerWorld serverWorld);
     @Shadow
     public abstract void setServerWorld(ServerWorld world);
+    @Shadow
+    public abstract CommonPlayerSpawnInfo createCommonPlayerSpawnInfo(ServerWorld serverWorld);
 
     public ServerPlayerEntityMixin(MinecraftServer minecraftServer, ServerWorld serverWorld, GameProfile gameProfile) {
         super(serverWorld, serverWorld.getSpawnPos(), serverWorld.getSpawnAngle(), gameProfile);
@@ -83,7 +81,7 @@ public abstract class ServerPlayerEntityMixin extends PlayerEntity {
         RegistryKey<World> registryKey = serverWorld2.getRegistryKey();
         if (((EntityMixinAccess)this).isInCustomPortal()) {
             WorldProperties worldProperties = serverWorld.getLevelProperties();
-            this.networkHandler.sendPacket(new PlayerRespawnS2CPacket(serverWorld.getDimensionKey(), serverWorld.getRegistryKey(), BiomeAccess.hashSeed(serverWorld.getSeed()), this.interactionManager.getGameMode(), this.interactionManager.getPreviousGameMode(), serverWorld.isDebugWorld(), serverWorld.isFlat(), (byte)3, this.getLastDeathPos(), this.getPortalCooldown()));
+            this.networkHandler.sendPacket(new PlayerRespawnS2CPacket(this.createCommonPlayerSpawnInfo(serverWorld), (byte)3));
             this.networkHandler.sendPacket(new DifficultyS2CPacket(worldProperties.getDifficulty(), worldProperties.isDifficultyLocked()));
             PlayerManager playerManager = this.server.getPlayerManager();
             playerManager.sendCommandTree((ServerPlayerEntity)(Object)this);
