@@ -24,7 +24,6 @@ import net.minecraft.world.World;
 import net.minecraft.world.WorldView;
 
 public class AbstractRuneBlock extends WallMountedBlock {
-
     protected static final VoxelShape CEILING_SHAPE;
     protected static final VoxelShape FLOOR_SHAPE;
     protected static final VoxelShape NORTH_SHAPE;
