@@ -10,7 +10,7 @@ import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.ShapeContext;
 import net.minecraft.block.WallMountedBlock;
-import net.minecraft.block.enums.BlockFace;
+import net.minecraft.block.enums.WallMountLocation;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
@@ -33,7 +33,7 @@ public class AbstractRuneBlock extends WallMountedBlock {
 
     protected AbstractRuneBlock(AbstractBlock.Settings settings) {
         super(settings);
-        this.setDefaultState((BlockState)((BlockState)((BlockState)this.stateManager.getDefaultState()).with(FACING, Direction.NORTH)).with(FACE, BlockFace.WALL));
+        this.setDefaultState((BlockState)((BlockState)((BlockState)this.stateManager.getDefaultState()).with(FACING, Direction.NORTH)).with(FACE, WallMountLocation.WALL));
     }
 
     public void registerOnPortal(Portal portal, World world) {}
@@ -54,7 +54,7 @@ public class AbstractRuneBlock extends WallMountedBlock {
     @Override
     public VoxelShape getOutlineShape(BlockState state, BlockView world, BlockPos pos, ShapeContext context) {
         Direction direction = (Direction)state.get(FACING);
-        switch((BlockFace)state.get(FACE)) {
+        switch((WallMountLocation)state.get(FACE)) {
         case FLOOR:
             return FLOOR_SHAPE;
         case WALL:
@@ -133,7 +133,7 @@ public class AbstractRuneBlock extends WallMountedBlock {
 
     public BlockPos getBlockMountedPos(BlockPos pos, BlockState state) {
         Direction direction = (Direction)state.get(FACING);
-        BlockFace orientation = (BlockFace)state.get(FACE);
+        WallMountLocation orientation = (WallMountLocation)state.get(FACE);
         switch(orientation) {
             case FLOOR: 
                 return pos.down();

@@ -138,7 +138,7 @@ public abstract class EntityMixin implements EntityMixinAccess {
                         // done in moveToWorld()
                         if (((Entity)(Object)this) instanceof ServerPlayerEntity) {
                             PlayerManager playerManager = ((ServerPlayerEntity)(Object)this).server.getPlayerManager();
-                            ((ServerPlayerEntity)(Object)this).networkHandler.sendPacket(new PlayerRespawnS2CPacket(((ServerPlayerEntity)(Object)this).createCommonPlayerSpawnInfo(serverWorld), (byte)3));
+                            ((ServerPlayerEntity)(Object)this).networkHandler.sendPacket(new PlayerRespawnS2CPacket(serverWorld.getDimensionKey(), serverWorld.getRegistryKey(), BiomeAccess.hashSeed(serverWorld.getSeed()), ((ServerPlayerEntity)(Object)this).interactionManager.getGameMode(), ((ServerPlayerEntity)(Object)this).interactionManager.getPreviousGameMode(), serverWorld.isDebugWorld(), serverWorld.isFlat(), (byte)3, ((ServerPlayerEntity)(Object)this).getLastDeathPos(), ((ServerPlayerEntity)(Object)this).getPortalCooldown()));
                             playerManager.sendWorldInfo(((ServerPlayerEntity)(Object)this), serverWorld);
                             playerManager.sendPlayerStatus(((ServerPlayerEntity)(Object)this));
                         }
