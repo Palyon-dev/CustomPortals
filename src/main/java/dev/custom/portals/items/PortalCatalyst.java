@@ -9,6 +9,9 @@ import net.minecraft.util.ActionResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.world.World;
+
+import java.util.UUID;
+
 public class PortalCatalyst extends Item {
 
     private Block portalBlock;
@@ -17,7 +20,7 @@ public class PortalCatalyst extends Item {
         super(settings);
         this.portalBlock = portal;
     }
-    
+
     @Override
     public ActionResult useOnBlock(ItemUsageContext ctx) {
         PlayerEntity playerEntity = ctx.getPlayer();
@@ -32,8 +35,10 @@ public class PortalCatalyst extends Item {
             case UP -> pos.up();
             case DOWN -> pos.down();
         };
-        if (PortalHelper.buildPortal(pos, portalBlock, world)) {
-            if (playerEntity != null) playerEntity.playSound(SoundEvents.ITEM_FLINTANDSTEEL_USE, 1.0F, 1.0F);
+        if (PortalHelper.buildPortal(pos, portalBlock, playerEntity.getUuid(), world)) {
+            if (playerEntity != null) {
+                playerEntity.playSound(SoundEvents.ITEM_FLINTANDSTEEL_USE, 1.0F, 1.0F);
+            }
             ctx.getStack().decrement(1);
             return ActionResult.SUCCESS;
         }

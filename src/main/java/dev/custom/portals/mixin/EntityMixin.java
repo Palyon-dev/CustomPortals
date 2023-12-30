@@ -107,9 +107,9 @@ public abstract class EntityMixin implements EntityMixinAccess {
         if (this.world instanceof ServerWorld) {
             int i;
             if (((Entity)(Object)this) instanceof PlayerEntity && destPortal != null) {
-                if (CPSettings.PortalRuneSettings.portalsAlwaysHaste() == CPSettings.HasteDropdown.CREATIVE)
+                if (CPSettings.GeneralSettings.portalsAlwaysHaste() == CPSettings.HasteDropdown.CREATIVE)
                     i = destPortal.hasHaste() ? 1 : this.getMaxNetherPortalTime();
-                else if (CPSettings.PortalRuneSettings.portalsAlwaysHaste() == CPSettings.HasteDropdown.NO)
+                else if (CPSettings.GeneralSettings.portalsAlwaysHaste() == CPSettings.HasteDropdown.NO)
                     i = destPortal.hasHaste() ? 1 : 80;
                 else i = 1;
             }

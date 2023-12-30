@@ -50,7 +50,7 @@ public class PortalRegistry {
 
     public List<Portal> getPortals() { return portals; }
 
-    public void clear() { portals.clear(); }
+    //public void clear() { portals.clear(); }
 
     public Portal getPortalFromPos(BlockPos pos) {
         return portalPositions.get(pos);
