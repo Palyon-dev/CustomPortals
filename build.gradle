@@ -31,25 +31,25 @@ repositories {
 }
 
 dependencies {
-	minecraft "com.mojang:minecraft:1.20.2"
-    mappings "net.fabricmc:yarn:1.20.2+build.4"
-    modImplementation "net.fabricmc:fabric-loader:0.14.23"
+	minecraft "com.mojang:minecraft:1.20.3"
+    mappings "net.fabricmc:yarn:1.20.3+build.1"
+    modImplementation "net.fabricmc:fabric-loader:0.15.3"
 
 	// Fabric API. This is technically optional, but you probably want it anyway.
-	modImplementation "net.fabricmc.fabric-api:fabric-api:0.90.4+1.20.2"
+	modImplementation "net.fabricmc.fabric-api:fabric-api:0.91.1+1.20.3"
 
 	// Adds an API dependency on the base cardinal components module (required by every other module)
-	modApi "dev.onyxstudios.cardinal-components-api:cardinal-components-base:5.3.0"
-	include "dev.onyxstudios.cardinal-components-api:cardinal-components-base:5.3.0"
+	modApi "dev.onyxstudios.cardinal-components-api:cardinal-components-base:5.4.0"
+	include "dev.onyxstudios.cardinal-components-api:cardinal-components-base:5.4.0"
 	// Replace modImplementation with modApi if you expose components in your own API
-    modImplementation "dev.onyxstudios.cardinal-components-api:cardinal-components-world:5.3.0"
-	include "dev.onyxstudios.cardinal-components-api:cardinal-components-world:5.3.0"
+    modImplementation "dev.onyxstudios.cardinal-components-api:cardinal-components-world:5.4.0"
+	include "dev.onyxstudios.cardinal-components-api:cardinal-components-world:5.4.0"
 
-	modImplementation("com.github.Lortseam.completeconfig:base:2.5.1")
+	modImplementation("com.github.Lortseam.completeconfig:base:2.5.3")
 
-	modImplementation("com.github.Lortseam.completeconfig:gui-cloth:2.5.1")
+	modImplementation("com.github.Lortseam.completeconfig:gui-cloth:2.5.3")
 
-	modImplementation("com.terraformersmc:modmenu:8.0.0")
+	modImplementation("com.terraformersmc:modmenu:9.0.0")
 
 	// PSA: Some older mods, compiled on Loom 0.2.1, might have outdated Maven POMs.
 	// You may need to force-disable transitiveness on them.
@@ -84,6 +84,21 @@ java {
 jar {
 	from("LICENSE") {
 		rename { "${it}_${project.archivesBaseName}"}
+	}
+}
+
+loom {
+	runs {
+		testClient1 {
+			inherit client
+			runDir = "run1"
+			configName = "Test Minecraft Client 1"
+		}
+		testClient2 {
+			inherit client
+			runDir = "run2"
+			configName = "Test Minecraft Client 2"
+		}
 	}
 }
 

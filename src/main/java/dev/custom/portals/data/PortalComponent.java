@@ -2,6 +2,8 @@ package dev.custom.portals.data;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
+
 import net.minecraft.block.MapColor;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtList;
@@ -13,6 +15,7 @@ import dev.custom.portals.config.CPSettings;
 public class PortalComponent implements BasePortalComponent {
     private boolean portalsAlwaysUnlimited;
     private boolean portalsAlwaysInterdim;
+    private boolean privatePortals;
     private int defaultRange;
     private int rangeWithEnhancer;
     private int rangeWithStrongEnhancer;
@@ -21,8 +24,9 @@ public class PortalComponent implements BasePortalComponent {
 
     public PortalComponent() { 
         portalRegistry = new PortalRegistry();
-        portalsAlwaysUnlimited = CPSettings.PortalRuneSettings.portalsAlwaysUnlimited();
-        portalsAlwaysInterdim = CPSettings.PortalRuneSettings.portalsAlwaysInterdim();
+        portalsAlwaysUnlimited = CPSettings.GeneralSettings.portalsAlwaysUnlimited();
+        portalsAlwaysInterdim = CPSettings.GeneralSettings.portalsAlwaysInterdim();
+        privatePortals = CPSettings.GeneralSettings.arePortalsPrivate();
         defaultRange = CPSettings.PortalRangeSettings.getDefaultRange();
         rangeWithEnhancer = CPSettings.PortalRangeSettings.getRangeWithEnhancer();
         rangeWithStrongEnhancer = CPSettings.PortalRangeSettings.getRangeWithStrongEnhancer();
@@ -38,8 +42,9 @@ public class PortalComponent implements BasePortalComponent {
 
     @Override
     public boolean settingsChanged() {
-        boolean portalsAlwaysUnlimited = CPSettings.PortalRuneSettings.portalsAlwaysUnlimited();
-        boolean portalsAlwaysInterdim = CPSettings.PortalRuneSettings.portalsAlwaysInterdim();
+        boolean portalsAlwaysUnlimited = CPSettings.GeneralSettings.portalsAlwaysUnlimited();
+        boolean portalsAlwaysInterdim = CPSettings.GeneralSettings.portalsAlwaysInterdim();
+        boolean privatePortals = CPSettings.GeneralSettings.arePortalsPrivate();
         int defaultRange = CPSettings.PortalRangeSettings.getDefaultRange();
         int rangeWithEnhancer = CPSettings.PortalRangeSettings.getRangeWithEnhancer();
         int rangeWithStrongEnhancer = CPSettings.PortalRangeSettings.getRangeWithStrongEnhancer();
@@ -49,6 +54,10 @@ public class PortalComponent implements BasePortalComponent {
         }
         if (portalsAlwaysInterdim != this.portalsAlwaysInterdim) {
             this.portalsAlwaysInterdim = portalsAlwaysInterdim;
+            return true;
+        }
+        if (privatePortals != this.privatePortals) {
+            this.privatePortals = privatePortals;
             return true;
         }
         if (defaultRange != this.defaultRange) {
@@ -89,10 +98,10 @@ public class PortalComponent implements BasePortalComponent {
         portalRegistry.refreshPortals();
     }
 
-    @Override
+    /*@Override
     public void clearPortals() {
         portalRegistry.clear();
-    }
+    }*/
 
     @Override
     public void readFromNbt(NbtCompound tag) {
@@ -129,7 +138,8 @@ public class PortalComponent implements BasePortalComponent {
             int weakEnhancerRunes = curTag.getInt("weak");
             int strongEnhancerRunes = curTag.getInt("strong");
             int infinityRunes = curTag.getInt("infinity");
-            Portal portal = new Portal(frameId, dimensionId, color, spawnPos, portalBlocks, offsetX, offsetZ,
+            UUID creatorId = curTag.getUuid("creatorId");
+            Portal portal = new Portal(frameId, dimensionId, color, spawnPos, portalBlocks, offsetX, offsetZ, creatorId,
                 hasteRunes, gateRunes, weakEnhancerRunes, strongEnhancerRunes, infinityRunes);
             registerPortal(portal);
         }
@@ -154,6 +164,7 @@ public class PortalComponent implements BasePortalComponent {
             curTag.putInt("weak", curPortal.getWeakEnhancerRunes());
             curTag.putInt("strong", curPortal.getStrongEnhancerRunes());
             curTag.putInt("infinity", curPortal.getInfinityRunes());
+            if (curPortal.getCreatorId() != null) curTag.putUuid("creatorId", curPortal.getCreatorId());
             NbtList portalBlockData = new NbtList();
             for (BlockPos blockPos : curPortal.getPortalBlocks()) {
                 NbtCompound blockTag = new NbtCompound();

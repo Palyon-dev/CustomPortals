@@ -121,7 +121,7 @@ public class PortalBlock extends Block implements BlockEntityProvider {
    }
 
    @Override
-   public void onBreak(World world, BlockPos pos, BlockState state, PlayerEntity player) {
+   public BlockState onBreak(World world, BlockPos pos, BlockState state, PlayerEntity player) {
       super.onBreak(world, pos, state, player);
       Portal portal = CustomPortals.PORTALS.get(world).getPortalFromPos(pos);
       if(portal != null) {
@@ -129,6 +129,7 @@ public class PortalBlock extends Block implements BlockEntityProvider {
          if(!world.isClient)
             CustomPortals.PORTALS.get(world).syncWithAll(((ServerWorld)world).getServer());
       }
+      return state;
    }
 
    private void dropCatalyst(Portal portal, World world) {

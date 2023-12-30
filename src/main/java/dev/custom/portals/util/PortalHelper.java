@@ -7,6 +7,7 @@ import dev.custom.portals.data.Portal;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.registry.Registries;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.BlockRotation;
@@ -121,13 +122,13 @@ public class PortalHelper {
         return new SpawnPosData(spawnPos, offsetX, offsetZ);
     }
 
-    public static boolean buildPortal(BlockPos startPos, Block portalBlock, World world) {
-        if (buildPortal(startPos, Direction.Axis.X, portalBlock, world)) return true;
-        if (buildPortal(startPos, Direction.Axis.Y, portalBlock, world)) return true;
-        return buildPortal(startPos, Direction.Axis.Z, portalBlock, world);
+    public static boolean buildPortal(BlockPos startPos, Block portalBlock, UUID creatorId, World world) {
+        if (buildPortal(startPos, Direction.Axis.X, portalBlock, creatorId, world)) return true;
+        if (buildPortal(startPos, Direction.Axis.Y, portalBlock, creatorId, world)) return true;
+        return buildPortal(startPos, Direction.Axis.Z, portalBlock, creatorId, world);
     }
 
-    public static boolean buildPortal(BlockPos blockPos, Direction.Axis axis, Block portalBlock, World world) {
+    public static boolean buildPortal(BlockPos blockPos, Direction.Axis axis, Block portalBlock, UUID creatorId, World world) {
 
         if (!world.getBlockState(blockPos).isAir()) return false;
 
@@ -208,7 +209,7 @@ public class PortalHelper {
 
         Portal portal = new Portal(frameId, world.getRegistryKey().getValue().toString(),
                 portalBlock.getDefaultMapColor(), spawnPosData.blockPos, portalBlocks, spawnPosData.offsetX,
-                spawnPosData.offsetZ);
+                spawnPosData.offsetZ, creatorId);
         CustomPortals.PORTALS.get(world).registerPortal(portal);
 
         // register any runes that were already on the portal frames

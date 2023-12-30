@@ -1,6 +1,7 @@
 package dev.custom.portals.data;
 
 import java.util.List;
+import java.util.UUID;
 
 import dev.custom.portals.config.CPSettings;
 import net.minecraft.block.MapColor;
@@ -23,13 +24,14 @@ public class Portal {
     private int weakEnhancerRunes;
     private int strongEnhancerRunes;
     private int infinityRunes;
+    private final UUID creatorId;
 
     private boolean hasRedstoneSignal = false;
     
     private Portal linked;
 
     public Portal(final String frameId, final String dimensionId, final MapColor color, final BlockPos spawnPos,
-            final List<BlockPos> portalBlocks, final float offsetX, final float offsetZ) {
+            final List<BlockPos> portalBlocks, final float offsetX, final float offsetZ, final UUID creatorId) {
         this.frameId = frameId;
         this.dimensionId = dimensionId;
         this.color = color;
@@ -37,6 +39,7 @@ public class Portal {
         this.portalBlocks = portalBlocks;
         this.offsetX = offsetX;
         this.offsetZ = offsetZ;
+        this.creatorId = creatorId;
         hasteRunes = 0;
         gateRunes = 0;
         weakEnhancerRunes = 0;
@@ -45,7 +48,7 @@ public class Portal {
     }
 
     public Portal(final String frameId, final String dimensionId, final MapColor color, final BlockPos spawnPos,
-            final List<BlockPos> portalBlocks, final float offsetX, final float offsetZ, int hasteRunes, int gateRunes,
+            final List<BlockPos> portalBlocks, final float offsetX, final float offsetZ, final UUID creatorId, int hasteRunes, int gateRunes,
             int weakEnhancerRunes, int strongEnhancerRunes, int infinityRunes) {
         this.frameId = frameId;
         this.dimensionId = dimensionId;
@@ -54,6 +57,7 @@ public class Portal {
         this.portalBlocks = portalBlocks;
         this.offsetX = offsetX;
         this.offsetZ = offsetZ;
+        this.creatorId = creatorId;
         this.hasteRunes = hasteRunes;
         this.gateRunes = gateRunes;
         this.weakEnhancerRunes = weakEnhancerRunes;
@@ -83,6 +87,10 @@ public class Portal {
 
     public List<BlockPos> getPortalBlocks() {
         return portalBlocks;
+    }
+
+    public UUID getCreatorId() {
+        return creatorId;
     }
 
     public boolean hasLinked() {
@@ -153,15 +161,17 @@ public class Portal {
     }
 
     public void tryLink(final Portal portal) {
+        if (CPSettings.GeneralSettings.arePortalsPrivate() && this.creatorId != null && portal.creatorId != null &&
+                !this.creatorId.equals(portal.getCreatorId())) return;
         if (portal.getColor() == color && portal.getFrameId().equals(frameId) && portal != this) {
             if (portal.hasLinked()) {
                 if (portal.getLinked() != this)
                     return;
             }
-            if (!CPSettings.PortalRuneSettings.portalsAlwaysUnlimited() || !CPSettings.PortalRuneSettings.portalsAlwaysInterdim()) {
+            if (!CPSettings.GeneralSettings.portalsAlwaysUnlimited() || !CPSettings.GeneralSettings.portalsAlwaysInterdim()) {
                 int distance;
                 if (!portal.getDimensionId().equals(dimensionId)) {
-                    if (!this.hasGate() && !portal.hasGate() && !CPSettings.PortalRuneSettings.portalsAlwaysInterdim())
+                    if (!this.hasGate() && !portal.hasGate() && !CPSettings.GeneralSettings.portalsAlwaysInterdim())
                         return;
                     if (portal.getDimensionId().equals("minecraft:the_nether")) {
                         int translatedX = portal.getSpawnPos().getX() * 8;
@@ -177,7 +187,7 @@ public class Portal {
                         distance = distance(translatedSpawnPos, portal.getSpawnPos());
                     } else distance = distance(spawnPos, portal.getSpawnPos());
                 } else distance = distance(spawnPos, portal.getSpawnPos());
-                if (!CPSettings.PortalRuneSettings.portalsAlwaysUnlimited()) {
+                if (!CPSettings.GeneralSettings.portalsAlwaysUnlimited()) {
                     int tier = Math.max(portal.getEnhanceTier(), this.getEnhanceTier());
                     switch (tier) {
                         case 0 -> {

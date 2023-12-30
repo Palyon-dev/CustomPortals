@@ -24,14 +24,14 @@ public class PortalBlockEntity extends BlockEntity {
         }
         Portal portal = CustomPortals.PORTALS.get(world).getPortalFromPos(pos);
         if (portal != null) {
-            if (CPSettings.PortalRuneSettings.redstoneSetting() == CPSettings.RedstoneDropdown.OFF) {
+            if (CPSettings.GeneralSettings.redstoneSetting() == CPSettings.RedstoneDropdown.OFF) {
                 if (portal.hasLinked() && !(Boolean) state.get(PortalBlock.LIT) && !portal.hasRedstoneSignal()) {
                     world.setBlockState(pos, (BlockState) state.with(PortalBlock.LIT, true), Block.NOTIFY_ALL);
                 } else if ((!portal.hasLinked() || portal.hasRedstoneSignal()) && (Boolean) state.get(PortalBlock.LIT)) {
                     world.setBlockState(pos, (BlockState) state.with(PortalBlock.LIT, false), Block.NOTIFY_ALL);
                 }
             }
-            else if (CPSettings.PortalRuneSettings.redstoneSetting() == CPSettings.RedstoneDropdown.ON) {
+            else if (CPSettings.GeneralSettings.redstoneSetting() == CPSettings.RedstoneDropdown.ON) {
                 if (portal.hasLinked() && !(Boolean) state.get(PortalBlock.LIT) && portal.hasRedstoneSignal()) {
                     world.setBlockState(pos, (BlockState) state.with(PortalBlock.LIT, true), Block.NOTIFY_ALL);
                 } else if ((!portal.hasLinked() || !portal.hasRedstoneSignal()) && (Boolean) state.get(PortalBlock.LIT)) {

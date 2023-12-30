@@ -9,6 +9,7 @@ import me.lortseam.completeconfig.api.ConfigEntries;
 import me.lortseam.completeconfig.api.ConfigEntry;
 import me.lortseam.completeconfig.api.ConfigGroup;
 import me.lortseam.completeconfig.api.ConfigEntry.Boolean;
+import me.lortseam.completeconfig.api.ConfigEntry.Dropdown;
 import me.lortseam.completeconfig.data.Config;;
 
 
@@ -20,20 +21,23 @@ public final class CPSettings extends Config implements ConfigContainer {
 
     @ConfigEntries(includeAll = true)
     @Transitive
-    public static class PortalRuneSettings implements ConfigGroup {
+    public static class GeneralSettings implements ConfigGroup {
         private static boolean portals_always_unlimited = false;
-        private static boolean portals_always_interdimensional;
+        private static boolean portals_always_interdimensional = false;
         @ConfigEntry.Dropdown
         private static HasteDropdown hasteDropdown = HasteDropdown.CREATIVE;
         @ConfigEntry.Dropdown
         @ConfigEntry(descriptionKey = "redstoneTooltip")
         private static RedstoneDropdown redstoneDropdown = RedstoneDropdown.OFF;
+        @ConfigEntry(descriptionKey = "privatePortalsTooltip")
+        private static boolean private_portals = false;
 
         public static boolean portalsAlwaysUnlimited() { return portals_always_unlimited; }
         public static HasteDropdown portalsAlwaysHaste() { return hasteDropdown; }
 
         public static RedstoneDropdown redstoneSetting() { return redstoneDropdown; }
         public static boolean portalsAlwaysInterdim() { return portals_always_interdimensional; }
+        public static boolean arePortalsPrivate() { return private_portals; }
     }
 
     public enum HasteDropdown {

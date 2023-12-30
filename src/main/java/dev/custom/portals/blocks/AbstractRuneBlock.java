@@ -3,13 +3,10 @@ package dev.custom.portals.blocks;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.mojang.serialization.MapCodec;
 import dev.custom.portals.CustomPortals;
 import dev.custom.portals.data.Portal;
-import net.minecraft.block.AbstractBlock;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.ShapeContext;
-import net.minecraft.block.WallMountedBlock;
+import net.minecraft.block.*;
 import net.minecraft.block.enums.BlockFace;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -24,13 +21,17 @@ import net.minecraft.world.World;
 import net.minecraft.world.WorldView;
 
 public class AbstractRuneBlock extends WallMountedBlock {
-
+    public static final MapCodec<LeverBlock> CODEC = createCodec(LeverBlock::new);
     protected static final VoxelShape CEILING_SHAPE;
     protected static final VoxelShape FLOOR_SHAPE;
     protected static final VoxelShape NORTH_SHAPE;
     protected static final VoxelShape SOUTH_SHAPE;
     protected static final VoxelShape WEST_SHAPE;
     protected static final VoxelShape EAST_SHAPE;
+
+    public MapCodec<LeverBlock> getCodec() {
+        return CODEC;
+    }
 
     protected AbstractRuneBlock(AbstractBlock.Settings settings) {
         super(settings);
@@ -105,7 +106,7 @@ public class AbstractRuneBlock extends WallMountedBlock {
     }
 
     @Override
-    public void onBreak(World world, BlockPos pos, BlockState state, PlayerEntity player) {
+    public BlockState onBreak(World world, BlockPos pos, BlockState state, PlayerEntity player) {
         super.onBreak(world, pos, state, player);
         BlockPos blockPos = getBlockMountedPos(pos, state);
         Portal portal;
@@ -130,6 +131,7 @@ public class AbstractRuneBlock extends WallMountedBlock {
                 }
             }
         }
+        return state;
     }
 
     public BlockPos getBlockMountedPos(BlockPos pos, BlockState state) {
