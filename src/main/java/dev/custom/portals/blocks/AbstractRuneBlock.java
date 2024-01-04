@@ -21,7 +21,7 @@ import net.minecraft.world.World;
 import net.minecraft.world.WorldView;
 
 public class AbstractRuneBlock extends WallMountedBlock {
-    public static final MapCodec<LeverBlock> CODEC = createCodec(LeverBlock::new);
+    public static final MapCodec<AbstractRuneBlock> CODEC = createCodec(AbstractRuneBlock::new);
     protected static final VoxelShape CEILING_SHAPE;
     protected static final VoxelShape FLOOR_SHAPE;
     protected static final VoxelShape NORTH_SHAPE;
@@ -29,7 +29,7 @@ public class AbstractRuneBlock extends WallMountedBlock {
     protected static final VoxelShape WEST_SHAPE;
     protected static final VoxelShape EAST_SHAPE;
 
-    public MapCodec<LeverBlock> getCodec() {
+    public MapCodec<AbstractRuneBlock> getCodec() {
         return CODEC;
     }
 
