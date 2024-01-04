@@ -105,7 +105,7 @@ public abstract class ServerPlayerEntityMixin extends PlayerEntity {
                     StatusEffectInstance statusEffectInstance = (StatusEffectInstance)var7.next();
                     this.networkHandler.sendPacket(new EntityStatusEffectS2CPacket(this.getId(), statusEffectInstance));
                 }
-
+                // Apparently this line means "play the teleport sound effect." Minecraft try to have readable code challenge (impossible)
                 this.networkHandler.sendPacket(new WorldEventS2CPacket(1032, BlockPos.ORIGIN, 0, false));
                 this.syncedExperience = -1;
                 this.syncedHealth = -1.0F;

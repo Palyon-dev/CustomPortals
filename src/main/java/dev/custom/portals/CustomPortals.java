@@ -22,8 +22,6 @@ import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
 
-import java.util.Optional;
-
 public class CustomPortals implements ModInitializer, WorldComponentInitializer {
 
         public static final String MOD_ID = "customportals";
@@ -31,7 +29,7 @@ public class CustomPortals implements ModInitializer, WorldComponentInitializer 
         public static final ComponentKey<BasePortalComponent> PORTALS = ComponentRegistryV3.INSTANCE
                 .getOrCreate(new Identifier("customportals:portals"), BasePortalComponent.class);
 
-        private static CPSettings Config;
+        private static final CPSettings Config = new CPSettings();
 
         public static final RegistryKey<ItemGroup> PORTALS_ITEM_GROUP = RegistryKey.of(RegistryKeys.ITEM_GROUP,
                 new Identifier(CustomPortals.MOD_ID, "general"));
@@ -44,7 +42,6 @@ public class CustomPortals implements ModInitializer, WorldComponentInitializer 
                 Registry.register(Registries.ITEM_GROUP, PORTALS_ITEM_GROUP, FabricItemGroup.builder().icon(()
                         -> new ItemStack(CPItems.PURPLE_PORTAL_CATALYST))
                         .displayName(Text.translatable("itemGroup.customportals.general")).build());
-                Config = new CPSettings();
                 Config.load();
                 CPBlocks.registerBlocks();
                 CPItems.registerItems();
@@ -56,7 +53,7 @@ public class CustomPortals implements ModInitializer, WorldComponentInitializer 
                 registry.register(PORTALS, WorldPortals.class, WorldPortals::new);
         }
 
-        public static Optional<CPSettings> getConfig() { return Optional.ofNullable(Config); }
+        public static CPSettings getConfig() { return Config; }
 
         // for debugging purposes
         public static String blockPosToString(BlockPos pos) {
