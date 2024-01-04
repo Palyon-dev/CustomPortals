@@ -10,5 +10,6 @@ public interface EntityMixinAccess {
     public void notInCustomPortal();
     public int getPortalColor();
     public void setPortalColor(int color);
+    public int getMaxCustomPortalTime();
     public Portal getDestPortal();
 }

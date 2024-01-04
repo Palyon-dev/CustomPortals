@@ -2,6 +2,7 @@ package dev.custom.portals.mixin;
 
 import com.mojang.authlib.GameProfile;
 
+import dev.custom.portals.data.Portal;
 import net.minecraft.client.gui.screen.DeathScreen;
 import net.minecraft.client.gui.screen.DownloadingTerrainScreen;
 import net.minecraft.client.network.ClientPlayNetworkHandler;
@@ -42,10 +43,8 @@ public abstract class ClientPlayerEntityMixin extends AbstractClientPlayerEntity
 
     @Inject(method = "updateNausea", at = @At("HEAD"), cancellable = true)
     private void updateNausea(CallbackInfo ci) {
-        //if (((EntityMixinAccess)this).isInCustomPortal()) System.out.println("In custom portal.");
-        //if (((EntityMixinAccess)this).getDestPortal() != null) System.out.println("Dest portal found.");
-        if(((EntityMixinAccess)this).isInCustomPortal() && ((EntityMixinAccess)this).getDestPortal() != null) {
-            //System.out.println("(2) Nausea Intensity is " + this.nauseaIntensity);
+        Portal portal = ((EntityMixinAccess)this).getDestPortal();
+        if(((EntityMixinAccess)this).isInCustomPortal() && portal != null) {
             this.prevNauseaIntensity = this.nauseaIntensity;
             if (!(this.client.currentScreen == null || this.client.currentScreen.shouldPause() || this.client.currentScreen instanceof DeathScreen || this.client.currentScreen instanceof DownloadingTerrainScreen)) {
                 if (this.client.currentScreen instanceof HandledScreen) {
@@ -55,7 +54,7 @@ public abstract class ClientPlayerEntityMixin extends AbstractClientPlayerEntity
                 this.client.setScreen((Screen)null);
             }
 
-            if (this.nauseaIntensity == 0.0F) {
+            if (this.nauseaIntensity == 0.0F && ((EntityMixinAccess)this).getMaxCustomPortalTime() > 1) {
                 this.client.getSoundManager().play(PositionedSoundInstance.ambient(SoundEvents.BLOCK_PORTAL_TRIGGER, this.random.nextFloat() * 0.4F + 0.8F, 0.25F));
             }
 

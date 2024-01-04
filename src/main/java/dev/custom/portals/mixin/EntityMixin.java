@@ -2,10 +2,12 @@ package dev.custom.portals.mixin;
 
 import dev.custom.portals.CustomPortals;
 import dev.custom.portals.config.CPSettings;
-import net.minecraft.network.packet.s2c.play.PlayerRespawnS2CPacket;
-import net.minecraft.network.packet.s2c.play.PositionFlag;
+import net.minecraft.client.network.ClientPlayerEntity;
+import net.minecraft.entity.effect.StatusEffectInstance;
+import net.minecraft.network.packet.s2c.play.*;
 import net.minecraft.server.PlayerManager;
 import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.world.WorldProperties;
 import net.minecraft.world.biome.source.BiomeAccess;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -28,6 +30,7 @@ import net.minecraft.world.TeleportTarget;
 import net.minecraft.world.World;
 
 import java.util.Collections;
+import java.util.Iterator;
 import java.util.Set;
 
 @Mixin(Entity.class)
@@ -105,15 +108,7 @@ public abstract class EntityMixin implements EntityMixinAccess {
     @Unique
     public void tickCustomPortal() {
         if (this.world instanceof ServerWorld) {
-            int i;
-            if (((Entity)(Object)this) instanceof PlayerEntity && destPortal != null) {
-                if (CPSettings.GeneralSettings.portalsAlwaysHaste() == CPSettings.HasteDropdown.CREATIVE)
-                    i = destPortal.hasHaste() ? 1 : this.getMaxNetherPortalTime();
-                else if (CPSettings.GeneralSettings.portalsAlwaysHaste() == CPSettings.HasteDropdown.NO)
-                    i = destPortal.hasHaste() ? 1 : 80;
-                else i = 1;
-            }
-            else i = this.getMaxNetherPortalTime();
+            int i = this.getMaxCustomPortalTime();
             ServerWorld serverWorld = (ServerWorld)this.world;
             if (this.inCustomPortal) {
                 MinecraftServer minecraftServer = serverWorld.getServer();
@@ -133,22 +128,33 @@ public abstract class EntityMixin implements EntityMixinAccess {
                         }
                     }
                     else {
-                        // Bit of a hack to ensure data is still shared with the client
-                        // even when we're not changing dimensions, as this is normally
-                        // done in moveToWorld()
-                        if (((Entity)(Object)this) instanceof ServerPlayerEntity) {
-                            PlayerManager playerManager = ((ServerPlayerEntity)(Object)this).server.getPlayerManager();
-                            ((ServerPlayerEntity)(Object)this).networkHandler.sendPacket(new PlayerRespawnS2CPacket(((ServerPlayerEntity)(Object)this).createCommonPlayerSpawnInfo(serverWorld), (byte)3));
-                            playerManager.sendWorldInfo(((ServerPlayerEntity)(Object)this), serverWorld);
-                            playerManager.sendPlayerStatus(((ServerPlayerEntity)(Object)this));
-                        }
                         BlockPos dest = destPortal.getSpawnPos();
                         double destX = dest.getX();
                         double destY = dest.getY();
                         double destZ = dest.getZ();
                         destX += destPortal.offsetX;
                         destZ += destPortal.offsetZ;
-                        this.teleport(serverWorld, destX, destY, destZ, Collections.emptySet(), this.yaw, this.pitch);
+
+                        // Since this is a same-dimension teleport and we're not using moveToWorld(), need to do some
+                        // stuff that's normally handled there
+                        if (((Entity)(Object)this) instanceof ServerPlayerEntity) {
+                            ServerPlayerEntity thisPlayer = ((ServerPlayerEntity)(Object)this);
+                            WorldProperties worldProperties = serverWorld.getLevelProperties();
+                            PlayerManager playerManager = thisPlayer.server.getPlayerManager();
+                            thisPlayer.networkHandler.sendPacket(new PlayerRespawnS2CPacket(thisPlayer.createCommonPlayerSpawnInfo(serverWorld), (byte)3));
+                            thisPlayer.networkHandler.sendPacket(new DifficultyS2CPacket(worldProperties.getDifficulty(), worldProperties.isDifficultyLocked()));
+                            thisPlayer.networkHandler.requestTeleport(destX, destY, destZ, this.yaw, this.pitch);
+                            thisPlayer.networkHandler.syncWithPlayerPosition();
+                            thisPlayer.networkHandler.sendPacket(new PlayerAbilitiesS2CPacket(thisPlayer.getAbilities()));
+                            playerManager.sendWorldInfo(thisPlayer, serverWorld);
+                            playerManager.sendPlayerStatus(thisPlayer);
+
+                            for (StatusEffectInstance statusEffectInstance : thisPlayer.getStatusEffects()) {
+                                thisPlayer.networkHandler.sendPacket(new EntityStatusEffectS2CPacket(((ServerPlayerEntity) (Object) this).getId(), statusEffectInstance));
+                            }
+                            thisPlayer.networkHandler.sendPacket(new WorldEventS2CPacket(1032, BlockPos.ORIGIN, 0, false));
+                        }
+                        else this.teleport(serverWorld, destX, destY, destZ, Collections.emptySet(), this.yaw, this.pitch);
                     }
                     this.world.getProfiler().pop();
                 }
@@ -167,6 +173,18 @@ public abstract class EntityMixin implements EntityMixinAccess {
   
            this.tickPortalCooldown();
         }
+    }
+
+    @Unique
+    public int getMaxCustomPortalTime() {
+        if (((Entity)(Object)this) instanceof PlayerEntity && destPortal != null) {
+            if (CPSettings.GeneralSettings.portalsAlwaysHaste() == CPSettings.HasteDropdown.CREATIVE)
+                return destPortal.hasHaste() ? 1 : this.getMaxNetherPortalTime();
+            else if (CPSettings.GeneralSettings.portalsAlwaysHaste() == CPSettings.HasteDropdown.NO)
+                return destPortal.hasHaste() ? 1 : 80;
+            else return 1;
+        }
+        return this.getMaxNetherPortalTime();
     }
 
     @Unique
