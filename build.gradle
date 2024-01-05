@@ -34,8 +34,6 @@ dependencies {
 	minecraft "com.mojang:minecraft:$minecraft_version"
     mappings "net.fabricmc:yarn:$yarn_mappings"
     modImplementation "net.fabricmc:fabric-loader:$loader_version"
-	mappings "net.fabricmc:yarn:$yarn_mappings"
-	modImplementation "net.fabricmc:fabric-loader:$loader_version"
 
 	// Fabric API. This is technically optional, but you probably want it anyway.
 	modImplementation "net.fabricmc.fabric-api:fabric-api:$fabric_version"
@@ -45,7 +43,6 @@ dependencies {
 	include "dev.onyxstudios.cardinal-components-api:cardinal-components-base:$cardinalcomponents_version"
 	// Replace modImplementation with modApi if you expose components in your own API
     modImplementation "dev.onyxstudios.cardinal-components-api:cardinal-components-world:$cardinalcomponents_version"
-	modImplementation "dev.onyxstudios.cardinal-components-api:cardinal-components-world:$cardinalcomponents_version"
 	include "dev.onyxstudios.cardinal-components-api:cardinal-components-world:$cardinalcomponents_version"
 
 	modImplementation("com.github.Lortseam.completeconfig:base:$completeconfig_version")
