@@ -11,28 +11,28 @@ import net.minecraft.client.particle.ParticleFactory;
 import net.minecraft.client.particle.PortalParticle;
 import net.minecraft.client.particle.SpriteProvider;
 import net.minecraft.client.world.ClientWorld;
-import net.minecraft.particle.DefaultParticleType;
+import net.minecraft.particle.SimpleParticleType;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
 import net.minecraft.util.Identifier;
 
 public class CPParticles {
 
-    public static final DefaultParticleType BLACK_PORTAL_PARTICLE = FabricParticleTypes.simple();
-    public static final DefaultParticleType BLUE_PORTAL_PARTICLE = FabricParticleTypes.simple();
-    public static final DefaultParticleType BROWN_PORTAL_PARTICLE = FabricParticleTypes.simple();
-    public static final DefaultParticleType CYAN_PORTAL_PARTICLE = FabricParticleTypes.simple();
-    public static final DefaultParticleType GRAY_PORTAL_PARTICLE = FabricParticleTypes.simple();
-    public static final DefaultParticleType GREEN_PORTAL_PARTICLE = FabricParticleTypes.simple();
-    public static final DefaultParticleType LIGHT_BLUE_PORTAL_PARTICLE = FabricParticleTypes.simple();
-    public static final DefaultParticleType LIGHT_GRAY_PORTAL_PARTICLE = FabricParticleTypes.simple();
-    public static final DefaultParticleType LIME_PORTAL_PARTICLE = FabricParticleTypes.simple();
-    public static final DefaultParticleType MAGENTA_PORTAL_PARTICLE = FabricParticleTypes.simple();
-    public static final DefaultParticleType ORANGE_PORTAL_PARTICLE = FabricParticleTypes.simple();
-    public static final DefaultParticleType PINK_PORTAL_PARTICLE = FabricParticleTypes.simple();
-    public static final DefaultParticleType RED_PORTAL_PARTICLE = FabricParticleTypes.simple();
-    public static final DefaultParticleType WHITE_PORTAL_PARTICLE = FabricParticleTypes.simple();
-    public static final DefaultParticleType YELLOW_PORTAL_PARTICLE = FabricParticleTypes.simple();
+    public static final SimpleParticleType BLACK_PORTAL_PARTICLE = FabricParticleTypes.simple();
+    public static final SimpleParticleType BLUE_PORTAL_PARTICLE = FabricParticleTypes.simple();
+    public static final SimpleParticleType BROWN_PORTAL_PARTICLE = FabricParticleTypes.simple();
+    public static final SimpleParticleType CYAN_PORTAL_PARTICLE = FabricParticleTypes.simple();
+    public static final SimpleParticleType GRAY_PORTAL_PARTICLE = FabricParticleTypes.simple();
+    public static final SimpleParticleType GREEN_PORTAL_PARTICLE = FabricParticleTypes.simple();
+    public static final SimpleParticleType LIGHT_BLUE_PORTAL_PARTICLE = FabricParticleTypes.simple();
+    public static final SimpleParticleType LIGHT_GRAY_PORTAL_PARTICLE = FabricParticleTypes.simple();
+    public static final SimpleParticleType LIME_PORTAL_PARTICLE = FabricParticleTypes.simple();
+    public static final SimpleParticleType MAGENTA_PORTAL_PARTICLE = FabricParticleTypes.simple();
+    public static final SimpleParticleType ORANGE_PORTAL_PARTICLE = FabricParticleTypes.simple();
+    public static final SimpleParticleType PINK_PORTAL_PARTICLE = FabricParticleTypes.simple();
+    public static final SimpleParticleType RED_PORTAL_PARTICLE = FabricParticleTypes.simple();
+    public static final SimpleParticleType WHITE_PORTAL_PARTICLE = FabricParticleTypes.simple();
+    public static final SimpleParticleType YELLOW_PORTAL_PARTICLE = FabricParticleTypes.simple();
 
     public static void registerParticles() {
         Registry.register(Registries.PARTICLE_TYPE, new Identifier(CustomPortals.MOD_ID, "black_portal_particle"), BLACK_PORTAL_PARTICLE);
@@ -81,7 +81,7 @@ public class CPParticles {
             }
 
             @Environment(EnvType.CLIENT)
-            public static class Factory implements ParticleFactory<DefaultParticleType> {
+            public static class Factory implements ParticleFactory<SimpleParticleType> {
                     private final FabricSpriteProvider sprites;
 
                     public Factory(FabricSpriteProvider sprites) {
@@ -89,7 +89,7 @@ public class CPParticles {
                     }
 
                     @Override
-                    public Particle createParticle(DefaultParticleType type, ClientWorld world, double x, double y, double z, double vX, double vY, double vZ) {
+                    public Particle createParticle(SimpleParticleType type, ClientWorld world, double x, double y, double z, double vX, double vY, double vZ) {
                             return new BlackPortalParticle(world, x, y, z, vX, vY, vZ, sprites);
                     }
             }
@@ -108,7 +108,7 @@ public class CPParticles {
             }
 
             @Environment(EnvType.CLIENT)
-            public static class Factory implements ParticleFactory<DefaultParticleType> {
+            public static class Factory implements ParticleFactory<SimpleParticleType> {
                     private final FabricSpriteProvider sprites;
 
                     public Factory(FabricSpriteProvider sprites) {
@@ -116,7 +116,7 @@ public class CPParticles {
                     }
 
                     @Override
-                    public Particle createParticle(DefaultParticleType type, ClientWorld world, double x, double y, double z, double vX, double vY, double vZ) {
+                    public Particle createParticle(SimpleParticleType type, ClientWorld world, double x, double y, double z, double vX, double vY, double vZ) {
                             return new BluePortalParticle(world, x, y, z, vX, vY, vZ, sprites);
                     }
             }
@@ -135,7 +135,7 @@ public class CPParticles {
             }
 
             @Environment(EnvType.CLIENT)
-            public static class Factory implements ParticleFactory<DefaultParticleType> {
+            public static class Factory implements ParticleFactory<SimpleParticleType> {
                     private final FabricSpriteProvider sprites;
 
                     public Factory(FabricSpriteProvider sprites) {
@@ -143,7 +143,7 @@ public class CPParticles {
                     }
 
                     @Override
-                    public Particle createParticle(DefaultParticleType type, ClientWorld world, double x, double y, double z, double vX, double vY, double vZ) {
+                    public Particle createParticle(SimpleParticleType type, ClientWorld world, double x, double y, double z, double vX, double vY, double vZ) {
                             return new BrownPortalParticle(world, x, y, z, vX, vY, vZ, sprites);
                     }
             }
@@ -162,7 +162,7 @@ public class CPParticles {
             }
 
             @Environment(EnvType.CLIENT)
-            public static class Factory implements ParticleFactory<DefaultParticleType> {
+            public static class Factory implements ParticleFactory<SimpleParticleType> {
                     private final FabricSpriteProvider sprites;
 
                     public Factory(FabricSpriteProvider sprites) {
@@ -170,7 +170,7 @@ public class CPParticles {
                     }
 
                     @Override
-                    public Particle createParticle(DefaultParticleType type, ClientWorld world, double x, double y, double z, double vX, double vY, double vZ) {
+                    public Particle createParticle(SimpleParticleType type, ClientWorld world, double x, double y, double z, double vX, double vY, double vZ) {
                             return new CyanPortalParticle(world, x, y, z, vX, vY, vZ, sprites);
                     }
             }
@@ -187,7 +187,7 @@ public class CPParticles {
             }
 
             @Environment(EnvType.CLIENT)
-            public static class Factory implements ParticleFactory<DefaultParticleType> {
+            public static class Factory implements ParticleFactory<SimpleParticleType> {
                     private final FabricSpriteProvider sprites;
 
                     public Factory(FabricSpriteProvider sprites) {
@@ -195,7 +195,7 @@ public class CPParticles {
                     }
 
                     @Override
-                    public Particle createParticle(DefaultParticleType type, ClientWorld world, double x, double y, double z, double vX, double vY, double vZ) {
+                    public Particle createParticle(SimpleParticleType type, ClientWorld world, double x, double y, double z, double vX, double vY, double vZ) {
                             return new GrayPortalParticle(world, x, y, z, vX, vY, vZ, sprites);
                     }
             }
@@ -214,7 +214,7 @@ public class CPParticles {
             }
 
             @Environment(EnvType.CLIENT)
-            public static class Factory implements ParticleFactory<DefaultParticleType> {
+            public static class Factory implements ParticleFactory<SimpleParticleType> {
                     private final FabricSpriteProvider sprites;
 
                     public Factory(FabricSpriteProvider sprites) {
@@ -222,7 +222,7 @@ public class CPParticles {
                     }
 
                     @Override
-                    public Particle createParticle(DefaultParticleType type, ClientWorld world, double x, double y, double z, double vX, double vY, double vZ) {
+                    public Particle createParticle(SimpleParticleType type, ClientWorld world, double x, double y, double z, double vX, double vY, double vZ) {
                             return new GreenPortalParticle(world, x, y, z, vX, vY, vZ, sprites);
                     }
             }
@@ -241,7 +241,7 @@ public class CPParticles {
             }
 
             @Environment(EnvType.CLIENT)
-            public static class Factory implements ParticleFactory<DefaultParticleType> {
+            public static class Factory implements ParticleFactory<SimpleParticleType> {
                     private final FabricSpriteProvider sprites;
 
                     public Factory(FabricSpriteProvider sprites) {
@@ -249,7 +249,7 @@ public class CPParticles {
                     }
 
                     @Override
-                    public Particle createParticle(DefaultParticleType type, ClientWorld world, double x, double y, double z, double vX, double vY, double vZ) {
+                    public Particle createParticle(SimpleParticleType type, ClientWorld world, double x, double y, double z, double vX, double vY, double vZ) {
                             return new LightBluePortalParticle(world, x, y, z, vX, vY, vZ, sprites);
                     }
             }
@@ -266,7 +266,7 @@ public class CPParticles {
             }
 
             @Environment(EnvType.CLIENT)
-            public static class Factory implements ParticleFactory<DefaultParticleType> {
+            public static class Factory implements ParticleFactory<SimpleParticleType> {
                     private final FabricSpriteProvider sprites;
 
                     public Factory(FabricSpriteProvider sprites) {
@@ -274,7 +274,7 @@ public class CPParticles {
                     }
 
                     @Override
-                    public Particle createParticle(DefaultParticleType type, ClientWorld world, double x, double y, double z, double vX, double vY, double vZ) {
+                    public Particle createParticle(SimpleParticleType type, ClientWorld world, double x, double y, double z, double vX, double vY, double vZ) {
                             return new LightGrayPortalParticle(world, x, y, z, vX, vY, vZ, sprites);
                     }
             }
@@ -293,7 +293,7 @@ public class CPParticles {
             }
 
             @Environment(EnvType.CLIENT)
-            public static class Factory implements ParticleFactory<DefaultParticleType> {
+            public static class Factory implements ParticleFactory<SimpleParticleType> {
                     private final FabricSpriteProvider sprites;
 
                     public Factory(FabricSpriteProvider sprites) {
@@ -301,7 +301,7 @@ public class CPParticles {
                     }
 
                     @Override
-                    public Particle createParticle(DefaultParticleType type, ClientWorld world, double x, double y, double z, double vX, double vY, double vZ) {
+                    public Particle createParticle(SimpleParticleType type, ClientWorld world, double x, double y, double z, double vX, double vY, double vZ) {
                             return new LimePortalParticle(world, x, y, z, vX, vY, vZ, sprites);
                     }
             }
@@ -320,7 +320,7 @@ public class CPParticles {
             }
 
             @Environment(EnvType.CLIENT)
-            public static class Factory implements ParticleFactory<DefaultParticleType> {
+            public static class Factory implements ParticleFactory<SimpleParticleType> {
                     private final FabricSpriteProvider sprites;
 
                     public Factory(FabricSpriteProvider sprites) {
@@ -328,7 +328,7 @@ public class CPParticles {
                     }
 
                     @Override
-                    public Particle createParticle(DefaultParticleType type, ClientWorld world, double x, double y, double z, double vX, double vY, double vZ) {
+                    public Particle createParticle(SimpleParticleType type, ClientWorld world, double x, double y, double z, double vX, double vY, double vZ) {
                             return new MagentaPortalParticle(world, x, y, z, vX, vY, vZ, sprites);
                     }
             }
@@ -347,7 +347,7 @@ public class CPParticles {
             }
 
             @Environment(EnvType.CLIENT)
-            public static class Factory implements ParticleFactory<DefaultParticleType> {
+            public static class Factory implements ParticleFactory<SimpleParticleType> {
                     private final FabricSpriteProvider sprites;
 
                     public Factory(FabricSpriteProvider sprites) {
@@ -355,7 +355,7 @@ public class CPParticles {
                     }
 
                     @Override
-                    public Particle createParticle(DefaultParticleType type, ClientWorld world, double x, double y, double z, double vX, double vY, double vZ) {
+                    public Particle createParticle(SimpleParticleType type, ClientWorld world, double x, double y, double z, double vX, double vY, double vZ) {
                             return new OrangePortalParticle(world, x, y, z, vX, vY, vZ, sprites);
                     }
             }
@@ -374,7 +374,7 @@ public class CPParticles {
             }
 
             @Environment(EnvType.CLIENT)
-            public static class Factory implements ParticleFactory<DefaultParticleType> {
+            public static class Factory implements ParticleFactory<SimpleParticleType> {
                     private final FabricSpriteProvider sprites;
 
                     public Factory(FabricSpriteProvider sprites) {
@@ -382,7 +382,7 @@ public class CPParticles {
                     }
 
                     @Override
-                    public Particle createParticle(DefaultParticleType type, ClientWorld world, double x, double y, double z, double vX, double vY, double vZ) {
+                    public Particle createParticle(SimpleParticleType type, ClientWorld world, double x, double y, double z, double vX, double vY, double vZ) {
                             return new PinkPortalParticle(world, x, y, z, vX, vY, vZ, sprites);
                     }
             }
@@ -401,7 +401,7 @@ public class CPParticles {
             }
 
             @Environment(EnvType.CLIENT)
-            public static class Factory implements ParticleFactory<DefaultParticleType> {
+            public static class Factory implements ParticleFactory<SimpleParticleType> {
                     private final FabricSpriteProvider sprites;
 
                     public Factory(FabricSpriteProvider sprites) {
@@ -409,7 +409,7 @@ public class CPParticles {
                     }
 
                     @Override
-                    public Particle createParticle(DefaultParticleType type, ClientWorld world, double x, double y, double z, double vX, double vY, double vZ) {
+                    public Particle createParticle(SimpleParticleType type, ClientWorld world, double x, double y, double z, double vX, double vY, double vZ) {
                             return new RedPortalParticle(world, x, y, z, vX, vY, vZ, sprites);
                     }
             }
@@ -426,7 +426,7 @@ public class CPParticles {
             }
 
             @Environment(EnvType.CLIENT)
-            public static class Factory implements ParticleFactory<DefaultParticleType> {
+            public static class Factory implements ParticleFactory<SimpleParticleType> {
                     private final FabricSpriteProvider sprites;
 
                     public Factory(FabricSpriteProvider sprites) {
@@ -434,7 +434,7 @@ public class CPParticles {
                     }
 
                     @Override
-                    public Particle createParticle(DefaultParticleType type, ClientWorld world, double x, double y, double z, double vX, double vY, double vZ) {
+                    public Particle createParticle(SimpleParticleType type, ClientWorld world, double x, double y, double z, double vX, double vY, double vZ) {
                             return new WhitePortalParticle(world, x, y, z, vX, vY, vZ, sprites);
                     }
             }
@@ -453,7 +453,7 @@ public class CPParticles {
             }
 
             @Environment(EnvType.CLIENT)
-            public static class Factory implements ParticleFactory<DefaultParticleType> {
+            public static class Factory implements ParticleFactory<SimpleParticleType> {
                     private final FabricSpriteProvider sprites;
 
                     public Factory(FabricSpriteProvider sprites) {
@@ -461,7 +461,7 @@ public class CPParticles {
                     }
 
                     @Override
-                    public Particle createParticle(DefaultParticleType type, ClientWorld world, double x, double y, double z, double vX, double vY, double vZ) {
+                    public Particle createParticle(SimpleParticleType type, ClientWorld world, double x, double y, double z, double vX, double vY, double vZ) {
                             return new YellowPortalParticle(world, x, y, z, vX, vY, vZ, sprites);
                     }
             }

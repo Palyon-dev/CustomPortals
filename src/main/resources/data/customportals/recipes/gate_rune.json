@@ -17,7 +17,7 @@
         }
     },
     "result": {
-        "item": "customportals:gate_rune",
+        "id": "customportals:gate_rune",
         "count": 1
     }
 }

@@ -7,29 +7,16 @@ import java.util.UUID;
 import net.minecraft.block.MapColor;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtList;
+import net.minecraft.registry.RegistryWrapper;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.math.BlockPos;
 
-import dev.custom.portals.config.CPSettings;
-
 public class PortalComponent implements BasePortalComponent {
-    private boolean portalsAlwaysUnlimited;
-    private boolean portalsAlwaysInterdim;
-    private boolean privatePortals;
-    private int defaultRange;
-    private int rangeWithEnhancer;
-    private int rangeWithStrongEnhancer;
 
     private PortalRegistry portalRegistry;
 
-    public PortalComponent() { 
+    public PortalComponent() {
         portalRegistry = new PortalRegistry();
-        portalsAlwaysUnlimited = CPSettings.GeneralSettings.portalsAlwaysUnlimited();
-        portalsAlwaysInterdim = CPSettings.GeneralSettings.portalsAlwaysInterdim();
-        privatePortals = CPSettings.GeneralSettings.arePortalsPrivate();
-        defaultRange = CPSettings.PortalRangeSettings.getDefaultRange();
-        rangeWithEnhancer = CPSettings.PortalRangeSettings.getRangeWithEnhancer();
-        rangeWithStrongEnhancer = CPSettings.PortalRangeSettings.getRangeWithStrongEnhancer();
     }
 
     @Override
@@ -38,41 +25,6 @@ public class PortalComponent implements BasePortalComponent {
     @Override
     public Portal getPortalFromPos(BlockPos pos) {
         return portalRegistry.getPortalFromPos(pos);
-    }
-
-    @Override
-    public boolean settingsChanged() {
-        boolean portalsAlwaysUnlimited = CPSettings.GeneralSettings.portalsAlwaysUnlimited();
-        boolean portalsAlwaysInterdim = CPSettings.GeneralSettings.portalsAlwaysInterdim();
-        boolean privatePortals = CPSettings.GeneralSettings.arePortalsPrivate();
-        int defaultRange = CPSettings.PortalRangeSettings.getDefaultRange();
-        int rangeWithEnhancer = CPSettings.PortalRangeSettings.getRangeWithEnhancer();
-        int rangeWithStrongEnhancer = CPSettings.PortalRangeSettings.getRangeWithStrongEnhancer();
-        if (portalsAlwaysUnlimited != this.portalsAlwaysUnlimited) {
-            this.portalsAlwaysUnlimited = portalsAlwaysUnlimited;
-            return true;
-        }
-        if (portalsAlwaysInterdim != this.portalsAlwaysInterdim) {
-            this.portalsAlwaysInterdim = portalsAlwaysInterdim;
-            return true;
-        }
-        if (privatePortals != this.privatePortals) {
-            this.privatePortals = privatePortals;
-            return true;
-        }
-        if (defaultRange != this.defaultRange) {
-            this.defaultRange = defaultRange;
-            return true;
-        }
-        if (rangeWithEnhancer != this.rangeWithEnhancer) {
-            this.rangeWithEnhancer = rangeWithEnhancer;
-            return true;
-        }
-        if (rangeWithStrongEnhancer != this.rangeWithStrongEnhancer) {
-            this.rangeWithStrongEnhancer = rangeWithStrongEnhancer;
-            return true;
-        }
-        return false;
     }
 
     @Override
@@ -104,7 +56,7 @@ public class PortalComponent implements BasePortalComponent {
     }*/
 
     @Override
-    public void readFromNbt(NbtCompound tag) {
+    public void readFromNbt(NbtCompound tag, RegistryWrapper.WrapperLookup registryLookup) {
         NbtList portalData = tag.getList("portals", 10);
         for(int i = 0; i < portalData.size(); i++) {
             NbtCompound curTag = portalData.getCompound(i);
@@ -147,7 +99,7 @@ public class PortalComponent implements BasePortalComponent {
     }
 
     @Override
-    public void writeToNbt(NbtCompound tag) {
+    public void writeToNbt(NbtCompound tag, RegistryWrapper.WrapperLookup registryLookup) {
         NbtList portalData = new NbtList();
         for(Portal curPortal : portalRegistry.getPortals()) {
             NbtCompound curTag = new NbtCompound();

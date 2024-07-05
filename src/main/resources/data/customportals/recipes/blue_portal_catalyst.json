@@ -18,7 +18,7 @@
         }
     },
     "result": {
-        "item": "customportals:blue_portal_catalyst",
+        "id": "customportals:blue_portal_catalyst",
         "count": 2
     }
 }

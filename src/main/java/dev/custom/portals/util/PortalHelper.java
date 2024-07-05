@@ -4,13 +4,14 @@ import dev.custom.portals.CustomPortals;
 import dev.custom.portals.blocks.AbstractRuneBlock;
 import dev.custom.portals.config.CPSettings;
 import dev.custom.portals.data.Portal;
+import dev.custom.portals.registry.CPBlocks;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
-import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.registry.Registries;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.BlockRotation;
+import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.Vec3i;
@@ -19,6 +20,10 @@ import net.minecraft.world.World;
 import java.util.*;
 
 public class PortalHelper {
+
+    public static Block transitionBackgroundSpriteModel;
+    public static boolean isTransitioning = false;
+    public static Identifier DRAW_SPRITE_PACKET_ID = new Identifier("customportals", "draw_sprite");
 
     private static BlockPos getUp(BlockPos pos, Direction.Axis axis) {
         return axis == Direction.Axis.Y ? pos.north() : pos.up();
@@ -160,8 +165,8 @@ public class PortalHelper {
 
         // verify that the frame block is a valid portal frame block
         String frameId = Registries.BLOCK.getId(frameMaterial).toString();
-        List<String> blockIds = CPSettings.BlockFilterSettings.getBlocks();
-        if (CPSettings.BlockFilterSettings.isWhitelist()) {
+        List<String> blockIds = CPSettings.instance().filteredBlocks;
+        if (CPSettings.instance().isWhitelist) {
             if (!blockIds.contains(frameId)) return false;
         } else {
             if (blockIds.contains(frameId)) return false;
@@ -225,6 +230,28 @@ public class PortalHelper {
         if(!world.isClient)
             CustomPortals.PORTALS.get(world).syncWithAll(((ServerWorld)world).getServer());
         return true;
+    }
+
+    public static Block getPortalBlockFromColorId(int colorId) {
+        return switch (colorId) {
+            case 29 -> CPBlocks.BLACK_PORTAL;
+            case 25 -> CPBlocks.BLUE_PORTAL;
+            case 26 -> CPBlocks.BROWN_PORTAL;
+            case 23 -> CPBlocks.CYAN_PORTAL;
+            case 21 -> CPBlocks.GRAY_PORTAL;
+            case 27 -> CPBlocks.GREEN_PORTAL;
+            case 17 -> CPBlocks.LIGHT_BLUE_PORTAL;
+            case 22 -> CPBlocks.LIGHT_GRAY_PORTAL;
+            case 19 -> CPBlocks.LIME_PORTAL;
+            case 16 -> CPBlocks.MAGENTA_PORTAL;
+            case 15 -> CPBlocks.ORANGE_PORTAL;
+            case 20 -> CPBlocks.PINK_PORTAL;
+            case 24 -> CPBlocks.PURPLE_PORTAL;
+            case 28 -> CPBlocks.RED_PORTAL;
+            case 8 -> CPBlocks.WHITE_PORTAL;
+            case 18 -> CPBlocks.YELLOW_PORTAL;
+            default -> Blocks.NETHER_PORTAL;
+        };
     }
 
     static class SpawnPosData {

@@ -16,7 +16,7 @@ public class PortalCatalyst extends Item {
 
     private Block portalBlock;
 
-    public PortalCatalyst(Settings settings, Block portal) {
+    public PortalCatalyst(net.minecraft.item.Item.Settings settings, Block portal) {
         super(settings);
         this.portalBlock = portal;
     }

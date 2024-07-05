@@ -7,7 +7,6 @@ import dev.custom.portals.blocks.*;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.blockrenderlayer.v1.BlockRenderLayerMap;
-import net.fabricmc.fabric.api.object.builder.v1.block.FabricBlockSettings;
 import net.fabricmc.fabric.api.object.builder.v1.block.entity.FabricBlockEntityTypeBuilder;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
@@ -22,72 +21,80 @@ import net.minecraft.util.Identifier;
 
 public class CPBlocks {
 
+        private static final ToIntFunction<BlockState> STATE_TO_LUMINANCE = (state) -> {
+                return (Boolean)state.get(Properties.LIT) ? 11 : 0;
+        };
+
+        private static final ToIntFunction<BlockState> RUNE_LUMINANCE = (state) -> {
+                return 2;
+        };
+
         // Runes
         public static final Block HASTE_RUNE_BLOCK = new HasteRuneBlock(
-                FabricBlockSettings.create().sounds(BlockSoundGroup.AMETHYST_CLUSTER)
-                .nonOpaque().luminance(2).noCollision().strength(0.3F));
+                Block.Settings.create().sounds(BlockSoundGroup.AMETHYST_CLUSTER)
+                .nonOpaque().luminance(RUNE_LUMINANCE).noCollision().strength(0.3F));
         public static final Block GATE_RUNE_BLOCK = new GateRuneBlock(
-                FabricBlockSettings.create().sounds(BlockSoundGroup.AMETHYST_CLUSTER)
-                .nonOpaque().luminance(2).noCollision().strength(0.3F));
+                Block.Settings.create().sounds(BlockSoundGroup.AMETHYST_CLUSTER)
+                .nonOpaque().luminance(RUNE_LUMINANCE).noCollision().strength(0.3F));
         public static final Block WEAK_ENHANCER_RUNE_BLOCK = new EnhancerRuneBlock(
-                FabricBlockSettings.create().sounds(BlockSoundGroup.AMETHYST_CLUSTER)
-                .nonOpaque().luminance(2).noCollision().strength(0.3F));
+                Block.Settings.create().sounds(BlockSoundGroup.AMETHYST_CLUSTER)
+                .nonOpaque().luminance(RUNE_LUMINANCE).noCollision().strength(0.3F));
         public static final Block STRONG_ENHANCER_RUNE_BLOCK = new StrongEnhancerRuneBlock(
-                FabricBlockSettings.create().sounds(BlockSoundGroup.AMETHYST_CLUSTER)
-                .nonOpaque().luminance(2).noCollision().strength(0.3F));
+                Block.Settings.create().sounds(BlockSoundGroup.AMETHYST_CLUSTER)
+                .nonOpaque().luminance(RUNE_LUMINANCE).noCollision().strength(0.3F));
         public static final Block INFINITY_RUNE_BLOCK = new InfinityRuneBlock(
-                FabricBlockSettings.create().sounds(BlockSoundGroup.AMETHYST_CLUSTER)
-                .nonOpaque().luminance(2).noCollision().strength(0.3F));
+                Block.Settings.create().sounds(BlockSoundGroup.AMETHYST_CLUSTER)
+                .nonOpaque().luminance(RUNE_LUMINANCE).noCollision().strength(0.3F));
 
         // Portal Blocks
         public static final Block BLACK_PORTAL = new PortalBlock(
-                FabricBlockSettings.create().mapColor(MapColor.BLACK).nonOpaque().noCollision().ticksRandomly()
-                .strength(-1.0F).sounds(BlockSoundGroup.GLASS).luminance(createLightLevelFromLitBlockState(11)));
+                Block.Settings.create().mapColor(MapColor.BLACK).nonOpaque().noCollision().ticksRandomly()
+                .strength(-1.0F).sounds(BlockSoundGroup.GLASS).luminance(STATE_TO_LUMINANCE));
         public static final Block BLUE_PORTAL = new PortalBlock(
-                FabricBlockSettings.create().mapColor(MapColor.BLUE).nonOpaque().noCollision().ticksRandomly()
-                .strength(-1.0F).sounds(BlockSoundGroup.GLASS).luminance(createLightLevelFromLitBlockState(11)));
+                Block.Settings.create().mapColor(MapColor.BLUE).nonOpaque().noCollision().ticksRandomly()
+                .strength(-1.0F).sounds(BlockSoundGroup.GLASS).luminance(STATE_TO_LUMINANCE));
         public static final Block BROWN_PORTAL = new PortalBlock(
-                FabricBlockSettings.create().mapColor(MapColor.BROWN).nonOpaque().noCollision().ticksRandomly()
-                .strength(-1.0F).sounds(BlockSoundGroup.GLASS).luminance(createLightLevelFromLitBlockState(11)));
+                Block.Settings.create().mapColor(MapColor.BROWN).nonOpaque().noCollision().ticksRandomly()
+                .strength(-1.0F).sounds(BlockSoundGroup.GLASS).luminance(STATE_TO_LUMINANCE));
         public static final Block CYAN_PORTAL = new PortalBlock(
-                FabricBlockSettings.create().mapColor(MapColor.CYAN).nonOpaque().noCollision().ticksRandomly()
-                .strength(-1.0F).sounds(BlockSoundGroup.GLASS).luminance(createLightLevelFromLitBlockState(11)));
+                Block.Settings.create().mapColor(MapColor.CYAN).nonOpaque().noCollision().ticksRandomly()
+                .strength(-1.0F).sounds(BlockSoundGroup.GLASS).luminance(STATE_TO_LUMINANCE));
         public static final Block GRAY_PORTAL = new PortalBlock(
-                FabricBlockSettings.create().mapColor(MapColor.GRAY).nonOpaque().noCollision().ticksRandomly()
-                .strength(-1.0F).sounds(BlockSoundGroup.GLASS).luminance(createLightLevelFromLitBlockState(11)));
+                Block.Settings.create().mapColor(MapColor.GRAY).nonOpaque().noCollision().ticksRandomly()
+                .strength(-1.0F).sounds(BlockSoundGroup.GLASS).luminance(STATE_TO_LUMINANCE));
         public static final Block GREEN_PORTAL = new PortalBlock(
-                FabricBlockSettings.create().mapColor(MapColor.GREEN).nonOpaque().noCollision().ticksRandomly()
-                .strength(-1.0F).sounds(BlockSoundGroup.GLASS).luminance(createLightLevelFromLitBlockState(11)));
+                Block.Settings.create().mapColor(MapColor.GREEN).nonOpaque().noCollision().ticksRandomly()
+                .strength(-1.0F).sounds(BlockSoundGroup.GLASS).luminance(STATE_TO_LUMINANCE));
         public static final Block LIGHT_BLUE_PORTAL = new PortalBlock(
-                FabricBlockSettings.create().mapColor(MapColor.LIGHT_BLUE).nonOpaque().noCollision()
-                .ticksRandomly().strength(-1.0F).sounds(BlockSoundGroup.GLASS).luminance(createLightLevelFromLitBlockState(11)));
+                Block.Settings.create().mapColor(MapColor.LIGHT_BLUE).nonOpaque().noCollision()
+                .ticksRandomly().strength(-1.0F).sounds(BlockSoundGroup.GLASS).luminance(STATE_TO_LUMINANCE));
         public static final Block LIGHT_GRAY_PORTAL = new PortalBlock(
-                FabricBlockSettings.create().mapColor(MapColor.LIGHT_GRAY).nonOpaque().noCollision()
-                .ticksRandomly().strength(-1.0F).sounds(BlockSoundGroup.GLASS).luminance(createLightLevelFromLitBlockState(11)));
+                Block.Settings.create().mapColor(MapColor.LIGHT_GRAY).nonOpaque().noCollision()
+                .ticksRandomly().strength(-1.0F).sounds(BlockSoundGroup.GLASS).luminance(STATE_TO_LUMINANCE));
         public static final Block LIME_PORTAL = new PortalBlock(
-                FabricBlockSettings.create().mapColor(MapColor.LIME).nonOpaque().noCollision().ticksRandomly()
-                .strength(-1.0F).sounds(BlockSoundGroup.GLASS).luminance(createLightLevelFromLitBlockState(11)));
+                Block.Settings.create().mapColor(MapColor.LIME).nonOpaque().noCollision().ticksRandomly()
+                .strength(-1.0F).sounds(BlockSoundGroup.GLASS).luminance(STATE_TO_LUMINANCE));
         public static final Block MAGENTA_PORTAL = new PortalBlock(
-                FabricBlockSettings.create().mapColor(MapColor.MAGENTA).nonOpaque().noCollision().ticksRandomly()
-                .strength(-1.0F).sounds(BlockSoundGroup.GLASS).luminance(createLightLevelFromLitBlockState(11)));
+                Block.Settings.create().mapColor(MapColor.MAGENTA).nonOpaque().noCollision().ticksRandomly()
+                .strength(-1.0F).sounds(BlockSoundGroup.GLASS).luminance(STATE_TO_LUMINANCE));
         public static final Block ORANGE_PORTAL = new PortalBlock(
-                FabricBlockSettings.create().mapColor(MapColor.ORANGE).nonOpaque().noCollision().ticksRandomly()
-                .strength(-1.0F).sounds(BlockSoundGroup.GLASS).luminance(createLightLevelFromLitBlockState(11)));
+                Block.Settings.create().mapColor(MapColor.ORANGE).nonOpaque().noCollision().ticksRandomly()
+                .strength(-1.0F).sounds(BlockSoundGroup.GLASS).luminance(STATE_TO_LUMINANCE));
         public static final Block PINK_PORTAL = new PortalBlock(
-                FabricBlockSettings.create().mapColor(MapColor.PINK).nonOpaque().noCollision().ticksRandomly()
-                .strength(-1.0F).sounds(BlockSoundGroup.GLASS).luminance(createLightLevelFromLitBlockState(11)));
+                Block.Settings.create().mapColor(MapColor.PINK).nonOpaque().noCollision().ticksRandomly()
+                .strength(-1.0F).sounds(BlockSoundGroup.GLASS).luminance(STATE_TO_LUMINANCE));
         public static final Block PURPLE_PORTAL = new PortalBlock(
-                FabricBlockSettings.create().mapColor(MapColor.PURPLE).nonOpaque().noCollision().ticksRandomly()
-                .strength(-1.0F).sounds(BlockSoundGroup.GLASS).luminance(createLightLevelFromLitBlockState(11)));
+                Block.Settings.create().mapColor(MapColor.PURPLE).nonOpaque().noCollision().ticksRandomly()
+                .strength(-1.0F).sounds(BlockSoundGroup.GLASS).luminance(STATE_TO_LUMINANCE));
         public static final Block RED_PORTAL = new PortalBlock(
-                FabricBlockSettings.create().mapColor(MapColor.RED).nonOpaque().noCollision().ticksRandomly()
-                .strength(-1.0F).sounds(BlockSoundGroup.GLASS).luminance(createLightLevelFromLitBlockState(11)));
+                Block.Settings.create().mapColor(MapColor.RED).nonOpaque().noCollision().ticksRandomly()
+                .strength(-1.0F).sounds(BlockSoundGroup.GLASS).luminance(STATE_TO_LUMINANCE));
         public static final Block WHITE_PORTAL = new PortalBlock(
-                FabricBlockSettings.create().mapColor(MapColor.WHITE).nonOpaque().noCollision().ticksRandomly()
-                .strength(-1.0F).sounds(BlockSoundGroup.GLASS).luminance(createLightLevelFromLitBlockState(11)));
+                Block.Settings.create().mapColor(MapColor.WHITE).nonOpaque().noCollision().ticksRandomly()
+                .strength(-1.0F).sounds(BlockSoundGroup.GLASS).luminance(STATE_TO_LUMINANCE));
         public static final Block YELLOW_PORTAL = new PortalBlock(
-                FabricBlockSettings.create().mapColor(MapColor.YELLOW).nonOpaque().noCollision().ticksRandomly()
-                .strength(-1.0F).sounds(BlockSoundGroup.GLASS).luminance(createLightLevelFromLitBlockState(11)));
+                Block.Settings.create().mapColor(MapColor.YELLOW).nonOpaque().noCollision().ticksRandomly()
+                .strength(-1.0F).sounds(BlockSoundGroup.GLASS).luminance(STATE_TO_LUMINANCE));
 
         // BlockEntities
         public static BlockEntityType<PortalBlockEntity> PORTAL_BLOCK_ENTITY;
@@ -142,11 +149,5 @@ public class CPBlocks {
                 BlockRenderLayerMap.INSTANCE.putBlock(RED_PORTAL, RenderLayer.getTranslucent());
                 BlockRenderLayerMap.INSTANCE.putBlock(WHITE_PORTAL, RenderLayer.getTranslucent());
                 BlockRenderLayerMap.INSTANCE.putBlock(YELLOW_PORTAL, RenderLayer.getTranslucent());
-        }
-
-        private static ToIntFunction<BlockState> createLightLevelFromLitBlockState(int litLevel) {
-                return (state) -> {
-                   return (Boolean)state.get(Properties.LIT) ? litLevel : 0;
-                };
         }
 }

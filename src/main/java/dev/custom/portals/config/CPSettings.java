@@ -1,81 +1,141 @@
 package dev.custom.portals.config;
 
+import dev.isxander.yacl3.api.NameableEnum;
+import dev.isxander.yacl3.api.Option;
+import dev.isxander.yacl3.api.controller.ControllerBuilder;
+import dev.isxander.yacl3.api.controller.StringControllerBuilder;
+import dev.isxander.yacl3.config.v2.api.ConfigClassHandler;
+import dev.isxander.yacl3.config.v2.api.ConfigField;
+import dev.isxander.yacl3.config.v2.api.SerialEntry;
+import dev.isxander.yacl3.config.v2.api.autogen.*;
+import dev.isxander.yacl3.config.v2.api.autogen.Boolean;
+import dev.isxander.yacl3.config.v2.api.serializer.GsonConfigSerializerBuilder;
+import net.fabricmc.loader.api.FabricLoader;
+import net.minecraft.client.gui.screen.Screen;
+import net.minecraft.text.Text;
+import net.minecraft.util.Identifier;
+import org.jetbrains.annotations.Nullable;
+
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 
-import dev.custom.portals.CustomPortals;
-import me.lortseam.completeconfig.api.ConfigContainer;
-import me.lortseam.completeconfig.api.ConfigEntries;
-import me.lortseam.completeconfig.api.ConfigEntry;
-import me.lortseam.completeconfig.api.ConfigGroup;
-import me.lortseam.completeconfig.api.ConfigEntry.Boolean;
-import me.lortseam.completeconfig.api.ConfigEntry.Dropdown;
-import me.lortseam.completeconfig.data.Config;;
+public final class CPSettings {
 
+    public static final Path CONFIG_PATH = FabricLoader.getInstance().getConfigDir().resolve("customportals.json");
 
-public final class CPSettings extends Config implements ConfigContainer {
+    public static final ConfigClassHandler<CPSettings> HANDLER = ConfigClassHandler.createBuilder(CPSettings.class)
+            .id(new Identifier("customportals", "config"))
+            .serializer(config -> GsonConfigSerializerBuilder.create(config).setJson5(true)
+                    .setPath(CONFIG_PATH).build())
+            .build();
 
-    public CPSettings() {
-        super(CustomPortals.MOD_ID);
+    public static void load() {
+        HANDLER.load();
     }
 
-    @ConfigEntries(includeAll = true)
-    @Transitive
-    public static class GeneralSettings implements ConfigGroup {
-        private static boolean portals_always_unlimited = false;
-        private static boolean portals_always_interdimensional = false;
-        @ConfigEntry.Dropdown
-        private static HasteDropdown hasteDropdown = HasteDropdown.CREATIVE;
-        @ConfigEntry.Dropdown
-        @ConfigEntry(descriptionKey = "redstoneTooltip")
-        private static RedstoneDropdown redstoneDropdown = RedstoneDropdown.OFF;
-        @ConfigEntry(descriptionKey = "privatePortalsTooltip")
-        private static boolean private_portals = false;
-
-        public static boolean portalsAlwaysUnlimited() { return portals_always_unlimited; }
-        public static HasteDropdown portalsAlwaysHaste() { return hasteDropdown; }
-
-        public static RedstoneDropdown redstoneSetting() { return redstoneDropdown; }
-        public static boolean portalsAlwaysInterdim() { return portals_always_interdimensional; }
-        public static boolean arePortalsPrivate() { return private_portals; }
+    public static void save() {
+        HANDLER.save();
     }
 
-    public enum HasteDropdown {
-        YES, NO, CREATIVE
+    public static CPSettings instance() {
+        return HANDLER.instance();
     }
 
-    public enum RedstoneDropdown {
-        OFF, ON, NONE
-    }
+    @AutoGen(category = "general")
+    @Boolean
+    @SerialEntry
+    public boolean unlimitedRange = false;
+    @AutoGen(category = "general")
+    @Boolean
+    @SerialEntry
+    public boolean alwaysInterdim = false;
+    @AutoGen(category = "general")
+    @EnumCycler()
+    @SerialEntry
+    public HasteEnum alwaysHaste = HasteEnum.CREATIVE;
+    @AutoGen(category = "general")
+    @Boolean
+    @CustomDescription({
+            "Only allows portals to link if they were each constructed by the same player. Useful for servers."
+    })
+    @SerialEntry(comment = "Only allows portals to link if they were each constructed by the same player. Useful for servers.")
+    public boolean privatePortals = false;
+    @AutoGen(category = "general")
+    @EnumCycler()
+    @CustomDescription({
+            "Note: Setting this to 'Turns Portals On' means your portals will be off without redstone power!"
+    })
+    @SerialEntry(comment = "Note: Setting this to 'Turns Portals On' means your portals will be off without redstone power!")
+    public RedstoneEnum redstone = RedstoneEnum.OFF;
+    @AutoGen(category = "range_settings")
+    @IntField(min = 0, max = Integer.MAX_VALUE)
+    @SerialEntry
+    public int defaultRange = 100;
+    @AutoGen(category = "range_settings")
+    @IntField(min = 0, max = Integer.MAX_VALUE)
+    @SerialEntry
+    public int rangeWithEnhancer = 1000;
+    @AutoGen(category = "range_settings")
+    @IntField(min = 0, max = Integer.MAX_VALUE)
+    @SerialEntry
+    public int rangeWithStrongEnhancer = 10000;
+    @AutoGen(category = "block_filter_settings")
+    @Boolean(formatter = Boolean.Formatter.CUSTOM)
+    @CustomDescription({
+            "Whether the below list is a whitelist or blacklist"
+    })
+    @SerialEntry(comment = "Whether the below list is a whitelist or blacklist")
+    public boolean isWhitelist = false;
+    @AutoGen(category = "block_filter_settings")
+    @ListGroup(valueFactory = ListFactory.class, controllerFactory = ListFactory.class)
+    @CustomDescription({
+            "Allows customizing which blocks may be used as portal frames. Takes the block's id, e.g. \"minecraft:stone\" for stone block."
+    })
+    @SerialEntry(comment = "Allows customizing which blocks may be used as portal frames. Takes the block's id, e.g. \"minecraft:stone\" for stone block.")
+    public List<String> filteredBlocks = new ArrayList<>();
 
-    @ConfigEntries(includeAll = true)
-    @Transitive
-    public static class PortalRangeSettings implements ConfigGroup {
+    public enum HasteEnum implements NameableEnum {
+        YES("True"), NO("False"), CREATIVE("Creative Mode Only");
 
-
-        private static int default_range;
-        private static int range_with_enhancer;
-        private static int range_with_strong_enhancer;
-
-        public PortalRangeSettings() {
-            default_range = 100;
-            range_with_enhancer = 1000;
-            range_with_strong_enhancer = 10000;
+        private final String displayName;
+        HasteEnum(String displayName) {
+            this.displayName = displayName;
         }
-        public static int getDefaultRange() { return default_range; }
-        public static int getRangeWithEnhancer() { return range_with_enhancer; }
-        public static int getRangeWithStrongEnhancer() { return range_with_strong_enhancer; }
+
+        @Override
+        public Text getDisplayName() {
+            return Text.of(displayName);
+        }
     }
 
-    @Transitive
-    public static class BlockFilterSettings implements ConfigGroup {
+    public enum RedstoneEnum implements NameableEnum {
+        OFF("Turns Portals Off"), ON("Turns Portals On"), NONE("Has No Effect");
 
-        @ConfigEntry(descriptionKey = "listTooltip")
-        private static boolean whitelist;
-        @ConfigEntry(descriptionKey = "blocksTooltip")
-        private static List<String> filteredBlocks = new ArrayList<>();
-        
-        public static boolean isWhitelist() { return whitelist; }
-        public static List<String> getBlocks() { return filteredBlocks; }
+        private final String displayName;
+        RedstoneEnum(String displayName) {
+            this.displayName = displayName;
+        }
+
+        @Override
+        public Text getDisplayName() {
+            return Text.of(displayName);
+        }
+    }
+
+    public static Screen createScreen(@Nullable Screen parent) {
+        return HANDLER.generateGui().generateScreen(parent);
+    }
+
+    public static class ListFactory implements ListGroup.ValueFactory<String>, ListGroup.ControllerFactory<String> {
+        @Override
+        public String provideNewValue() {
+            return "";
+        }
+
+        @Override
+        public ControllerBuilder<String> createController(ListGroup annotation, ConfigField<List<String>> field, OptionAccess storage, Option<String> option) {
+            return StringControllerBuilder.create(option);
+        }
     }
 }

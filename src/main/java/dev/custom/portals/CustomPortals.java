@@ -6,10 +6,12 @@ import dev.custom.portals.data.WorldPortals;
 import dev.custom.portals.registry.CPBlocks;
 import dev.custom.portals.registry.CPItems;
 import dev.custom.portals.registry.CPParticles;
-import dev.onyxstudios.cca.api.v3.world.WorldComponentFactoryRegistry;
-import dev.onyxstudios.cca.api.v3.world.WorldComponentInitializer;
-import dev.onyxstudios.cca.api.v3.component.ComponentRegistryV3;
-import dev.onyxstudios.cca.api.v3.component.ComponentKey;
+import dev.custom.portals.util.DrawSpritePayload;
+import net.fabricmc.fabric.api.networking.v1.PayloadTypeRegistry;
+import org.ladysnake.cca.api.v3.world.WorldComponentFactoryRegistry;
+import org.ladysnake.cca.api.v3.world.WorldComponentInitializer;
+import org.ladysnake.cca.api.v3.component.ComponentRegistryV3;
+import org.ladysnake.cca.api.v3.component.ComponentKey;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.itemgroup.v1.FabricItemGroup;
 import net.minecraft.item.ItemGroup;
@@ -29,8 +31,6 @@ public class CustomPortals implements ModInitializer, WorldComponentInitializer 
         public static final ComponentKey<BasePortalComponent> PORTALS = ComponentRegistryV3.INSTANCE
                 .getOrCreate(new Identifier("customportals:portals"), BasePortalComponent.class);
 
-        private static final CPSettings Config = new CPSettings();
-
         public static final RegistryKey<ItemGroup> PORTALS_ITEM_GROUP = RegistryKey.of(RegistryKeys.ITEM_GROUP,
                 new Identifier(CustomPortals.MOD_ID, "general"));
 
@@ -42,18 +42,17 @@ public class CustomPortals implements ModInitializer, WorldComponentInitializer 
                 Registry.register(Registries.ITEM_GROUP, PORTALS_ITEM_GROUP, FabricItemGroup.builder().icon(()
                         -> new ItemStack(CPItems.PURPLE_PORTAL_CATALYST))
                         .displayName(Text.translatable("itemGroup.customportals.general")).build());
-                Config.load();
+                CPSettings.load();
                 CPBlocks.registerBlocks();
                 CPItems.registerItems();
                 CPParticles.registerParticles();
+                PayloadTypeRegistry.playS2C().register(DrawSpritePayload.ID, DrawSpritePayload.CODEC);
         }
 
         @Override
         public void registerWorldComponentFactories(WorldComponentFactoryRegistry registry) {
                 registry.register(PORTALS, WorldPortals.class, WorldPortals::new);
         }
-
-        public static CPSettings getConfig() { return Config; }
 
         // for debugging purposes
         public static String blockPosToString(BlockPos pos) {

@@ -1,14 +1,24 @@
 package dev.custom.portals.mixin;
 
 import dev.custom.portals.CustomPortals;
+import dev.custom.portals.blocks.PortalBlock;
 import dev.custom.portals.config.CPSettings;
+import dev.custom.portals.util.DrawSpritePayload;
+import dev.custom.portals.util.PortalHelper;
+import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
+import net.minecraft.block.Block;
+import net.minecraft.block.BlockState;
+import net.minecraft.block.Blocks;
 import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.network.packet.s2c.play.*;
 import net.minecraft.server.PlayerManager;
 import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.util.crash.CrashException;
+import net.minecraft.util.crash.CrashReport;
+import net.minecraft.util.crash.CrashReportSection;
+import net.minecraft.util.math.Box;
 import net.minecraft.world.WorldProperties;
-import net.minecraft.world.biome.source.BiomeAccess;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
@@ -29,8 +39,9 @@ import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.TeleportTarget;
 import net.minecraft.world.World;
 
+import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Iterator;
+import java.util.List;
 import java.util.Set;
 
 @Mixin(Entity.class)
@@ -44,7 +55,11 @@ public abstract class EntityMixin implements EntityMixinAccess {
     private Portal destPortal;
     @Unique
     private int customPortalTime;
+    @Unique
+    private boolean shouldResetBackgroundSprite = false;
 
+    @Shadow
+    protected boolean inNetherPortal;
     @Shadow
     private World world;
     @Shadow
@@ -67,9 +82,15 @@ public abstract class EntityMixin implements EntityMixinAccess {
     @Shadow
     public abstract boolean hasVehicle();
     @Shadow
+    public abstract boolean isAlive();
+    @Shadow
     public abstract Entity moveToWorld(ServerWorld destination);
     @Shadow 
     public abstract Vec3d getVelocity();
+    @Shadow
+    public abstract Box getBoundingBox();
+    @Shadow
+    public abstract World getWorld();
 
     @Inject(method = "baseTick", at = @At("TAIL"))
     public void baseTick(CallbackInfo ci) {
@@ -111,6 +132,10 @@ public abstract class EntityMixin implements EntityMixinAccess {
             int i = this.getMaxCustomPortalTime();
             ServerWorld serverWorld = (ServerWorld)this.world;
             if (this.inCustomPortal) {
+                if (((Entity)(Object)this) instanceof ServerPlayerEntity && !shouldResetBackgroundSprite) {
+                    ServerPlayNetworking.send(((ServerPlayerEntity) (Object) this), new DrawSpritePayload(this.portalColor));
+                    shouldResetBackgroundSprite = true;
+                }
                 MinecraftServer minecraftServer = serverWorld.getServer();
                 if (!this.hasVehicle() && this.customPortalTime++ >= i && this.destPortal != null) {
                     this.world.getProfiler().push("portal");
@@ -150,7 +175,7 @@ public abstract class EntityMixin implements EntityMixinAccess {
                             playerManager.sendPlayerStatus(thisPlayer);
 
                             for (StatusEffectInstance statusEffectInstance : thisPlayer.getStatusEffects()) {
-                                thisPlayer.networkHandler.sendPacket(new EntityStatusEffectS2CPacket(((ServerPlayerEntity) (Object) this).getId(), statusEffectInstance));
+                                thisPlayer.networkHandler.sendPacket(new EntityStatusEffectS2CPacket(((ServerPlayerEntity) (Object) this).getId(), statusEffectInstance, false));
                             }
                             thisPlayer.networkHandler.sendPacket(new WorldEventS2CPacket(1032, BlockPos.ORIGIN, 0, false));
                         }
@@ -162,15 +187,19 @@ public abstract class EntityMixin implements EntityMixinAccess {
                 this.portalColor = 0;
                 this.destPortal = null;
             } else {
+                if (shouldResetBackgroundSprite && ((Entity)(Object)this) instanceof ServerPlayerEntity && !PortalHelper.isTransitioning) {
+                    ServerPlayNetworking.send(((ServerPlayerEntity) (Object) this), new DrawSpritePayload(this.portalColor));
+                    shouldResetBackgroundSprite = false;
+                }
                 if (this.customPortalTime > 0) {
                     this.customPortalTime -= 4;
                 }
-  
+
                 if (this.customPortalTime < 0) {
                     this.customPortalTime = 0;
                 }
             }
-  
+
            this.tickPortalCooldown();
         }
     }
@@ -178,9 +207,9 @@ public abstract class EntityMixin implements EntityMixinAccess {
     @Unique
     public int getMaxCustomPortalTime() {
         if (((Entity)(Object)this) instanceof PlayerEntity && destPortal != null) {
-            if (CPSettings.GeneralSettings.portalsAlwaysHaste() == CPSettings.HasteDropdown.CREATIVE)
+            if (CPSettings.instance().alwaysHaste == CPSettings.HasteEnum.CREATIVE)
                 return destPortal.hasHaste() ? 1 : this.getMaxNetherPortalTime();
-            else if (CPSettings.GeneralSettings.portalsAlwaysHaste() == CPSettings.HasteDropdown.NO)
+            else if (CPSettings.instance().alwaysHaste == CPSettings.HasteEnum.NO)
                 return destPortal.hasHaste() ? 1 : 80;
             else return 1;
         }
@@ -192,6 +221,9 @@ public abstract class EntityMixin implements EntityMixinAccess {
 
     @Unique
     public boolean isInCustomPortal() { return inCustomPortal; }
+
+    @Unique
+    public boolean isInNetherPortal() { return inNetherPortal; }
     
     @Unique
     public void notInCustomPortal() { inCustomPortal = false; }

@@ -1,15 +1,12 @@
 package dev.custom.portals.mixin;
 
-import com.mojang.authlib.GameProfile;
-
 import dev.custom.portals.data.Portal;
+import dev.custom.portals.util.PortalHelper;
 import net.minecraft.client.gui.screen.DeathScreen;
-import net.minecraft.client.gui.screen.DownloadingTerrainScreen;
 import net.minecraft.client.network.ClientPlayNetworkHandler;
 import net.minecraft.client.recipebook.ClientRecipeBook;
-import net.minecraft.network.encryption.PlayerPublicKey;
 import net.minecraft.stat.StatHandler;
-import org.jetbrains.annotations.Nullable;
+import net.minecraft.util.math.MathHelper;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -44,9 +41,11 @@ public abstract class ClientPlayerEntityMixin extends AbstractClientPlayerEntity
     @Inject(method = "updateNausea", at = @At("HEAD"), cancellable = true)
     private void updateNausea(CallbackInfo ci) {
         Portal portal = ((EntityMixinAccess)this).getDestPortal();
+        float f = 0.0F;
         if(((EntityMixinAccess)this).isInCustomPortal() && portal != null) {
+            //PortalHelper.transitionBackgroundSpriteModel = PortalHelper.getPortalBlockFromColorId(((EntityMixinAccess)this).getPortalColor());
             this.prevNauseaIntensity = this.nauseaIntensity;
-            if (!(this.client.currentScreen == null || this.client.currentScreen.shouldPause() || this.client.currentScreen instanceof DeathScreen || this.client.currentScreen instanceof DownloadingTerrainScreen)) {
+            if (this.client.currentScreen != null && !this.client.currentScreen.shouldPause() && !(this.client.currentScreen instanceof DeathScreen)) {
                 if (this.client.currentScreen instanceof HandledScreen) {
                     this.closeHandledScreen();
                 }
@@ -58,14 +57,15 @@ public abstract class ClientPlayerEntityMixin extends AbstractClientPlayerEntity
                 this.client.getSoundManager().play(PositionedSoundInstance.ambient(SoundEvents.BLOCK_PORTAL_TRIGGER, this.random.nextFloat() * 0.4F + 0.8F, 0.25F));
             }
 
-            this.nauseaIntensity += 0.0125F;
-            if (this.nauseaIntensity >= 1.0F) {
-                this.nauseaIntensity = 1.0F;
-            }
+            f = 0.0125F;
             ((EntityMixinAccess)this).notInCustomPortal();
+            this.nauseaIntensity = MathHelper.clamp(this.nauseaIntensity + f, 0.0F, 1.0F);
+            this.tickPortalCooldown();
             ci.cancel();
         }
-        /*if(this.prevNauseaIntensity == 0.0F && ((EntityMixinAccess)this).getPortalColor() != 0)
-            ((EntityMixinAccess)this).setPortalColor(0);*/
+        if(this.prevNauseaIntensity == 0.0F && ((EntityMixinAccess)this).getPortalColor() != 0) {
+            ((EntityMixinAccess) this).setPortalColor(0);
+            //PortalHelper.transitionBackgroundSpriteModel = null;
+        }
     }
 }

@@ -2,14 +2,21 @@ package dev.custom.portals;
 
 import dev.custom.portals.registry.CPBlocks;
 import dev.custom.portals.registry.CPParticles;
+import dev.custom.portals.util.DrawSpritePayload;
+import dev.custom.portals.util.PortalHelper;
 import net.fabricmc.api.ClientModInitializer;
+import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 
 public class CustomPortalsClient implements ClientModInitializer {
-
     @Override
     public void onInitializeClient() {
         CPBlocks.setBlockRenderLayers();
         CPParticles.registerFactoryRegistries();
+        ClientPlayNetworking.registerGlobalReceiver(DrawSpritePayload.ID, (payload, context) -> {
+            context.client().execute(() -> {
+                PortalHelper.transitionBackgroundSpriteModel = payload.colorId() == 0 ? null : PortalHelper.getPortalBlockFromColorId(payload.colorId());
+            });
+        });
     }
     
 }

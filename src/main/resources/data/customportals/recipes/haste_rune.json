@@ -17,7 +17,7 @@
         }
     },
     "result": {
-        "item": "customportals:haste_rune",
+        "id": "customportals:haste_rune",
         "count": 1
     }
 }
