@@ -22,7 +22,6 @@ import java.util.*;
 public class PortalHelper {
 
     public static final Identifier DRAW_SPRITE_PACKET_ID = new Identifier("customportals", "draw_sprite");
-    public static final Identifier SCREEN_TRANSITIONING_PACKET_ID = new Identifier("customportals", "screen_transition");
 
     private static BlockPos getUp(BlockPos pos, Direction.Axis axis) {
         return axis == Direction.Axis.Y ? pos.north() : pos.up();
