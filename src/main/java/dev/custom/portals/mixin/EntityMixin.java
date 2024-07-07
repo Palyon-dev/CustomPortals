@@ -1,22 +1,13 @@
 package dev.custom.portals.mixin;
 
 import dev.custom.portals.CustomPortals;
-import dev.custom.portals.blocks.PortalBlock;
 import dev.custom.portals.config.CPSettings;
 import dev.custom.portals.util.DrawSpritePayload;
-import dev.custom.portals.util.PortalHelper;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
-import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.network.packet.s2c.play.*;
 import net.minecraft.server.PlayerManager;
 import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.util.crash.CrashException;
-import net.minecraft.util.crash.CrashReport;
-import net.minecraft.util.crash.CrashReportSection;
 import net.minecraft.util.math.Box;
 import net.minecraft.world.WorldProperties;
 import org.spongepowered.asm.mixin.Mixin;
@@ -39,9 +30,7 @@ import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.TeleportTarget;
 import net.minecraft.world.World;
 
-import java.util.ArrayList;
 import java.util.Collections;
-import java.util.List;
 import java.util.Set;
 
 @Mixin(Entity.class)
@@ -56,7 +45,7 @@ public abstract class EntityMixin implements EntityMixinAccess {
     @Unique
     private int customPortalTime;
     @Unique
-    private boolean shouldResetBackgroundSprite = false;
+    private boolean packetSent = false;
 
     @Shadow
     protected boolean inNetherPortal;
@@ -82,15 +71,9 @@ public abstract class EntityMixin implements EntityMixinAccess {
     @Shadow
     public abstract boolean hasVehicle();
     @Shadow
-    public abstract boolean isAlive();
-    @Shadow
     public abstract Entity moveToWorld(ServerWorld destination);
     @Shadow 
     public abstract Vec3d getVelocity();
-    @Shadow
-    public abstract Box getBoundingBox();
-    @Shadow
-    public abstract World getWorld();
 
     @Inject(method = "baseTick", at = @At("TAIL"))
     public void baseTick(CallbackInfo ci) {
@@ -132,9 +115,9 @@ public abstract class EntityMixin implements EntityMixinAccess {
             int i = this.getMaxCustomPortalTime();
             ServerWorld serverWorld = (ServerWorld)this.world;
             if (this.inCustomPortal) {
-                if (((Entity)(Object)this) instanceof ServerPlayerEntity && !shouldResetBackgroundSprite) {
+                if (((Entity)(Object)this) instanceof ServerPlayerEntity && !packetSent) {
                     ServerPlayNetworking.send(((ServerPlayerEntity) (Object) this), new DrawSpritePayload(this.portalColor));
-                    shouldResetBackgroundSprite = true;
+                    packetSent = true;
                 }
                 MinecraftServer minecraftServer = serverWorld.getServer();
                 if (!this.hasVehicle() && this.customPortalTime++ >= i && this.destPortal != null) {
@@ -187,9 +170,8 @@ public abstract class EntityMixin implements EntityMixinAccess {
                 this.portalColor = 0;
                 this.destPortal = null;
             } else {
-                if (shouldResetBackgroundSprite && ((Entity)(Object)this) instanceof ServerPlayerEntity && !PortalHelper.isTransitioning) {
-                    ServerPlayNetworking.send(((ServerPlayerEntity) (Object) this), new DrawSpritePayload(this.portalColor));
-                    shouldResetBackgroundSprite = false;
+                if (packetSent && ((Entity)(Object)this) instanceof ServerPlayerEntity) {
+                    packetSent = false;
                 }
                 if (this.customPortalTime > 0) {
                     this.customPortalTime -= 4;

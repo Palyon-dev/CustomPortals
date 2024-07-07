@@ -1,7 +1,7 @@
 package dev.custom.portals.mixin;
 
 import dev.custom.portals.blocks.PortalBlock;
-import dev.custom.portals.util.PortalHelper;
+import dev.custom.portals.util.*;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.DownloadingTerrainScreen;
 import net.minecraft.client.gui.screen.Screen;
@@ -33,15 +33,15 @@ public abstract class DownloadingTerrainScreenMixin extends Screen {
 
     @Inject(method = "renderBackground", at = @At("HEAD"), cancellable = true)
     public void renderBackground(DrawContext drawContext, int i, int j, float f, CallbackInfo ci) {
-        if (PortalHelper.transitionBackgroundSpriteModel != null) {
-            PortalHelper.isTransitioning = true;
-            drawContext.drawSprite(0, 0, -90, drawContext.getScaledWindowWidth(), drawContext.getScaledWindowHeight(), this.client.getBlockRenderManager().getModels().getModelParticleSprite(PortalHelper.transitionBackgroundSpriteModel.getDefaultState().with(PortalBlock.LIT, true)));
+        if (ClientUtil.transitionBackgroundSpriteModel != null) {
+            ClientUtil.isTransitioning = true;
+            drawContext.drawSprite(0, 0, -90, drawContext.getScaledWindowWidth(), drawContext.getScaledWindowHeight(), this.client.getBlockRenderManager().getModels().getModelParticleSprite(ClientUtil.transitionBackgroundSpriteModel.getDefaultState().with(PortalBlock.LIT, true)));
             ci.cancel();
         }
     }
     @Inject(method = "close", at = @At("HEAD"))
     public void close(CallbackInfo ci) {
-        PortalHelper.isTransitioning = false;
-        PortalHelper.transitionBackgroundSpriteModel = null;
+        ClientUtil.isTransitioning = false;
+        ClientUtil.transitionBackgroundSpriteModel = null;
     }
 }

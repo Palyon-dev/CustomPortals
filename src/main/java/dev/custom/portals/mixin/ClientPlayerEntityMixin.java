@@ -1,7 +1,7 @@
 package dev.custom.portals.mixin;
 
 import dev.custom.portals.data.Portal;
-import dev.custom.portals.util.PortalHelper;
+import net.minecraft.block.Block;
 import net.minecraft.client.gui.screen.DeathScreen;
 import net.minecraft.client.network.ClientPlayNetworkHandler;
 import net.minecraft.client.recipebook.ClientRecipeBook;
@@ -9,6 +9,7 @@ import net.minecraft.stat.StatHandler;
 import net.minecraft.util.math.MathHelper;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
@@ -43,7 +44,6 @@ public abstract class ClientPlayerEntityMixin extends AbstractClientPlayerEntity
         Portal portal = ((EntityMixinAccess)this).getDestPortal();
         float f = 0.0F;
         if(((EntityMixinAccess)this).isInCustomPortal() && portal != null) {
-            //PortalHelper.transitionBackgroundSpriteModel = PortalHelper.getPortalBlockFromColorId(((EntityMixinAccess)this).getPortalColor());
             this.prevNauseaIntensity = this.nauseaIntensity;
             if (this.client.currentScreen != null && !this.client.currentScreen.shouldPause() && !(this.client.currentScreen instanceof DeathScreen)) {
                 if (this.client.currentScreen instanceof HandledScreen) {
@@ -65,7 +65,6 @@ public abstract class ClientPlayerEntityMixin extends AbstractClientPlayerEntity
         }
         if(this.prevNauseaIntensity == 0.0F && ((EntityMixinAccess)this).getPortalColor() != 0) {
             ((EntityMixinAccess) this).setPortalColor(0);
-            //PortalHelper.transitionBackgroundSpriteModel = null;
         }
     }
 }

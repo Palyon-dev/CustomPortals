@@ -2,6 +2,7 @@ package dev.custom.portals;
 
 import dev.custom.portals.registry.CPBlocks;
 import dev.custom.portals.registry.CPParticles;
+import dev.custom.portals.util.ClientUtil;
 import dev.custom.portals.util.DrawSpritePayload;
 import dev.custom.portals.util.PortalHelper;
 import net.fabricmc.api.ClientModInitializer;
@@ -14,7 +15,7 @@ public class CustomPortalsClient implements ClientModInitializer {
         CPParticles.registerFactoryRegistries();
         ClientPlayNetworking.registerGlobalReceiver(DrawSpritePayload.ID, (payload, context) -> {
             context.client().execute(() -> {
-                PortalHelper.transitionBackgroundSpriteModel = payload.colorId() == 0 ? null : PortalHelper.getPortalBlockFromColorId(payload.colorId());
+                ClientUtil.transitionBackgroundSpriteModel = payload.colorId() == 0 ? null : PortalHelper.getPortalBlockFromColorId(payload.colorId());
             });
         });
     }

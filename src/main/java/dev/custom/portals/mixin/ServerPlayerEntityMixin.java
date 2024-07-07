@@ -4,11 +4,8 @@ import java.util.Iterator;
 
 import com.mojang.authlib.GameProfile;
 
-import dev.custom.portals.util.DrawSpritePayload;
-import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.network.packet.s2c.play.*;
 import net.minecraft.registry.RegistryKey;
-import net.minecraft.util.math.Vec3d;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -24,7 +21,6 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.PlayerManager;
 import net.minecraft.server.network.ServerPlayNetworkHandler;
 import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.server.network.ServerPlayerInteractionManager;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.TeleportTarget;
@@ -40,9 +36,6 @@ public abstract class ServerPlayerEntityMixin extends PlayerEntity {
     public ServerPlayNetworkHandler networkHandler;
     @Final
     @Shadow
-    public ServerPlayerInteractionManager interactionManager;
-    @Final
-    @Shadow
     public MinecraftServer server;
     @Shadow
     private float syncedHealth;
@@ -50,9 +43,6 @@ public abstract class ServerPlayerEntityMixin extends PlayerEntity {
     private int syncedExperience;
     @Shadow
     private int syncedFoodLevel;
-
-    @Shadow
-    private Vec3d enteredNetherPos;
 
     @Shadow
     public abstract ServerWorld getServerWorld();
