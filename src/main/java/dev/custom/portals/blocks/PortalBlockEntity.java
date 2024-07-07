@@ -19,19 +19,16 @@ public class PortalBlockEntity extends BlockEntity {
     public static <T extends BlockEntity> void tick(World world, BlockPos pos, BlockState state, BlockEntity be) {
         if (world.isClient)
             return;
-        if (CustomPortals.PORTALS.get(world).settingsChanged()) {
-            CustomPortals.PORTALS.get(world).refreshPortals();
-        }
         Portal portal = CustomPortals.PORTALS.get(world).getPortalFromPos(pos);
         if (portal != null) {
-            if (CPSettings.GeneralSettings.redstoneSetting() == CPSettings.RedstoneDropdown.OFF) {
+            if (CPSettings.instance().redstone == CPSettings.RedstoneEnum.OFF) {
                 if (portal.hasLinked() && !(Boolean) state.get(PortalBlock.LIT) && !portal.hasRedstoneSignal()) {
                     world.setBlockState(pos, (BlockState) state.with(PortalBlock.LIT, true), Block.NOTIFY_ALL);
                 } else if ((!portal.hasLinked() || portal.hasRedstoneSignal()) && (Boolean) state.get(PortalBlock.LIT)) {
                     world.setBlockState(pos, (BlockState) state.with(PortalBlock.LIT, false), Block.NOTIFY_ALL);
                 }
             }
-            else if (CPSettings.GeneralSettings.redstoneSetting() == CPSettings.RedstoneDropdown.ON) {
+            else if (CPSettings.instance().redstone == CPSettings.RedstoneEnum.ON) {
                 if (portal.hasLinked() && !(Boolean) state.get(PortalBlock.LIT) && portal.hasRedstoneSignal()) {
                     world.setBlockState(pos, (BlockState) state.with(PortalBlock.LIT, true), Block.NOTIFY_ALL);
                 } else if ((!portal.hasLinked() || !portal.hasRedstoneSignal()) && (Boolean) state.get(PortalBlock.LIT)) {

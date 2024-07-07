@@ -1,5 +1,6 @@
 package dev.custom.portals.mixin;
 
+import dev.custom.portals.util.PortalHelper;
 import net.minecraft.client.gui.DrawContext;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -41,26 +42,8 @@ public abstract class InGameHudMixin {
     @Inject(method = "renderPortalOverlay", at = @At("HEAD"), cancellable = true)
     private void renderPortalOverlay(DrawContext drawContext, float f, CallbackInfo ci) {
         int color = ((EntityMixinAccess)this.client.player).getPortalColor();
-        if(color != 0) {
-            Block spriteModel = switch (color) {
-                case 29 -> CPBlocks.BLACK_PORTAL;
-                case 25 -> CPBlocks.BLUE_PORTAL;
-                case 26 -> CPBlocks.BROWN_PORTAL;
-                case 23 -> CPBlocks.CYAN_PORTAL;
-                case 21 -> CPBlocks.GRAY_PORTAL;
-                case 27 -> CPBlocks.GREEN_PORTAL;
-                case 17 -> CPBlocks.LIGHT_BLUE_PORTAL;
-                case 22 -> CPBlocks.LIGHT_GRAY_PORTAL;
-                case 19 -> CPBlocks.LIME_PORTAL;
-                case 16 -> CPBlocks.MAGENTA_PORTAL;
-                case 15 -> CPBlocks.ORANGE_PORTAL;
-                case 20 -> CPBlocks.PINK_PORTAL;
-                case 24 -> CPBlocks.PURPLE_PORTAL;
-                case 28 -> CPBlocks.RED_PORTAL;
-                case 8 -> CPBlocks.WHITE_PORTAL;
-                case 18 -> CPBlocks.YELLOW_PORTAL;
-                default -> Blocks.NETHER_PORTAL;
-            };
+        if(color != 0 && !((EntityMixinAccess)this.client.player).isInNetherPortal()) {
+            Block spriteModel = PortalHelper.getPortalBlockFromColorId(color);
             if (f < 1.0F) {
                 f *= f;
                 f *= f;

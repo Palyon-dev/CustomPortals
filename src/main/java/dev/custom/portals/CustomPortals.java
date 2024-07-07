@@ -29,8 +29,6 @@ public class CustomPortals implements ModInitializer, WorldComponentInitializer 
         public static final ComponentKey<BasePortalComponent> PORTALS = ComponentRegistryV3.INSTANCE
                 .getOrCreate(new Identifier("customportals:portals"), BasePortalComponent.class);
 
-        private static final CPSettings Config = new CPSettings();
-
         public static final RegistryKey<ItemGroup> PORTALS_ITEM_GROUP = RegistryKey.of(RegistryKeys.ITEM_GROUP,
                 new Identifier(CustomPortals.MOD_ID, "general"));
 
@@ -42,7 +40,7 @@ public class CustomPortals implements ModInitializer, WorldComponentInitializer 
                 Registry.register(Registries.ITEM_GROUP, PORTALS_ITEM_GROUP, FabricItemGroup.builder().icon(()
                         -> new ItemStack(CPItems.PURPLE_PORTAL_CATALYST))
                         .displayName(Text.translatable("itemGroup.customportals.general")).build());
-                Config.load();
+                CPSettings.load();
                 CPBlocks.registerBlocks();
                 CPItems.registerItems();
                 CPParticles.registerParticles();
@@ -52,8 +50,6 @@ public class CustomPortals implements ModInitializer, WorldComponentInitializer 
         public void registerWorldComponentFactories(WorldComponentFactoryRegistry registry) {
                 registry.register(PORTALS, WorldPortals.class, WorldPortals::new);
         }
-
-        public static CPSettings getConfig() { return Config; }
 
         // for debugging purposes
         public static String blockPosToString(BlockPos pos) {

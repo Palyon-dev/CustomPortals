@@ -8,8 +8,8 @@ import dev.custom.portals.config.CPSettings;
 import net.minecraft.block.AbstractBlock;
 import net.minecraft.client.item.TooltipContext;
 import net.minecraft.item.ItemStack;
+import net.minecraft.server.world.ServerWorld;
 import net.minecraft.text.Text;
-import net.minecraft.text.TranslatableTextContent;
 import net.minecraft.util.Formatting;
 import net.minecraft.world.BlockView;
 import net.minecraft.world.World;
@@ -24,6 +24,8 @@ public class EnhancerRuneBlock extends AbstractRuneBlock {
     public void registerOnPortal(Portal portal, World world) {
         portal.addWeakEnhancer();
         CustomPortals.PORTALS.get(world).tryWithAll(portal);
+        if (!world.isClient)
+            CustomPortals.PORTALS.get(world).syncWithAll(((ServerWorld)world).getServer());
     }
 
     @Override
@@ -32,10 +34,12 @@ public class EnhancerRuneBlock extends AbstractRuneBlock {
         if (portal.hasLinked())
             CustomPortals.PORTALS.get(world).tryWithAll(portal.getLinked());
         CustomPortals.PORTALS.get(world).tryWithAll(portal);
+        if (!world.isClient)
+            CustomPortals.PORTALS.get(world).syncWithAll(((ServerWorld)world).getServer());
     }
 
     @Override
     public void appendTooltip(ItemStack stack, BlockView world, List<Text> tooltip, TooltipContext options) {
-        tooltip.add(Text.translatable("item.customportals.weak_enhancer_rune.tooltip", CPSettings.PortalRangeSettings.getRangeWithEnhancer()).formatted(Formatting.GRAY));
+        tooltip.add(Text.translatable("item.customportals.weak_enhancer_rune.tooltip", CPSettings.instance().rangeWithEnhancer).formatted(Formatting.GRAY));
     }
 }

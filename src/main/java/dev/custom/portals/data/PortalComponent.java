@@ -10,26 +10,12 @@ import net.minecraft.nbt.NbtList;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.math.BlockPos;
 
-import dev.custom.portals.config.CPSettings;
-
 public class PortalComponent implements BasePortalComponent {
-    private boolean portalsAlwaysUnlimited;
-    private boolean portalsAlwaysInterdim;
-    private boolean privatePortals;
-    private int defaultRange;
-    private int rangeWithEnhancer;
-    private int rangeWithStrongEnhancer;
 
     private PortalRegistry portalRegistry;
 
     public PortalComponent() {
         portalRegistry = new PortalRegistry();
-        portalsAlwaysUnlimited = CPSettings.GeneralSettings.portalsAlwaysUnlimited();
-        portalsAlwaysInterdim = CPSettings.GeneralSettings.portalsAlwaysInterdim();
-        privatePortals = CPSettings.GeneralSettings.arePortalsPrivate();
-        defaultRange = CPSettings.PortalRangeSettings.getDefaultRange();
-        rangeWithEnhancer = CPSettings.PortalRangeSettings.getRangeWithEnhancer();
-        rangeWithStrongEnhancer = CPSettings.PortalRangeSettings.getRangeWithStrongEnhancer();
     }
 
     @Override
@@ -38,41 +24,6 @@ public class PortalComponent implements BasePortalComponent {
     @Override
     public Portal getPortalFromPos(BlockPos pos) {
         return portalRegistry.getPortalFromPos(pos);
-    }
-
-    @Override
-    public boolean settingsChanged() {
-        boolean portalsAlwaysUnlimited = CPSettings.GeneralSettings.portalsAlwaysUnlimited();
-        boolean portalsAlwaysInterdim = CPSettings.GeneralSettings.portalsAlwaysInterdim();
-        boolean privatePortals = CPSettings.GeneralSettings.arePortalsPrivate();
-        int defaultRange = CPSettings.PortalRangeSettings.getDefaultRange();
-        int rangeWithEnhancer = CPSettings.PortalRangeSettings.getRangeWithEnhancer();
-        int rangeWithStrongEnhancer = CPSettings.PortalRangeSettings.getRangeWithStrongEnhancer();
-        if (portalsAlwaysUnlimited != this.portalsAlwaysUnlimited) {
-            this.portalsAlwaysUnlimited = portalsAlwaysUnlimited;
-            return true;
-        }
-        if (portalsAlwaysInterdim != this.portalsAlwaysInterdim) {
-            this.portalsAlwaysInterdim = portalsAlwaysInterdim;
-            return true;
-        }
-        if (privatePortals != this.privatePortals) {
-            this.privatePortals = privatePortals;
-            return true;
-        }
-        if (defaultRange != this.defaultRange) {
-            this.defaultRange = defaultRange;
-            return true;
-        }
-        if (rangeWithEnhancer != this.rangeWithEnhancer) {
-            this.rangeWithEnhancer = rangeWithEnhancer;
-            return true;
-        }
-        if (rangeWithStrongEnhancer != this.rangeWithStrongEnhancer) {
-            this.rangeWithStrongEnhancer = rangeWithStrongEnhancer;
-            return true;
-        }
-        return false;
     }
 
     @Override

@@ -161,17 +161,17 @@ public class Portal {
     }
 
     public void tryLink(final Portal portal) {
-        if (CPSettings.GeneralSettings.arePortalsPrivate() && this.creatorId != null && portal.creatorId != null &&
+        if (CPSettings.instance().privatePortals && this.creatorId != null && portal.creatorId != null &&
                 !this.creatorId.equals(portal.getCreatorId())) return;
         if (portal.getColor() == color && portal.getFrameId().equals(frameId) && portal != this) {
             if (portal.hasLinked()) {
                 if (portal.getLinked() != this)
                     return;
             }
-            if (!CPSettings.GeneralSettings.portalsAlwaysUnlimited() || !CPSettings.GeneralSettings.portalsAlwaysInterdim()) {
+            if (!CPSettings.instance().unlimitedRange || !CPSettings.instance().alwaysInterdim) {
                 int distance;
                 if (!portal.getDimensionId().equals(dimensionId)) {
-                    if (!this.hasGate() && !portal.hasGate() && !CPSettings.GeneralSettings.portalsAlwaysInterdim())
+                    if (!this.hasGate() && !portal.hasGate() && !CPSettings.instance().alwaysInterdim)
                         return;
                     if (portal.getDimensionId().equals("minecraft:the_nether")) {
                         int translatedX = portal.getSpawnPos().getX() * 8;
@@ -187,19 +187,19 @@ public class Portal {
                         distance = distance(translatedSpawnPos, portal.getSpawnPos());
                     } else distance = distance(spawnPos, portal.getSpawnPos());
                 } else distance = distance(spawnPos, portal.getSpawnPos());
-                if (!CPSettings.GeneralSettings.portalsAlwaysUnlimited()) {
+                if (!CPSettings.instance().unlimitedRange) {
                     int tier = Math.max(portal.getEnhanceTier(), this.getEnhanceTier());
                     switch (tier) {
                         case 0 -> {
-                            if (distance > CPSettings.PortalRangeSettings.getDefaultRange())
+                            if (distance > CPSettings.instance().defaultRange)
                                 return;
                         }
                         case 1 -> {
-                            if (distance > CPSettings.PortalRangeSettings.getRangeWithEnhancer())
+                            if (distance > CPSettings.instance().rangeWithEnhancer)
                                 return;
                         }
                         case 2 -> {
-                            if (distance > CPSettings.PortalRangeSettings.getRangeWithStrongEnhancer())
+                            if (distance > CPSettings.instance().rangeWithStrongEnhancer)
                                 return;
                         }
                     }

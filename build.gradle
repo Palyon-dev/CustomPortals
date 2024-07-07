@@ -1,5 +1,5 @@
 plugins {
-	id 'fabric-loom' version '1.4-SNAPSHOT'
+	id 'fabric-loom' version '1.6-SNAPSHOT'
 	id 'maven-publish'
 }
 
@@ -27,6 +27,10 @@ repositories {
 	maven {
 		url "https://maven.siphalor.de/"
 	}
+	maven {
+		name 'Xander Maven'
+		url 'https://maven.isxander.dev/releases'
+	}
 
 }
 
@@ -45,9 +49,7 @@ dependencies {
     modImplementation "dev.onyxstudios.cardinal-components-api:cardinal-components-world:$cardinalcomponents_version"
 	include "dev.onyxstudios.cardinal-components-api:cardinal-components-world:$cardinalcomponents_version"
 
-	modImplementation("com.github.Lortseam.completeconfig:base:$completeconfig_version")
-
-	modImplementation("com.github.Lortseam.completeconfig:gui-cloth:$completeconfig_version")
+	modImplementation "dev.isxander:yet-another-config-lib:$yacl_version+$minecraft_version-fabric"
 
 	modImplementation("com.terraformersmc:modmenu:$modmenu_version")
 

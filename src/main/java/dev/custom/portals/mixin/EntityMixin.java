@@ -44,6 +44,8 @@ public abstract class EntityMixin implements EntityMixinAccess {
     private int customPortalTime;
 
     @Shadow
+    protected boolean inNetherPortal;
+    @Shadow
     private World world;
     @Shadow
     private float yaw;
@@ -180,9 +182,9 @@ public abstract class EntityMixin implements EntityMixinAccess {
     @Unique
     public int getMaxCustomPortalTime() {
         if (((Entity)(Object)this) instanceof PlayerEntity && destPortal != null) {
-            if (CPSettings.GeneralSettings.portalsAlwaysHaste() == CPSettings.HasteDropdown.CREATIVE)
+            if (CPSettings.instance().alwaysHaste == CPSettings.HasteEnum.CREATIVE)
                 return destPortal.hasHaste() ? 1 : this.getMaxNetherPortalTime();
-            else if (CPSettings.GeneralSettings.portalsAlwaysHaste() == CPSettings.HasteDropdown.NO)
+            else if (CPSettings.instance().alwaysHaste == CPSettings.HasteEnum.NO)
                 return destPortal.hasHaste() ? 1 : 80;
             else return 1;
         }
@@ -194,6 +196,9 @@ public abstract class EntityMixin implements EntityMixinAccess {
 
     @Unique
     public boolean isInCustomPortal() { return inCustomPortal; }
+
+    @Unique
+    public boolean isInNetherPortal() { return inNetherPortal; }
     
     @Unique
     public void notInCustomPortal() { inCustomPortal = false; }

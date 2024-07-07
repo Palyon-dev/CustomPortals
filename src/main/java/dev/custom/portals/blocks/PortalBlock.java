@@ -1,5 +1,7 @@
 package dev.custom.portals.blocks;
 
+import net.minecraft.block.*;
+import net.minecraft.fluid.Fluid;
 import net.minecraft.text.*;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
@@ -13,12 +15,6 @@ import dev.custom.portals.registry.CPItems;
 import dev.custom.portals.registry.CPParticles;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.minecraft.block.AbstractBlock;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockEntityProvider;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
-import net.minecraft.block.ShapeContext;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.BlockEntityTicker;
 import net.minecraft.block.entity.BlockEntityType;
@@ -28,7 +24,6 @@ import net.minecraft.entity.SpawnReason;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NbtCompound;
 import net.minecraft.particle.ParticleTypes;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
@@ -47,11 +42,9 @@ import net.minecraft.world.WorldAccess;
 import net.minecraft.world.dimension.NetherPortal;
 import net.minecraft.server.world.ServerWorld;
 
-import java.util.List;
-import java.util.Optional;
-
-public class PortalBlock extends Block implements BlockEntityProvider {
+public class PortalBlock extends Block implements BlockEntityProvider, Waterloggable {
    public static final BooleanProperty LIT;
+   public static final BooleanProperty WATERLOGGED;
    public static final EnumProperty<Direction.Axis> AXIS;
    protected static final VoxelShape X_SHAPE;
    protected static final VoxelShape Z_SHAPE;
@@ -59,7 +52,7 @@ public class PortalBlock extends Block implements BlockEntityProvider {
     
    public PortalBlock(AbstractBlock.Settings settings) {
       super(settings);
-      this.setDefaultState(this.stateManager.getDefaultState().with(AXIS, Direction.Axis.X).with(LIT, false));
+      this.setDefaultState(this.stateManager.getDefaultState().with(AXIS, Direction.Axis.X).with(LIT, false).with(WATERLOGGED, false));
    }
 
    @Override
@@ -287,6 +280,16 @@ public class PortalBlock extends Block implements BlockEntityProvider {
       }
    
    }
+
+   @Override
+   public boolean canFillWithFluid(BlockView blockView, BlockPos blockPos, BlockState blockState, Fluid fluid) {
+      return false;
+   }
+
+   @Override
+   public boolean canBucketPlace(BlockState blockState, Fluid fluid) {
+      return false;
+   }
   
    @Environment(EnvType.CLIENT)
    public ItemStack getPickStack(BlockView world, BlockPos pos, BlockState state) {
@@ -324,11 +327,12 @@ public class PortalBlock extends Block implements BlockEntityProvider {
   
    @Override
    protected void appendProperties(StateManager.Builder<Block, BlockState> builder) {
-      builder.add(AXIS, LIT);
+      builder.add(AXIS, LIT, WATERLOGGED);
    }
 
    static {
       LIT = Properties.LIT;
+      WATERLOGGED = Properties.WATERLOGGED;
       AXIS = Properties.AXIS;
       X_SHAPE = Block.createCuboidShape(0.0D, 0.0D, 6.0D, 16.0D, 16.0D, 10.0D);
       Z_SHAPE = Block.createCuboidShape(6.0D, 0.0D, 0.0D, 10.0D, 16.0D, 16.0D);
