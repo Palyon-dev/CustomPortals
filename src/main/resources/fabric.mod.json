@@ -6,7 +6,7 @@
       "customportals:portals"
     ]
   },
-  "version": "3.4.0",
+  "version": "3.5.1",
 
   "name": "Custom Portals",
   "description": "Build portals to anywhere out of any material!",
@@ -43,7 +43,7 @@
 
   "depends": {
     "fabricloader": ">=0.15.0",
-    "fabric": "*",
+    "fabric": ">=0.100.2",
     "minecraft": ">=1.20.5",
     "java": ">=21",
     "yet_another_config_lib_v3": "*"

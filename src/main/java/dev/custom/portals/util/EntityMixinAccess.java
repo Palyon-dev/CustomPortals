@@ -1,7 +1,6 @@
 package dev.custom.portals.util;
 
 import dev.custom.portals.data.Portal;
-import net.minecraft.block.Block;
 
 public interface EntityMixinAccess {
     
@@ -12,6 +11,7 @@ public interface EntityMixinAccess {
     public void notInCustomPortal();
     public int getPortalColor();
     public void setPortalColor(int color);
+    public void setInTransition(boolean bl);
     public int getMaxCustomPortalTime();
     public Portal getDestPortal();
 }

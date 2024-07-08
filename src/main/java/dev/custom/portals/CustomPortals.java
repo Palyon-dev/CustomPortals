@@ -7,7 +7,10 @@ import dev.custom.portals.registry.CPBlocks;
 import dev.custom.portals.registry.CPItems;
 import dev.custom.portals.registry.CPParticles;
 import dev.custom.portals.util.DrawSpritePayload;
+import dev.custom.portals.util.EntityMixinAccess;
+import dev.custom.portals.util.ScreenTransitionPayload;
 import net.fabricmc.fabric.api.networking.v1.PayloadTypeRegistry;
+import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import org.ladysnake.cca.api.v3.world.WorldComponentFactoryRegistry;
 import org.ladysnake.cca.api.v3.world.WorldComponentInitializer;
 import org.ladysnake.cca.api.v3.component.ComponentRegistryV3;
@@ -34,9 +37,6 @@ public class CustomPortals implements ModInitializer, WorldComponentInitializer 
         public static final RegistryKey<ItemGroup> PORTALS_ITEM_GROUP = RegistryKey.of(RegistryKeys.ITEM_GROUP,
                 new Identifier(CustomPortals.MOD_ID, "general"));
 
-        /*FabricItemGroup.builder(
-        new Identifier(CustomPortals.MOD_ID, "general")).icon(() -> new ItemStack(CPItems.PURPLE_PORTAL_CATALYST)).build();*/
-
         @Override
         public void onInitialize() {
                 Registry.register(Registries.ITEM_GROUP, PORTALS_ITEM_GROUP, FabricItemGroup.builder().icon(()
@@ -47,6 +47,12 @@ public class CustomPortals implements ModInitializer, WorldComponentInitializer 
                 CPItems.registerItems();
                 CPParticles.registerParticles();
                 PayloadTypeRegistry.playS2C().register(DrawSpritePayload.ID, DrawSpritePayload.CODEC);
+                PayloadTypeRegistry.playC2S().register(ScreenTransitionPayload.ID, ScreenTransitionPayload.CODEC);
+                ServerPlayNetworking.registerGlobalReceiver(ScreenTransitionPayload.ID, (payload, context) -> {
+                        context.server().execute(() -> {
+                                ((EntityMixinAccess)context.player()).setInTransition(payload.isTransitioning());
+                        });
+                });
         }
 
         @Override

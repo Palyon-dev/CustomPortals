@@ -8,7 +8,6 @@ import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.network.packet.s2c.play.*;
 import net.minecraft.server.PlayerManager;
 import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.util.math.Box;
 import net.minecraft.world.WorldProperties;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -46,6 +45,7 @@ public abstract class EntityMixin implements EntityMixinAccess {
     private int customPortalTime;
     @Unique
     private boolean packetSent = false;
+    @Unique boolean inTransition;
 
     @Shadow
     protected boolean inNetherPortal;
@@ -170,7 +170,8 @@ public abstract class EntityMixin implements EntityMixinAccess {
                 this.portalColor = 0;
                 this.destPortal = null;
             } else {
-                if (packetSent && ((Entity)(Object)this) instanceof ServerPlayerEntity) {
+                if (packetSent && ((Entity)(Object)this) instanceof ServerPlayerEntity && !inTransition) {
+                    ServerPlayNetworking.send(((ServerPlayerEntity)(Object)this), new DrawSpritePayload(0));
                     packetSent = false;
                 }
                 if (this.customPortalTime > 0) {
@@ -221,5 +222,8 @@ public abstract class EntityMixin implements EntityMixinAccess {
 
     @Unique
     public void setPortalColor(int color) { this.portalColor = color; }
+
+    @Unique
+    public void setInTransition(boolean bl) { this.inTransition = bl; }
 
 }

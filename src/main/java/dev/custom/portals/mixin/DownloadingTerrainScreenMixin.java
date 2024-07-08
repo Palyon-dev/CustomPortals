@@ -2,6 +2,7 @@ package dev.custom.portals.mixin;
 
 import dev.custom.portals.blocks.PortalBlock;
 import dev.custom.portals.util.*;
+import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.DownloadingTerrainScreen;
 import net.minecraft.client.gui.screen.Screen;
@@ -35,6 +36,7 @@ public abstract class DownloadingTerrainScreenMixin extends Screen {
     public void renderBackground(DrawContext drawContext, int i, int j, float f, CallbackInfo ci) {
         if (ClientUtil.transitionBackgroundSpriteModel != null) {
             ClientUtil.isTransitioning = true;
+            ClientPlayNetworking.send(new ScreenTransitionPayload(true));
             drawContext.drawSprite(0, 0, -90, drawContext.getScaledWindowWidth(), drawContext.getScaledWindowHeight(), this.client.getBlockRenderManager().getModels().getModelParticleSprite(ClientUtil.transitionBackgroundSpriteModel.getDefaultState().with(PortalBlock.LIT, true)));
             ci.cancel();
         }
@@ -42,6 +44,7 @@ public abstract class DownloadingTerrainScreenMixin extends Screen {
     @Inject(method = "close", at = @At("HEAD"))
     public void close(CallbackInfo ci) {
         ClientUtil.isTransitioning = false;
+        ClientPlayNetworking.send(new ScreenTransitionPayload(false));
         ClientUtil.transitionBackgroundSpriteModel = null;
     }
 }
