@@ -6,6 +6,7 @@ import com.mojang.authlib.GameProfile;
 
 import net.minecraft.network.packet.s2c.play.*;
 import net.minecraft.registry.RegistryKey;
+import net.minecraft.util.math.BlockPos;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -15,14 +16,12 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import dev.custom.portals.util.EntityMixinAccess;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.PlayerManager;
 import net.minecraft.server.network.ServerPlayNetworkHandler;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.TeleportTarget;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldProperties;
@@ -57,51 +56,47 @@ public abstract class ServerPlayerEntityMixin extends PlayerEntity {
         super(serverWorld, serverWorld.getSpawnPos(), serverWorld.getSpawnAngle(), gameProfile);
     }
 
-    /* This is necessary to avoid unwanted side effects from using the normal moveToWorld(),
+    /* This is necessary to avoid unwanted side effects from using the normal teleportTo(),
      * such as how moving from the end to the overworld causes the credits to play and
      * resets the player's position to the world spawn. Most of this is simply copied from
      * vanilla code.
      */
-    @Inject(method = "moveToWorld", at = @At("HEAD"), cancellable = true)
-    public void moveToWorld(ServerWorld serverWorld, CallbackInfoReturnable<Entity> ci) {
-        this.inTeleportationState = true;
+    @Inject(method = "teleportTo", at = @At("HEAD"), cancellable = true)
+    public void telportTo(TeleportTarget teleportTarget, CallbackInfoReturnable<Entity> cir) {
+        if (this.isRemoved())
+            cir.setReturnValue(null);
+        ServerWorld serverWorld = teleportTarget.world();
         ServerWorld serverWorld2 = this.getServerWorld();
         RegistryKey<World> registryKey = serverWorld2.getRegistryKey();
         if (((EntityMixinAccess)this).isInCustomPortal()) {
+            ServerPlayerEntity thisPlayer = (ServerPlayerEntity)(Object)this;
+            this.inTeleportationState = true;
             WorldProperties worldProperties = serverWorld.getLevelProperties();
             this.networkHandler.sendPacket(new PlayerRespawnS2CPacket(this.createCommonPlayerSpawnInfo(serverWorld), (byte)3));
             this.networkHandler.sendPacket(new DifficultyS2CPacket(worldProperties.getDifficulty(), worldProperties.isDifficultyLocked()));
             PlayerManager playerManager = this.server.getPlayerManager();
-            playerManager.sendCommandTree((ServerPlayerEntity)(Object)this);
-            serverWorld2.removePlayer((ServerPlayerEntity)(Object)this, RemovalReason.CHANGED_DIMENSION);
+            playerManager.sendCommandTree(thisPlayer);
+            serverWorld2.removePlayer(thisPlayer, RemovalReason.CHANGED_DIMENSION);
             this.unsetRemoved();
-            TeleportTarget teleportTarget = this.getTeleportTarget(serverWorld);
-            if (teleportTarget != null) {
-                serverWorld2.getProfiler().push("moving");
-                serverWorld2.getProfiler().pop();
-                serverWorld2.getProfiler().push("placing");
-                this.setServerWorld(serverWorld);
-                this.networkHandler.requestTeleport(teleportTarget.position.x, teleportTarget.position.y, teleportTarget.position.z, teleportTarget.yaw, teleportTarget.pitch);
-                this.networkHandler.syncWithPlayerPosition();
-                serverWorld.onPlayerChangeDimension((ServerPlayerEntity)(Object)this);
-                serverWorld2.getProfiler().pop();
-                this.worldChanged(serverWorld2);
-                this.networkHandler.sendPacket(new PlayerAbilitiesS2CPacket(this.getAbilities()));
-                playerManager.sendWorldInfo((ServerPlayerEntity)(Object)this, serverWorld);
-                playerManager.sendPlayerStatus((ServerPlayerEntity)(Object)this);
-                Iterator var7 = this.getStatusEffects().iterator();
-
-                while(var7.hasNext()) {
-                    StatusEffectInstance statusEffectInstance = (StatusEffectInstance)var7.next();
-                    this.networkHandler.sendPacket(new EntityStatusEffectS2CPacket(this.getId(), statusEffectInstance, false));
-                }
-                // Apparently this line means "play the teleport sound effect." Minecraft try to have readable code challenge (impossible)
-                this.networkHandler.sendPacket(new WorldEventS2CPacket(1032, BlockPos.ORIGIN, 0, false));
-                this.syncedExperience = -1;
-                this.syncedHealth = -1.0F;
-                this.syncedFoodLevel = -1;
-            }
-            ci.setReturnValue((ServerPlayerEntity)(Object)this);
+            serverWorld2.getProfiler().push("moving");
+            serverWorld2.getProfiler().pop();
+            serverWorld2.getProfiler().push("placing");
+            this.setServerWorld(serverWorld);
+            this.networkHandler.requestTeleport(teleportTarget.comp_2821().x, teleportTarget.comp_2821().y, teleportTarget.comp_2821().z, teleportTarget.yaw(), teleportTarget.pitch());
+            this.networkHandler.syncWithPlayerPosition();
+            serverWorld.onDimensionChanged(thisPlayer);
+            serverWorld2.getProfiler().pop();
+            this.worldChanged(serverWorld2);
+            this.networkHandler.sendPacket(new PlayerAbilitiesS2CPacket(this.getAbilities()));
+            playerManager.sendWorldInfo(thisPlayer, serverWorld);
+            playerManager.sendPlayerStatus(thisPlayer);
+            playerManager.sendStatusEffects(thisPlayer);
+            // Apparently this line means "play the teleport sound effect." Minecraft try to have readable code challenge (impossible)
+            this.networkHandler.sendPacket(new WorldEventS2CPacket(1032, BlockPos.ORIGIN, 0, false));
+            this.syncedExperience = -1;
+            this.syncedHealth = -1.0F;
+            this.syncedFoodLevel = -1;
+            cir.setReturnValue(thisPlayer);
         }
     }
 }

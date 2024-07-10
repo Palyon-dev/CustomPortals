@@ -23,7 +23,7 @@ public class PortalComponent implements BasePortalComponent {
     public PortalRegistry getPortalRegistry() { return portalRegistry; }
 
     @Override
-    public Portal getPortalFromPos(BlockPos pos) {
+    public CustomPortal getPortalFromPos(BlockPos pos) {
         return portalRegistry.getPortalFromPos(pos);
     }
 
@@ -31,17 +31,17 @@ public class PortalComponent implements BasePortalComponent {
     public void setPortalRegistry(PortalRegistry portalRegistry) { this.portalRegistry = portalRegistry; }
 
     @Override
-    public void registerPortal(Portal portal) {
+    public void registerPortal(CustomPortal portal) {
         portalRegistry.register(portal);
     }
 
     @Override
-    public void unregisterPortal(Portal portal) {
+    public void unregisterPortal(CustomPortal portal) {
         portalRegistry.unregister(portal);
     }
 
     @Override
-    public void tryWithAll(Portal portal) {
+    public void tryWithAll(CustomPortal portal) {
         portalRegistry.tryWithAll(portal);
     }
 
@@ -91,7 +91,7 @@ public class PortalComponent implements BasePortalComponent {
             int strongEnhancerRunes = curTag.getInt("strong");
             int infinityRunes = curTag.getInt("infinity");
             UUID creatorId = curTag.getUuid("creatorId");
-            Portal portal = new Portal(frameId, dimensionId, color, spawnPos, portalBlocks, offsetX, offsetZ, creatorId,
+            CustomPortal portal = new CustomPortal(frameId, dimensionId, color, spawnPos, portalBlocks, offsetX, offsetZ, creatorId,
                 hasteRunes, gateRunes, weakEnhancerRunes, strongEnhancerRunes, infinityRunes);
             registerPortal(portal);
         }
@@ -101,7 +101,7 @@ public class PortalComponent implements BasePortalComponent {
     @Override
     public void writeToNbt(NbtCompound tag, RegistryWrapper.WrapperLookup registryLookup) {
         NbtList portalData = new NbtList();
-        for(Portal curPortal : portalRegistry.getPortals()) {
+        for(CustomPortal curPortal : portalRegistry.getPortals()) {
             NbtCompound curTag = new NbtCompound();
             curTag.putString("frameId", curPortal.getFrameId());
             curTag.putString("dimensionId", curPortal.getDimensionId());

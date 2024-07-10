@@ -2,23 +2,25 @@ package dev.custom.portals.mixin;
 
 import dev.custom.portals.CustomPortals;
 import dev.custom.portals.config.CPSettings;
+import dev.custom.portals.data.CustomPortal;
 import dev.custom.portals.util.DrawSpritePayload;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
+import net.minecraft.block.Portal;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.network.packet.s2c.play.*;
 import net.minecraft.server.PlayerManager;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.world.WorldProperties;
+import net.minecraft.world.dimension.PortalManager;
+import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import dev.custom.portals.util.EntityMixinAccess;
-import dev.custom.portals.data.Portal;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.registry.RegistryKey;
@@ -26,7 +28,6 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
-import net.minecraft.world.TeleportTarget;
 import net.minecraft.world.World;
 
 import java.util.Collections;
@@ -40,80 +41,60 @@ public abstract class EntityMixin implements EntityMixinAccess {
     @Unique
     private boolean inCustomPortal;
     @Unique
-    private Portal destPortal;
+    private CustomPortal destPortal;
     @Unique
     private int customPortalTime;
     @Unique
     private boolean packetSent = false;
-    @Unique boolean inTransition;
+    @Unique
+    boolean inTransition;
 
     @Shadow
-    protected boolean inNetherPortal;
+    @Nullable
+    public PortalManager portalManager;
     @Shadow
     private World world;
     @Shadow
-    private float yaw;
-    @Shadow
-    private float pitch;
-    @Shadow
     private BlockPos blockPos;
-
-    @Shadow
-    public abstract boolean hasPortalCooldown();
-    @Shadow
-    public abstract void resetPortalCooldown();
-    @Shadow
-    public abstract int getMaxNetherPortalTime();
-    @Shadow
-    protected abstract void tickPortalCooldown();
-    @Shadow
-    public abstract boolean teleport(ServerWorld serverWorld, double d, double e, double f, Set<PositionFlag> set, float g, float h);
-    @Shadow
-    public abstract boolean hasVehicle();
-    @Shadow
-    public abstract Entity moveToWorld(ServerWorld destination);
-    @Shadow 
-    public abstract Vec3d getVelocity();
 
     @Inject(method = "baseTick", at = @At("TAIL"))
     public void baseTick(CallbackInfo ci) {
-        this.tickCustomPortal();
+        if (!inCustomPortal && packetSent && ((Entity)(Object)this) instanceof ServerPlayerEntity && !inTransition) {
+            ServerPlayNetworking.send(((ServerPlayerEntity)(Object)this), new DrawSpritePayload(0));
+            packetSent = false;
+        }
     }
 
-    @Inject(method = "getTeleportTarget", at = @At("HEAD"), cancellable = true)
-    protected void getTeleportTarget(ServerWorld destination, CallbackInfoReturnable<TeleportTarget> ci) {
-        if(this.inCustomPortal) {
-            BlockPos dest = destPortal.getSpawnPos();
-            double destX = dest.getX();
-            double destY = dest.getY();
-            double destZ = dest.getZ();
-            destX += destPortal.offsetX;
-            destZ += destPortal.offsetZ;
-            /* For some reason, when the player is going from the Overworld to the End, the Y coordinate somehow gets
-             * decreased by 1. I have no idea why this happens or how to fix it directly, so this is here to correct it.
-             */
-            if(destPortal.getDimensionId().equals("minecraft:the_end") && this.world.getRegistryKey() == World.OVERWORLD)
-                destY += 1.0;
-            ci.setReturnValue(new TeleportTarget(new Vec3d(destX, destY, destZ), this.getVelocity(), this.yaw, this.pitch));
+    @Inject(method = "tickPortalTeleportation", at = @At("TAIL"))
+    protected void tickPortalTeleportation(CallbackInfo ci) {
+        if (world instanceof ServerWorld) {
+            if (this.inCustomPortal) {
+                if (((Entity) (Object) this) instanceof ServerPlayerEntity && !packetSent) {
+                    ServerPlayNetworking.send(((ServerPlayerEntity) (Object) this), new DrawSpritePayload(this.portalColor));
+                    packetSent = true;
+                }
+                if (this.portalManager == null) {
+                    this.destPortal = null;
+                    this.inCustomPortal = false;
+                    this.portalColor = 0;
+                }
+            }
         }
     }
 
     @Unique
-    public void setInCustomPortal(Portal portal) {
-        if (this.hasPortalCooldown()) {
-            this.resetPortalCooldown();
-        } else {
-            this.destPortal = portal.getLinked();
+    public void setInCustomPortal(CustomPortal customPortal) {
+        if (this.portalManager != null) {
+            this.destPortal = customPortal.getLinked();
             this.inCustomPortal = true;
-            this.portalColor = portal.getColor().id;
+            this.portalColor = customPortal.getColor().id;
         }
     }
 
-    @Unique
+    /*@Unique
     public void tickCustomPortal() {
-        if (this.world instanceof ServerWorld) {
+        if (this.world instanceof ServerWorld serverWorld) {
             int i = this.getMaxCustomPortalTime();
-            ServerWorld serverWorld = (ServerWorld)this.world;
             if (this.inCustomPortal) {
                 if (((Entity)(Object)this) instanceof ServerPlayerEntity && !packetSent) {
                     ServerPlayNetworking.send(((ServerPlayerEntity) (Object) this), new DrawSpritePayload(this.portalColor));
@@ -185,28 +166,16 @@ public abstract class EntityMixin implements EntityMixinAccess {
 
            this.tickPortalCooldown();
         }
-    }
+    }*/
 
     @Unique
-    public int getMaxCustomPortalTime() {
-        if (((Entity)(Object)this) instanceof PlayerEntity && destPortal != null) {
-            if (CPSettings.instance().alwaysHaste == CPSettings.HasteEnum.CREATIVE)
-                return destPortal.hasHaste() ? 1 : this.getMaxNetherPortalTime();
-            else if (CPSettings.instance().alwaysHaste == CPSettings.HasteEnum.NO)
-                return destPortal.hasHaste() ? 1 : 80;
-            else return 1;
-        }
-        return this.getMaxNetherPortalTime();
-    }
-
-    @Unique
-    public Portal getDestPortal() { return destPortal; }
+    public CustomPortal getDestPortal() { return destPortal; }
 
     @Unique
     public boolean isInCustomPortal() { return inCustomPortal; }
 
     @Unique
-    public boolean isInNetherPortal() { return inNetherPortal; }
+    public boolean isInNetherPortal() { return false; }
     
     @Unique
     public void notInCustomPortal() { inCustomPortal = false; }
@@ -214,7 +183,7 @@ public abstract class EntityMixin implements EntityMixinAccess {
     @Unique
     public int getPortalColor() {
         if (portalColor == 0) {
-            Portal portal = CustomPortals.PORTALS.get(world).getPortalFromPos(blockPos);
+            CustomPortal portal = CustomPortals.PORTALS.get(world).getPortalFromPos(blockPos);
             portalColor = portal == null ? 0 : portal.getColor().id;
         }
         return portalColor;

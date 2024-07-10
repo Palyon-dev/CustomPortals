@@ -1,19 +1,20 @@
 package dev.custom.portals.blocks;
 
-import dev.custom.portals.util.PortalHelper;
+import dev.custom.portals.config.CPSettings;
+import dev.custom.portals.data.CustomPortal;
 import net.minecraft.block.*;
-import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.fluid.Fluid;
+import net.minecraft.registry.RegistryKey;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.text.*;
-import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.util.ItemActionResult;
 import net.minecraft.util.hit.BlockHitResult;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.math.random.Random;
 
 import dev.custom.portals.CustomPortals;
 import dev.custom.portals.util.EntityMixinAccess;
-import dev.custom.portals.data.Portal;
 import dev.custom.portals.registry.CPItems;
 import dev.custom.portals.registry.CPParticles;
 import net.fabricmc.api.EnvType;
@@ -38,15 +39,12 @@ import net.minecraft.util.BlockRotation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.util.shape.VoxelShape;
-import net.minecraft.world.BlockView;
-import net.minecraft.world.GameRules;
-import net.minecraft.world.World;
-import net.minecraft.world.WorldAccess;
+import net.minecraft.world.*;
 import net.minecraft.world.dimension.NetherPortal;
 import net.minecraft.server.world.ServerWorld;
 import org.jetbrains.annotations.Nullable;
 
-public class PortalBlock extends Block implements BlockEntityProvider, Waterloggable {
+public class PortalBlock extends Block implements BlockEntityProvider, Waterloggable, Portal {
    public static final BooleanProperty LIT;
    public static final BooleanProperty WATERLOGGED;
    public static final EnumProperty<Direction.Axis> AXIS;
@@ -75,7 +73,7 @@ public class PortalBlock extends Block implements BlockEntityProvider, Waterlogg
    @Override
    public ItemActionResult onUseWithItem(ItemStack itemStack, BlockState blockState, World world, BlockPos blockPos, PlayerEntity playerEntity, Hand hand, BlockHitResult blockHitResult) {
       if (playerEntity.isSneaking() && itemStack.isEmpty()) {
-         Portal portal = CustomPortals.PORTALS.get(world).getPortalFromPos(blockPos);
+         CustomPortal portal = CustomPortals.PORTALS.get(world).getPortalFromPos(blockPos);
          if (portal == null) return ItemActionResult.FAIL;
          portal.setSpawnPos(blockPos);
          if (world.isClient)
@@ -86,7 +84,7 @@ public class PortalBlock extends Block implements BlockEntityProvider, Waterlogg
    }
    @Override
    public void randomTick(BlockState state, ServerWorld world, BlockPos pos, Random random) {
-      Portal portal = CustomPortals.PORTALS.get(world).getPortalFromPos(pos);
+      CustomPortal portal = CustomPortals.PORTALS.get(world).getPortalFromPos(pos);
       if(portal == null)
          return;
       if(portal.isInterdimensional()) {
@@ -120,7 +118,7 @@ public class PortalBlock extends Block implements BlockEntityProvider, Waterlogg
    @Override
    public BlockState onBreak(World world, BlockPos pos, BlockState state, PlayerEntity player) {
       super.onBreak(world, pos, state, player);
-      Portal portal = CustomPortals.PORTALS.get(world).getPortalFromPos(pos);
+      CustomPortal portal = CustomPortals.PORTALS.get(world).getPortalFromPos(pos);
       if(portal != null) {
          CustomPortals.PORTALS.get(world).unregisterPortal(portal);
          if(!world.isClient)
@@ -129,7 +127,7 @@ public class PortalBlock extends Block implements BlockEntityProvider, Waterlogg
       return state;
    }
 
-   private void dropCatalyst(Portal portal, World world) {
+   private void dropCatalyst(CustomPortal portal, World world) {
       Item catalyst;
       switch(this.getDefaultMapColor().id) {
          case 29: catalyst = CPItems.BLACK_PORTAL_CATALYST;
@@ -175,7 +173,7 @@ public class PortalBlock extends Block implements BlockEntityProvider, Waterlogg
       Direction.Axis axis2 = (Direction.Axis)state.get(AXIS);
       boolean bl = axis2 == Direction.Axis.Y ? axis2 == axis && axis.isVertical() : axis2 != axis && axis.isHorizontal();
       if(!bl && !newState.isOf(this) && !(new NetherPortal(world, pos, axis2)).wasAlreadyValid()) {
-         Portal portal = CustomPortals.PORTALS.get((World)world).getPortalFromPos(pos);
+         CustomPortal portal = CustomPortals.PORTALS.get((World)world).getPortalFromPos(pos);
          if(portal != null) {
             if (newState.getBlock().getTranslationKey().equals(portal.getFrameId()))
                return super.getStateForNeighborUpdate(state, direction, newState, world, pos, posFrom);
@@ -189,7 +187,7 @@ public class PortalBlock extends Block implements BlockEntityProvider, Waterlogg
       return super.getStateForNeighborUpdate(state, direction, newState, world, pos, posFrom);
    }
 
-   private boolean checkRedstoneSignal(World world, Portal portal) {
+   private boolean checkRedstoneSignal(World world, CustomPortal portal) {
       for (BlockPos pos : portal.getPortalBlocks()) {
          if (world.isReceivingRedstonePower(pos))
             return true;
@@ -199,7 +197,7 @@ public class PortalBlock extends Block implements BlockEntityProvider, Waterlogg
 
    @Override
    public void neighborUpdate(BlockState blockState, World world, BlockPos blockPos, Block block, BlockPos blockPos2, boolean bl) {
-      Portal portal = CustomPortals.PORTALS.get(world).getPortalFromPos(blockPos);
+      CustomPortal portal = CustomPortals.PORTALS.get(world).getPortalFromPos(blockPos);
       if (portal == null)
          return;
       boolean bl2 = checkRedstoneSignal(world, portal);
@@ -212,9 +210,11 @@ public class PortalBlock extends Block implements BlockEntityProvider, Waterlogg
    public void onEntityCollision(BlockState state, World world, BlockPos pos, Entity entity) {
       if (!state.get(LIT))
          return;
-      Portal portal = CustomPortals.PORTALS.get(world).getPortalFromPos(pos);
-      if(portal != null && entity.canUsePortals())
-         ((EntityMixinAccess)entity).setInCustomPortal(portal);
+      CustomPortal portal = CustomPortals.PORTALS.get(world).getPortalFromPos(pos);
+      if(portal != null && entity.canUsePortals(false)) {
+         entity.tryUsePortal(this, pos);
+         ((EntityMixinAccess) entity).setInCustomPortal(portal);
+      }
       // For debugging purposes
       /*if(portal != null) {
          if(portal.hasLinked())
@@ -353,5 +353,53 @@ public class PortalBlock extends Block implements BlockEntityProvider, Waterlogg
    public <T extends BlockEntity> BlockEntityTicker<T> getTicker(World world, BlockState state,
          BlockEntityType<T> type) {
       return PortalBlockEntity::tick;
+   }
+
+   @Nullable
+   @Override
+   public TeleportTarget createTeleportTarget(ServerWorld serverWorld, Entity entity, BlockPos blockPos) {
+      CustomPortal portal = CustomPortals.PORTALS.get(serverWorld).getPortalFromPos(blockPos);
+      if (portal == null) return null;
+      CustomPortal destPortal = portal.getLinked();
+      if (destPortal == null) return null;
+      MinecraftServer minecraftServer = serverWorld.getServer();
+      String dimensionId = portal.getDimensionId();
+      String destDimensionId = destPortal.getDimensionId();
+      ServerWorld serverWorld2 = null;
+      if(!destDimensionId.equals(dimensionId)) {
+         for(RegistryKey<World> registryKey : minecraftServer.getWorldRegistryKeys()) {
+            if(registryKey.getValue().toString().equals(destDimensionId)) {
+               serverWorld2 = minecraftServer.getWorld(registryKey);
+            }
+         }
+      }
+      else serverWorld2 = serverWorld;
+      if (serverWorld2 == null) {
+         return null;
+      } else {
+         BlockPos dest = destPortal.getSpawnPos();
+         float destX = (float)dest.getX();
+         float destY = (float)dest.getY();
+         float destZ = (float)dest.getZ();
+         destX += destPortal.offsetX;
+         destZ += destPortal.offsetZ;
+         /* For some reason, when the player is going from the Overworld to the End, the Y coordinate somehow gets
+          * decreased by 1. I have no idea why this happens or how to fix it directly, so this is here to correct it.
+          */
+         if(destPortal.getDimensionId().equals("minecraft:the_end") && serverWorld2.getRegistryKey() == World.OVERWORLD)
+            destY += 1.0f;
+         return new TeleportTarget(serverWorld2, new Vec3d(destX, destY, destZ), entity.getVelocity(), entity.getYaw(), entity.getPitch(), TeleportTarget.NO_OP);
+      }
+   }
+
+   @Override
+   public int getPortalDelay(ServerWorld serverWorld, Entity entity) {
+      CustomPortal destPortal = ((EntityMixinAccess)entity).getDestPortal();
+      if (entity instanceof PlayerEntity playerEntity && destPortal != null) {
+         if (CPSettings.instance().alwaysHaste == CPSettings.HasteEnum.CREATIVE)
+            return Math.max(1, playerEntity.getAbilities().invulnerable ? serverWorld.getGameRules().getInt(GameRules.PLAYERS_NETHER_PORTAL_CREATIVE_DELAY) : destPortal.getPlayerTeleportDelay());
+         else return destPortal.getPlayerTeleportDelay();
+      }
+      return 0;
    }
 }

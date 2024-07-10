@@ -8,7 +8,7 @@ import net.minecraft.block.MapColor;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3i;
 
-public class Portal {
+public class CustomPortal {
 
     public float offsetX;
     public float offsetZ;
@@ -28,10 +28,10 @@ public class Portal {
 
     private boolean hasRedstoneSignal = false;
     
-    private Portal linked;
+    private CustomPortal linked;
 
-    public Portal(final String frameId, final String dimensionId, final MapColor color, final BlockPos spawnPos,
-            final List<BlockPos> portalBlocks, final float offsetX, final float offsetZ, final UUID creatorId) {
+    public CustomPortal(final String frameId, final String dimensionId, final MapColor color, final BlockPos spawnPos,
+                        final List<BlockPos> portalBlocks, final float offsetX, final float offsetZ, final UUID creatorId) {
         this.frameId = frameId;
         this.dimensionId = dimensionId;
         this.color = color;
@@ -47,9 +47,9 @@ public class Portal {
         infinityRunes = 0;
     }
 
-    public Portal(final String frameId, final String dimensionId, final MapColor color, final BlockPos spawnPos,
-            final List<BlockPos> portalBlocks, final float offsetX, final float offsetZ, final UUID creatorId, int hasteRunes, int gateRunes,
-            int weakEnhancerRunes, int strongEnhancerRunes, int infinityRunes) {
+    public CustomPortal(final String frameId, final String dimensionId, final MapColor color, final BlockPos spawnPos,
+                        final List<BlockPos> portalBlocks, final float offsetX, final float offsetZ, final UUID creatorId, int hasteRunes, int gateRunes,
+                        int weakEnhancerRunes, int strongEnhancerRunes, int infinityRunes) {
         this.frameId = frameId;
         this.dimensionId = dimensionId;
         this.color = color;
@@ -77,7 +77,7 @@ public class Portal {
         return color;
     }
 
-    public Portal getLinked() {
+    public CustomPortal getLinked() {
         return linked;
     }
 
@@ -109,8 +109,14 @@ public class Portal {
         this.hasRedstoneSignal = hasRedstoneSignal;
     }
 
-    public void setLinked(final Portal portal) {
+    public void setLinked(final CustomPortal portal) {
         linked = portal;
+    }
+
+    public int getPlayerTeleportDelay() {
+        if (CPSettings.instance().alwaysHaste == CPSettings.HasteEnum.YES)
+            return 1;
+        return this.hasHaste() ? 1 : 80;
     }
 
     public void setSpawnPos(BlockPos newSpawn) {
@@ -160,7 +166,7 @@ public class Portal {
         return 0;
     }
 
-    public void tryLink(final Portal portal) {
+    public void tryLink(final CustomPortal portal) {
         if (CPSettings.instance().privatePortals && this.creatorId != null && portal.creatorId != null &&
                 !this.creatorId.equals(portal.getCreatorId())) return;
         if (portal.getColor() == color && portal.getFrameId().equals(frameId) && portal != this) {

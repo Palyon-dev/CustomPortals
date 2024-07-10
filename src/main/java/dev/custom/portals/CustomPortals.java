@@ -32,10 +32,10 @@ public class CustomPortals implements ModInitializer, WorldComponentInitializer 
         public static final String MOD_ID = "customportals";
 
         public static final ComponentKey<BasePortalComponent> PORTALS = ComponentRegistryV3.INSTANCE
-                .getOrCreate(new Identifier("customportals:portals"), BasePortalComponent.class);
+                .getOrCreate(Identifier.of("customportals:portals"), BasePortalComponent.class);
 
         public static final RegistryKey<ItemGroup> PORTALS_ITEM_GROUP = RegistryKey.of(RegistryKeys.ITEM_GROUP,
-                new Identifier(CustomPortals.MOD_ID, "general"));
+                Identifier.of(CustomPortals.MOD_ID, "general"));
 
         @Override
         public void onInitialize() {

@@ -3,7 +3,7 @@ package dev.custom.portals.util;
 import dev.custom.portals.CustomPortals;
 import dev.custom.portals.blocks.AbstractRuneBlock;
 import dev.custom.portals.config.CPSettings;
-import dev.custom.portals.data.Portal;
+import dev.custom.portals.data.CustomPortal;
 import dev.custom.portals.registry.CPBlocks;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
@@ -21,8 +21,8 @@ import java.util.*;
 
 public class PortalHelper {
 
-    public static final Identifier DRAW_SPRITE_PACKET_ID = new Identifier("customportals", "draw_sprite");
-    public static final Identifier SCREEN_TRANSITION_PACKET_ID = new Identifier("customportals", "is_in_transition");
+    public static final Identifier DRAW_SPRITE_PACKET_ID = Identifier.of("customportals", "draw_sprite");
+    public static final Identifier SCREEN_TRANSITION_PACKET_ID = Identifier.of("customportals", "is_in_transition");
 
     private static BlockPos getUp(BlockPos pos, Direction.Axis axis) {
         return axis == Direction.Axis.Y ? pos.north() : pos.up();
@@ -211,7 +211,7 @@ public class PortalHelper {
 
         SpawnPosData spawnPosData = determineSpawnPos(portalBlocks, portalBlock, axis, world);
 
-        Portal portal = new Portal(frameId, world.getRegistryKey().getValue().toString(),
+        CustomPortal portal = new CustomPortal(frameId, world.getRegistryKey().getValue().toString(),
                 portalBlock.getDefaultMapColor(), spawnPosData.blockPos, portalBlocks, spawnPosData.offsetX,
                 spawnPosData.offsetZ, creatorId);
         CustomPortals.PORTALS.get(world).registerPortal(portal);

@@ -5,8 +5,7 @@
     "compatibilityLevel": "JAVA_21",
     "mixins": [
       "EntityMixin",
-      "ServerPlayerEntityMixin",
-      "AbstractMinecartEntityMixin"
+      "ServerPlayerEntityMixin"
     ],
     "client": [
       "ClientPlayerEntityMixin",

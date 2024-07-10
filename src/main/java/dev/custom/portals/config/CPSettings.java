@@ -25,7 +25,7 @@ public final class CPSettings {
     public static final Path CONFIG_PATH = FabricLoader.getInstance().getConfigDir().resolve("customportals.json");
 
     public static final ConfigClassHandler<CPSettings> HANDLER = ConfigClassHandler.createBuilder(CPSettings.class)
-            .id(new Identifier("customportals", "config"))
+            .id(Identifier.of("customportals", "config"))
             .serializer(config -> GsonConfigSerializerBuilder.create(config).setJson5(true)
                     .setPath(CONFIG_PATH).build())
             .build();

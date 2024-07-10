@@ -9,15 +9,15 @@ import net.minecraft.util.math.BlockPos;
 
 public class PortalRegistry {
 
-    private List<Portal> portals;
-    private Map<BlockPos, Portal> portalPositions;
+    private List<CustomPortal> portals;
+    private Map<BlockPos, CustomPortal> portalPositions;
 
     public PortalRegistry() {
-        portals = new ArrayList<Portal>();
-        portalPositions = new HashMap<BlockPos, Portal>();
+        portals = new ArrayList<CustomPortal>();
+        portalPositions = new HashMap<BlockPos, CustomPortal>();
     }
     
-    public void register(Portal portal) {
+    public void register(CustomPortal portal) {
         tryWithAll(portal);
         for (BlockPos blockPos : portal.getPortalBlocks()) {
             portalPositions.put(blockPos, portal);
@@ -25,7 +25,7 @@ public class PortalRegistry {
         portals.add(portal);
     }
 
-    public void unregister(Portal portal) {
+    public void unregister(CustomPortal portal) {
         portals.remove(portal);
         if (portal.hasLinked()) {
             tryWithAll(portal.getLinked());
@@ -35,24 +35,24 @@ public class PortalRegistry {
         }
     }
 
-    public void tryWithAll(Portal portal) {
+    public void tryWithAll(CustomPortal portal) {
         portal.setLinked(null);
-        for (Portal p : portals) {
+        for (CustomPortal p : portals) {
             portal.tryLink(p);
         }
     }
 
     public void refreshPortals() {
-        for (Portal portal : portals) {
+        for (CustomPortal portal : portals) {
             tryWithAll(portal);
         }
     }
 
-    public List<Portal> getPortals() { return portals; }
+    public List<CustomPortal> getPortals() { return portals; }
 
     //public void clear() { portals.clear(); }
 
-    public Portal getPortalFromPos(BlockPos pos) {
+    public CustomPortal getPortalFromPos(BlockPos pos) {
         return portalPositions.get(pos);
     }
 }

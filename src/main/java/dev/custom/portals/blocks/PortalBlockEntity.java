@@ -2,7 +2,7 @@ package dev.custom.portals.blocks;
 
 import dev.custom.portals.CustomPortals;
 import dev.custom.portals.config.CPSettings;
-import dev.custom.portals.data.Portal;
+import dev.custom.portals.data.CustomPortal;
 import dev.custom.portals.registry.CPBlocks;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
@@ -19,7 +19,7 @@ public class PortalBlockEntity extends BlockEntity {
     public static <T extends BlockEntity> void tick(World world, BlockPos pos, BlockState state, BlockEntity be) {
         if (world.isClient)
             return;
-        Portal portal = CustomPortals.PORTALS.get(world).getPortalFromPos(pos);
+        CustomPortal portal = CustomPortals.PORTALS.get(world).getPortalFromPos(pos);
         if (portal != null) {
             if (CPSettings.instance().redstone == CPSettings.RedstoneEnum.OFF) {
                 if (portal.hasLinked() && !(Boolean) state.get(PortalBlock.LIT) && !portal.hasRedstoneSignal()) {

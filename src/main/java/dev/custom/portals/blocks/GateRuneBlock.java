@@ -3,11 +3,11 @@ package dev.custom.portals.blocks;
 import java.util.List;
 
 import dev.custom.portals.CustomPortals;
-import dev.custom.portals.data.Portal;
+import dev.custom.portals.data.CustomPortal;
 import net.minecraft.block.AbstractBlock;
-import net.minecraft.client.item.TooltipType;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.tooltip.TooltipType;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
@@ -20,7 +20,7 @@ public class GateRuneBlock extends AbstractRuneBlock {
     }
 
     @Override
-    public void registerOnPortal(Portal portal, World world) {
+    public void registerOnPortal(CustomPortal portal, World world) {
         portal.addGate();
         CustomPortals.PORTALS.get(world).tryWithAll(portal);
         if (!world.isClient)
@@ -28,7 +28,7 @@ public class GateRuneBlock extends AbstractRuneBlock {
     }
 
     @Override
-    public void unregisterOnPortal(Portal portal, World world) {
+    public void unregisterOnPortal(CustomPortal portal, World world) {
         portal.removeGate();
         if (portal.hasLinked())
             CustomPortals.PORTALS.get(world).tryWithAll(portal.getLinked());

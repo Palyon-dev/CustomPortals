@@ -5,7 +5,7 @@ import java.util.List;
 
 import com.mojang.serialization.MapCodec;
 import dev.custom.portals.CustomPortals;
-import dev.custom.portals.data.Portal;
+import dev.custom.portals.data.CustomPortal;
 import net.minecraft.block.*;
 import net.minecraft.block.enums.BlockFace;
 import net.minecraft.entity.LivingEntity;
@@ -38,9 +38,9 @@ public class AbstractRuneBlock extends WallMountedBlock {
         this.setDefaultState((BlockState)((BlockState)((BlockState)this.stateManager.getDefaultState()).with(FACING, Direction.NORTH)).with(FACE, BlockFace.WALL));
     }
 
-    public void registerOnPortal(Portal portal, World world) {}
+    public void registerOnPortal(CustomPortal portal, World world) {}
 
-    public void unregisterOnPortal(Portal portal, World world) {}
+    public void unregisterOnPortal(CustomPortal portal, World world) {}
 
     @Override
     protected void appendProperties(StateManager.Builder<Block, BlockState> builder) {
@@ -81,7 +81,7 @@ public class AbstractRuneBlock extends WallMountedBlock {
     public void onPlaced(World world, BlockPos pos, BlockState state, LivingEntity placer, ItemStack itemStack) {
         super.onPlaced(world, pos, state, placer, itemStack);
         BlockPos blockPos = getBlockMountedPos(pos, state);
-        Portal portal;
+        CustomPortal portal;
         List<BlockPos> adjacents = new ArrayList<BlockPos>();
         adjacents.add(blockPos.down());
         adjacents.add(blockPos.east());
@@ -109,7 +109,7 @@ public class AbstractRuneBlock extends WallMountedBlock {
     public BlockState onBreak(World world, BlockPos pos, BlockState state, PlayerEntity player) {
         super.onBreak(world, pos, state, player);
         BlockPos blockPos = getBlockMountedPos(pos, state);
-        Portal portal;
+        CustomPortal portal;
         List<BlockPos> adjacents = new ArrayList<BlockPos>();
         adjacents.add(blockPos.down());
         adjacents.add(blockPos.east());

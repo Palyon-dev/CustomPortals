@@ -62,37 +62,37 @@ public class CPItems {
         CPBlocks.INFINITY_RUNE_BLOCK, new Item.Settings().maxCount(1));
 
     public static void registerItems() {
-        Registry.register(Registries.ITEM, new Identifier(CustomPortals.MOD_ID, "white_portal_catalyst"),
+        Registry.register(Registries.ITEM, Identifier.of(CustomPortals.MOD_ID, "white_portal_catalyst"),
             WHITE_PORTAL_CATALYST);
-        Registry.register(Registries.ITEM, new Identifier(CustomPortals.MOD_ID, "orange_portal_catalyst"),
+        Registry.register(Registries.ITEM, Identifier.of(CustomPortals.MOD_ID, "orange_portal_catalyst"),
             ORANGE_PORTAL_CATALYST);
-        Registry.register(Registries.ITEM, new Identifier(CustomPortals.MOD_ID, "magenta_portal_catalyst"),
+        Registry.register(Registries.ITEM, Identifier.of(CustomPortals.MOD_ID, "magenta_portal_catalyst"),
             MAGENTA_PORTAL_CATALYST);
-        Registry.register(Registries.ITEM, new Identifier(CustomPortals.MOD_ID, "light_blue_portal_catalyst"),
+        Registry.register(Registries.ITEM, Identifier.of(CustomPortals.MOD_ID, "light_blue_portal_catalyst"),
             LIGHT_BLUE_PORTAL_CATALYST);
-        Registry.register(Registries.ITEM, new Identifier(CustomPortals.MOD_ID, "yellow_portal_catalyst"),
+        Registry.register(Registries.ITEM, Identifier.of(CustomPortals.MOD_ID, "yellow_portal_catalyst"),
             YELLOW_PORTAL_CATALYST);
-        Registry.register(Registries.ITEM, new Identifier(CustomPortals.MOD_ID, "lime_portal_catalyst"), LIME_PORTAL_CATALYST);
-        Registry.register(Registries.ITEM, new Identifier(CustomPortals.MOD_ID, "pink_portal_catalyst"), PINK_PORTAL_CATALYST);
-        Registry.register(Registries.ITEM, new Identifier(CustomPortals.MOD_ID, "gray_portal_catalyst"), GRAY_PORTAL_CATALYST);
-        Registry.register(Registries.ITEM, new Identifier(CustomPortals.MOD_ID, "light_gray_portal_catalyst"),
+        Registry.register(Registries.ITEM, Identifier.of(CustomPortals.MOD_ID, "lime_portal_catalyst"), LIME_PORTAL_CATALYST);
+        Registry.register(Registries.ITEM, Identifier.of(CustomPortals.MOD_ID, "pink_portal_catalyst"), PINK_PORTAL_CATALYST);
+        Registry.register(Registries.ITEM, Identifier.of(CustomPortals.MOD_ID, "gray_portal_catalyst"), GRAY_PORTAL_CATALYST);
+        Registry.register(Registries.ITEM, Identifier.of(CustomPortals.MOD_ID, "light_gray_portal_catalyst"),
             LIGHT_GRAY_PORTAL_CATALYST);
-        Registry.register(Registries.ITEM, new Identifier(CustomPortals.MOD_ID, "cyan_portal_catalyst"), CYAN_PORTAL_CATALYST);
-        Registry.register(Registries.ITEM, new Identifier(CustomPortals.MOD_ID, "purple_portal_catalyst"),
+        Registry.register(Registries.ITEM, Identifier.of(CustomPortals.MOD_ID, "cyan_portal_catalyst"), CYAN_PORTAL_CATALYST);
+        Registry.register(Registries.ITEM, Identifier.of(CustomPortals.MOD_ID, "purple_portal_catalyst"),
             PURPLE_PORTAL_CATALYST);
-        Registry.register(Registries.ITEM, new Identifier(CustomPortals.MOD_ID, "blue_portal_catalyst"), BLUE_PORTAL_CATALYST);
-        Registry.register(Registries.ITEM, new Identifier(CustomPortals.MOD_ID, "brown_portal_catalyst"),
+        Registry.register(Registries.ITEM, Identifier.of(CustomPortals.MOD_ID, "blue_portal_catalyst"), BLUE_PORTAL_CATALYST);
+        Registry.register(Registries.ITEM, Identifier.of(CustomPortals.MOD_ID, "brown_portal_catalyst"),
             BROWN_PORTAL_CATALYST);
-        Registry.register(Registries.ITEM, new Identifier(CustomPortals.MOD_ID, "green_portal_catalyst"),
+        Registry.register(Registries.ITEM, Identifier.of(CustomPortals.MOD_ID, "green_portal_catalyst"),
             GREEN_PORTAL_CATALYST);
-        Registry.register(Registries.ITEM, new Identifier(CustomPortals.MOD_ID, "red_portal_catalyst"), RED_PORTAL_CATALYST);
-        Registry.register(Registries.ITEM, new Identifier(CustomPortals.MOD_ID, "black_portal_catalyst"),
+        Registry.register(Registries.ITEM, Identifier.of(CustomPortals.MOD_ID, "red_portal_catalyst"), RED_PORTAL_CATALYST);
+        Registry.register(Registries.ITEM, Identifier.of(CustomPortals.MOD_ID, "black_portal_catalyst"),
             BLACK_PORTAL_CATALYST);
-        Registry.register(Registries.ITEM, new Identifier(CustomPortals.MOD_ID, "haste_rune"), HASTE_RUNE);
-        Registry.register(Registries.ITEM, new Identifier(CustomPortals.MOD_ID, "gate_rune"), GATE_RUNE);
-        Registry.register(Registries.ITEM, new Identifier(CustomPortals.MOD_ID, "weak_enhancer_rune"), WEAK_ENHANCER_RUNE);
-        Registry.register(Registries.ITEM, new Identifier(CustomPortals.MOD_ID, "strong_enhancer_rune"), STRONG_ENHANCER_RUNE);
-        Registry.register(Registries.ITEM, new Identifier(CustomPortals.MOD_ID, "infinity_rune"), INFINITY_RUNE);
+        Registry.register(Registries.ITEM, Identifier.of(CustomPortals.MOD_ID, "haste_rune"), HASTE_RUNE);
+        Registry.register(Registries.ITEM, Identifier.of(CustomPortals.MOD_ID, "gate_rune"), GATE_RUNE);
+        Registry.register(Registries.ITEM, Identifier.of(CustomPortals.MOD_ID, "weak_enhancer_rune"), WEAK_ENHANCER_RUNE);
+        Registry.register(Registries.ITEM, Identifier.of(CustomPortals.MOD_ID, "strong_enhancer_rune"), STRONG_ENHANCER_RUNE);
+        Registry.register(Registries.ITEM, Identifier.of(CustomPortals.MOD_ID, "infinity_rune"), INFINITY_RUNE);
 
         ItemGroupEvents.modifyEntriesEvent(CustomPortals.PORTALS_ITEM_GROUP).register(content -> {
             content.add(WHITE_PORTAL_CATALYST);
