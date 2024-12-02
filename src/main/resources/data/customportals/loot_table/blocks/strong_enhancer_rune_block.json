@@ -2,12 +2,11 @@
     "type": "minecraft:block",
     "pools": [
       {
-        "rolls": 1.0,
-        "bonus_rolls": 0.0,
+        "rolls": 1,
         "entries": [
           {
             "type": "minecraft:item",
-            "name": "customportals:weak_enhancer_rune"
+            "name": "customportals:strong_enhancer_rune"
           }
         ],
         "conditions": [
