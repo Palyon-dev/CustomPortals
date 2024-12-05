@@ -4,9 +4,12 @@ import java.util.Iterator;
 
 import com.mojang.authlib.GameProfile;
 
+import net.minecraft.entity.player.PlayerPosition;
 import net.minecraft.network.packet.s2c.play.*;
 import net.minecraft.registry.RegistryKey;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.profiler.Profiler;
+import net.minecraft.util.profiler.Profilers;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -78,14 +81,15 @@ public abstract class ServerPlayerEntityMixin extends PlayerEntity {
             playerManager.sendCommandTree(thisPlayer);
             serverWorld2.removePlayer(thisPlayer, RemovalReason.CHANGED_DIMENSION);
             this.unsetRemoved();
-            serverWorld2.getProfiler().push("moving");
-            serverWorld2.getProfiler().pop();
-            serverWorld2.getProfiler().push("placing");
+            Profiler profiler = Profilers.get();
+            profiler.push("moving");
+            profiler.pop();
+            profiler.push("placing");
             this.setServerWorld(serverWorld);
-            this.networkHandler.requestTeleport(teleportTarget.comp_2821().x, teleportTarget.comp_2821().y, teleportTarget.comp_2821().z, teleportTarget.yaw(), teleportTarget.pitch());
+            this.networkHandler.requestTeleport(PlayerPosition.fromTeleportTarget(teleportTarget), teleportTarget.comp_3183());
             this.networkHandler.syncWithPlayerPosition();
             serverWorld.onDimensionChanged(thisPlayer);
-            serverWorld2.getProfiler().pop();
+            profiler.pop();
             this.worldChanged(serverWorld2);
             this.networkHandler.sendPacket(new PlayerAbilitiesS2CPacket(this.getAbilities()));
             playerManager.sendWorldInfo(thisPlayer, serverWorld);

@@ -8,7 +8,7 @@ import net.minecraft.registry.RegistryKey;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.text.*;
 import net.minecraft.util.Hand;
-import net.minecraft.util.ItemActionResult;
+import net.minecraft.util.ActionResult;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.math.random.Random;
@@ -40,8 +40,10 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.util.shape.VoxelShape;
 import net.minecraft.world.*;
+import net.minecraft.world.block.WireOrientation;
 import net.minecraft.world.dimension.NetherPortal;
 import net.minecraft.server.world.ServerWorld;
+import net.minecraft.world.tick.ScheduledTickView;
 import org.jetbrains.annotations.Nullable;
 
 public class PortalBlock extends Block implements BlockEntityProvider, Waterloggable, Portal {
@@ -71,16 +73,16 @@ public class PortalBlock extends Block implements BlockEntityProvider, Waterlogg
    }
 
    @Override
-   public ItemActionResult onUseWithItem(ItemStack itemStack, BlockState blockState, World world, BlockPos blockPos, PlayerEntity playerEntity, Hand hand, BlockHitResult blockHitResult) {
+   public ActionResult onUseWithItem(ItemStack itemStack, BlockState blockState, World world, BlockPos blockPos, PlayerEntity playerEntity, Hand hand, BlockHitResult blockHitResult) {
       if (playerEntity.isSneaking() && itemStack.isEmpty()) {
          CustomPortal portal = CustomPortals.PORTALS.get(world).getPortalFromPos(blockPos);
-         if (portal == null) return ItemActionResult.FAIL;
+         if (portal == null) return ActionResult.FAIL;
          portal.setSpawnPos(blockPos);
          if (world.isClient)
-            playerEntity.sendMessage(Text.of("Set portal's spawn position to " + CustomPortals.blockPosToString(blockPos)));
-         return ItemActionResult.SUCCESS;
+            playerEntity.sendMessage(Text.of("Set portal's spawn position to " + CustomPortals.blockPosToString(blockPos)), true);
+         return ActionResult.SUCCESS;
       }
-      return ItemActionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
+      return ActionResult.PASS_TO_DEFAULT_BLOCK_ACTION;
    }
    @Override
    public void randomTick(BlockState state, ServerWorld world, BlockPos pos, Random random) {
@@ -168,23 +170,24 @@ public class PortalBlock extends Block implements BlockEntityProvider, Waterlogg
    }
    
    @Override
-   public BlockState getStateForNeighborUpdate(BlockState state, Direction direction, BlockState newState, WorldAccess world, BlockPos pos, BlockPos posFrom) {
+   public BlockState getStateForNeighborUpdate(BlockState state, WorldView worldView, ScheduledTickView scheduledTickView, BlockPos pos, Direction direction, BlockPos posFrom, BlockState newState, Random random) {
       Direction.Axis axis = direction.getAxis();
-      Direction.Axis axis2 = (Direction.Axis)state.get(AXIS);
+      Direction.Axis axis2 = state.get(AXIS);
+      World world = (World)worldView;
       boolean bl = axis2 == Direction.Axis.Y ? axis2 == axis && axis.isVertical() : axis2 != axis && axis.isHorizontal();
-      if(!bl && !newState.isOf(this) && !(new NetherPortal(world, pos, axis2)).wasAlreadyValid()) {
-         CustomPortal portal = CustomPortals.PORTALS.get((World)world).getPortalFromPos(pos);
+      if(!bl && !newState.isOf(this) && !NetherPortal.getOnAxis(worldView, pos, axis2).wasAlreadyValid()) {
+         CustomPortal portal = CustomPortals.PORTALS.get(world).getPortalFromPos(pos);
          if(portal != null) {
             if (newState.getBlock().getTranslationKey().equals(portal.getFrameId()))
-               return super.getStateForNeighborUpdate(state, direction, newState, world, pos, posFrom);
-            CustomPortals.PORTALS.get((World)world).unregisterPortal(portal);
-            if(!((World)world).isClient)
-               CustomPortals.PORTALS.get((World)world).syncWithAll(((ServerWorld)world).getServer());
-            dropCatalyst(portal, (World)world);
+               return super.getStateForNeighborUpdate(state, worldView, scheduledTickView, pos, direction, posFrom, newState, random);
+            CustomPortals.PORTALS.get(world).unregisterPortal(portal);
+            if(!world.isClient)
+               CustomPortals.PORTALS.get(world).syncWithAll(((ServerWorld)world).getServer());
+            dropCatalyst(portal, world);
          }
          return Blocks.AIR.getDefaultState();
       }
-      return super.getStateForNeighborUpdate(state, direction, newState, world, pos, posFrom);
+      return super.getStateForNeighborUpdate(state, worldView, scheduledTickView, pos, direction, posFrom, newState, random);
    }
 
    private boolean checkRedstoneSignal(World world, CustomPortal portal) {
@@ -196,7 +199,7 @@ public class PortalBlock extends Block implements BlockEntityProvider, Waterlogg
    }
 
    @Override
-   public void neighborUpdate(BlockState blockState, World world, BlockPos blockPos, Block block, BlockPos blockPos2, boolean bl) {
+   public void neighborUpdate(BlockState blockState, World world, BlockPos blockPos, Block block, @Nullable WireOrientation wireOrientation, boolean bl) {
       CustomPortal portal = CustomPortals.PORTALS.get(world).getPortalFromPos(blockPos);
       if (portal == null)
          return;

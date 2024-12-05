@@ -6,6 +6,7 @@ import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.DownloadingTerrainScreen;
 import net.minecraft.client.gui.screen.Screen;
+import net.minecraft.client.render.RenderLayer;
 import net.minecraft.client.util.NarratorManager;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -44,7 +45,7 @@ public abstract class DownloadingTerrainScreenMixin extends Screen {
                 ClientPlayNetworking.send(new ScreenTransitionPayload(true));
                 packetSent = true;
             }
-            drawContext.drawSprite(0, 0, -90, drawContext.getScaledWindowWidth(), drawContext.getScaledWindowHeight(), this.client.getBlockRenderManager().getModels().getModelParticleSprite(ClientUtil.transitionBackgroundSpriteModel.getDefaultState().with(PortalBlock.LIT, true)));
+            drawContext.drawSpriteStretched(RenderLayer::getGuiOpaqueTexturedBackground, this.client.getBlockRenderManager().getModels().getModelParticleSprite(ClientUtil.transitionBackgroundSpriteModel.getDefaultState().with(PortalBlock.LIT, true)), 0, 0, drawContext.getScaledWindowWidth(), drawContext.getScaledWindowHeight());
             ci.cancel();
         }
     }

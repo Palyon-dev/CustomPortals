@@ -15,11 +15,18 @@ import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.client.render.RenderLayer;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
+import net.minecraft.registry.RegistryKey;
+import net.minecraft.registry.RegistryKeys;
 import net.minecraft.sound.BlockSoundGroup;
 import net.minecraft.state.property.Properties;
 import net.minecraft.util.Identifier;
 
 public class CPBlocks {
+
+        private static RegistryKey<Block> getKey(String name) {
+                Identifier id = Identifier.of(CustomPortals.MOD_ID, name);
+                return RegistryKey.of(RegistryKeys.BLOCK, id);
+        }
 
         private static final ToIntFunction<BlockState> STATE_TO_LUMINANCE = (state) -> {
                 return (Boolean)state.get(Properties.LIT) ? 11 : 0;
@@ -31,69 +38,69 @@ public class CPBlocks {
 
         // Runes
         public static final Block HASTE_RUNE_BLOCK = new HasteRuneBlock(
-                Block.Settings.create().sounds(BlockSoundGroup.AMETHYST_CLUSTER)
+                Block.Settings.create().registryKey(getKey("haste_rune_block")).sounds(BlockSoundGroup.AMETHYST_CLUSTER)
                 .nonOpaque().luminance(RUNE_LUMINANCE).noCollision().strength(0.3F));
         public static final Block GATE_RUNE_BLOCK = new GateRuneBlock(
-                Block.Settings.create().sounds(BlockSoundGroup.AMETHYST_CLUSTER)
-                .nonOpaque().luminance(RUNE_LUMINANCE).noCollision().strength(0.3F));
+                Block.Settings.create().registryKey(getKey("gate_rune_block")).sounds(BlockSoundGroup.AMETHYST_CLUSTER)
+                  .nonOpaque().luminance(RUNE_LUMINANCE).noCollision().strength(0.3F));
         public static final Block WEAK_ENHANCER_RUNE_BLOCK = new EnhancerRuneBlock(
-                Block.Settings.create().sounds(BlockSoundGroup.AMETHYST_CLUSTER)
+                Block.Settings.create().registryKey(getKey("weak_enhancer_rune_block")).sounds(BlockSoundGroup.AMETHYST_CLUSTER)
                 .nonOpaque().luminance(RUNE_LUMINANCE).noCollision().strength(0.3F));
         public static final Block STRONG_ENHANCER_RUNE_BLOCK = new StrongEnhancerRuneBlock(
-                Block.Settings.create().sounds(BlockSoundGroup.AMETHYST_CLUSTER)
+                Block.Settings.create().registryKey(getKey("strong_enhancer_rune_block")).sounds(BlockSoundGroup.AMETHYST_CLUSTER)
                 .nonOpaque().luminance(RUNE_LUMINANCE).noCollision().strength(0.3F));
         public static final Block INFINITY_RUNE_BLOCK = new InfinityRuneBlock(
-                Block.Settings.create().sounds(BlockSoundGroup.AMETHYST_CLUSTER)
+                Block.Settings.create().registryKey(getKey("infinity_rune_block")).sounds(BlockSoundGroup.AMETHYST_CLUSTER)
                 .nonOpaque().luminance(RUNE_LUMINANCE).noCollision().strength(0.3F));
 
         // Portal Blocks
         public static final Block BLACK_PORTAL = new PortalBlock(
-                Block.Settings.create().mapColor(MapColor.BLACK).nonOpaque().noCollision().ticksRandomly()
+                Block.Settings.create().registryKey(getKey("black_portal")).mapColor(MapColor.BLACK).nonOpaque().noCollision().ticksRandomly()
                 .strength(-1.0F).sounds(BlockSoundGroup.GLASS).luminance(STATE_TO_LUMINANCE));
         public static final Block BLUE_PORTAL = new PortalBlock(
-                Block.Settings.create().mapColor(MapColor.BLUE).nonOpaque().noCollision().ticksRandomly()
+                Block.Settings.create().registryKey(getKey("blue_portal")).mapColor(MapColor.BLUE).nonOpaque().noCollision().ticksRandomly()
                 .strength(-1.0F).sounds(BlockSoundGroup.GLASS).luminance(STATE_TO_LUMINANCE));
         public static final Block BROWN_PORTAL = new PortalBlock(
-                Block.Settings.create().mapColor(MapColor.BROWN).nonOpaque().noCollision().ticksRandomly()
+                Block.Settings.create().registryKey(getKey("brown_portal")).mapColor(MapColor.BROWN).nonOpaque().noCollision().ticksRandomly()
                 .strength(-1.0F).sounds(BlockSoundGroup.GLASS).luminance(STATE_TO_LUMINANCE));
         public static final Block CYAN_PORTAL = new PortalBlock(
-                Block.Settings.create().mapColor(MapColor.CYAN).nonOpaque().noCollision().ticksRandomly()
+                Block.Settings.create().registryKey(getKey("cyan_portal")).mapColor(MapColor.CYAN).nonOpaque().noCollision().ticksRandomly()
                 .strength(-1.0F).sounds(BlockSoundGroup.GLASS).luminance(STATE_TO_LUMINANCE));
         public static final Block GRAY_PORTAL = new PortalBlock(
-                Block.Settings.create().mapColor(MapColor.GRAY).nonOpaque().noCollision().ticksRandomly()
+                Block.Settings.create().registryKey(getKey("gray_portal")).mapColor(MapColor.GRAY).nonOpaque().noCollision().ticksRandomly()
                 .strength(-1.0F).sounds(BlockSoundGroup.GLASS).luminance(STATE_TO_LUMINANCE));
         public static final Block GREEN_PORTAL = new PortalBlock(
-                Block.Settings.create().mapColor(MapColor.GREEN).nonOpaque().noCollision().ticksRandomly()
+                Block.Settings.create().registryKey(getKey("green_portal")).mapColor(MapColor.GREEN).nonOpaque().noCollision().ticksRandomly()
                 .strength(-1.0F).sounds(BlockSoundGroup.GLASS).luminance(STATE_TO_LUMINANCE));
         public static final Block LIGHT_BLUE_PORTAL = new PortalBlock(
-                Block.Settings.create().mapColor(MapColor.LIGHT_BLUE).nonOpaque().noCollision()
+                Block.Settings.create().registryKey(getKey("light_blue_portal")).mapColor(MapColor.LIGHT_BLUE).nonOpaque().noCollision()
                 .ticksRandomly().strength(-1.0F).sounds(BlockSoundGroup.GLASS).luminance(STATE_TO_LUMINANCE));
         public static final Block LIGHT_GRAY_PORTAL = new PortalBlock(
-                Block.Settings.create().mapColor(MapColor.LIGHT_GRAY).nonOpaque().noCollision()
+                Block.Settings.create().registryKey(getKey("light_gray_portal")).mapColor(MapColor.LIGHT_GRAY).nonOpaque().noCollision()
                 .ticksRandomly().strength(-1.0F).sounds(BlockSoundGroup.GLASS).luminance(STATE_TO_LUMINANCE));
         public static final Block LIME_PORTAL = new PortalBlock(
-                Block.Settings.create().mapColor(MapColor.LIME).nonOpaque().noCollision().ticksRandomly()
+                Block.Settings.create().registryKey(getKey("lime_portal")).mapColor(MapColor.LIME).nonOpaque().noCollision().ticksRandomly()
                 .strength(-1.0F).sounds(BlockSoundGroup.GLASS).luminance(STATE_TO_LUMINANCE));
         public static final Block MAGENTA_PORTAL = new PortalBlock(
-                Block.Settings.create().mapColor(MapColor.MAGENTA).nonOpaque().noCollision().ticksRandomly()
+                Block.Settings.create().registryKey(getKey("magenta_portal")).mapColor(MapColor.MAGENTA).nonOpaque().noCollision().ticksRandomly()
                 .strength(-1.0F).sounds(BlockSoundGroup.GLASS).luminance(STATE_TO_LUMINANCE));
         public static final Block ORANGE_PORTAL = new PortalBlock(
-                Block.Settings.create().mapColor(MapColor.ORANGE).nonOpaque().noCollision().ticksRandomly()
+                Block.Settings.create().registryKey(getKey("orange_portal")).mapColor(MapColor.ORANGE).nonOpaque().noCollision().ticksRandomly()
                 .strength(-1.0F).sounds(BlockSoundGroup.GLASS).luminance(STATE_TO_LUMINANCE));
         public static final Block PINK_PORTAL = new PortalBlock(
-                Block.Settings.create().mapColor(MapColor.PINK).nonOpaque().noCollision().ticksRandomly()
+                Block.Settings.create().registryKey(getKey("pink_portal")).mapColor(MapColor.PINK).nonOpaque().noCollision().ticksRandomly()
                 .strength(-1.0F).sounds(BlockSoundGroup.GLASS).luminance(STATE_TO_LUMINANCE));
         public static final Block PURPLE_PORTAL = new PortalBlock(
-                Block.Settings.create().mapColor(MapColor.PURPLE).nonOpaque().noCollision().ticksRandomly()
+                Block.Settings.create().registryKey(getKey("purple_portal")).mapColor(MapColor.PURPLE).nonOpaque().noCollision().ticksRandomly()
                 .strength(-1.0F).sounds(BlockSoundGroup.GLASS).luminance(STATE_TO_LUMINANCE));
         public static final Block RED_PORTAL = new PortalBlock(
-                Block.Settings.create().mapColor(MapColor.RED).nonOpaque().noCollision().ticksRandomly()
+                Block.Settings.create().registryKey(getKey("red_portal")).mapColor(MapColor.RED).nonOpaque().noCollision().ticksRandomly()
                 .strength(-1.0F).sounds(BlockSoundGroup.GLASS).luminance(STATE_TO_LUMINANCE));
         public static final Block WHITE_PORTAL = new PortalBlock(
-                Block.Settings.create().mapColor(MapColor.WHITE).nonOpaque().noCollision().ticksRandomly()
+                Block.Settings.create().registryKey(getKey("white_portal")).mapColor(MapColor.WHITE).nonOpaque().noCollision().ticksRandomly()
                 .strength(-1.0F).sounds(BlockSoundGroup.GLASS).luminance(STATE_TO_LUMINANCE));
         public static final Block YELLOW_PORTAL = new PortalBlock(
-                Block.Settings.create().mapColor(MapColor.YELLOW).nonOpaque().noCollision().ticksRandomly()
+                Block.Settings.create().registryKey(getKey("yellow_portal")).mapColor(MapColor.YELLOW).nonOpaque().noCollision().ticksRandomly()
                 .strength(-1.0F).sounds(BlockSoundGroup.GLASS).luminance(STATE_TO_LUMINANCE));
 
         // BlockEntities

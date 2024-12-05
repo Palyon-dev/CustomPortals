@@ -7,15 +7,9 @@
         "#E#"
     ],
     "key": {
-        "#": {
-            "item": "minecraft:ender_pearl"
-        },
-        "E": {
-            "item": "minecraft:ender_eye"
-        },
-        "B": {
-            "item": "minecraft:lime_dye"
-        }
+        "#": "minecraft:ender_pearl",
+        "E": "minecraft:ender_eye",
+        "B": "minecraft:lime_dye"
     },
     "result": {
         "id": "customportals:lime_portal_catalyst",

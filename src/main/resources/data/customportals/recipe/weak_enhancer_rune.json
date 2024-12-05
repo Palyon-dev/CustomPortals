@@ -5,12 +5,8 @@
         "#A "
     ],
     "key": {
-        "#": {
-            "item": "minecraft:lapis_lazuli"
-        },
-        "A": {
-            "item": "minecraft:amethyst_shard"
-        }
+        "#": "minecraft:lapis_lazuli",
+        "A": "minecraft:amethyst_shard"
     },
     "result": {
         "id": "customportals:weak_enhancer_rune",

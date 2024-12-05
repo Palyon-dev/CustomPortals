@@ -2,6 +2,8 @@ package dev.custom.portals.mixin;
 
 import dev.custom.portals.util.PortalHelper;
 import net.minecraft.client.gui.DrawContext;
+import net.minecraft.client.render.RenderLayer;
+import net.minecraft.util.math.ColorHelper;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -37,16 +39,9 @@ public abstract class InGameHudMixin {
                 f = f * 0.8F + 0.2F;
             }
 
-            RenderSystem.disableDepthTest();
-            RenderSystem.depthMask(false);
-            RenderSystem.enableBlend();
-            drawContext.setShaderColor(1.0F, 1.0F, 1.0F, f);
+            int i = ColorHelper.getWhite(f);
             Sprite sprite = this.client.getBlockRenderManager().getModels().getModelParticleSprite(spriteModel.getDefaultState().with(PortalBlock.LIT, true));
-            drawContext.drawSprite(0, 0, -90, drawContext.getScaledWindowWidth(), drawContext.getScaledWindowHeight(), sprite);
-            RenderSystem.disableBlend();
-            RenderSystem.depthMask(true);
-            RenderSystem.enableDepthTest();
-            drawContext.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
+            drawContext.drawSpriteStretched(RenderLayer::getGuiTexturedOverlay, sprite, 0, 0, drawContext.getScaledWindowWidth(), drawContext.getScaledWindowHeight(), i);
             ci.cancel();
         }
     }

@@ -5,61 +5,64 @@ import dev.custom.portals.items.PortalCatalyst;
 import net.fabricmc.fabric.api.itemgroup.v1.ItemGroupEvents;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
-import net.minecraft.item.ItemGroup;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
 import net.minecraft.registry.RegistryKey;
+import net.minecraft.registry.RegistryKeys;
 import net.minecraft.util.Identifier;
 
 public class CPItems {
 
-    public static final RegistryKey<ItemGroup> PORTALS_ITEM_GROUP = CustomPortals.PORTALS_ITEM_GROUP;
+    private static RegistryKey<Item> getKey(String name) {
+        Identifier id = Identifier.of(CustomPortals.MOD_ID, name);
+        return RegistryKey.of(RegistryKeys.ITEM, id);
+    }
     
     // Items
     public static final Item WHITE_PORTAL_CATALYST = new PortalCatalyst(
-        new Item.Settings().maxCount(16), CPBlocks.WHITE_PORTAL);
+        new Item.Settings().maxCount(16).registryKey(getKey("white_portal_catalyst")), CPBlocks.WHITE_PORTAL);
     public static final Item ORANGE_PORTAL_CATALYST = new PortalCatalyst(
-        new Item.Settings().maxCount(16), CPBlocks.ORANGE_PORTAL);
+        new Item.Settings().maxCount(16).registryKey(getKey("orange_portal_catalyst")), CPBlocks.ORANGE_PORTAL);
     public static final Item MAGENTA_PORTAL_CATALYST = new PortalCatalyst(
-        new Item.Settings().maxCount(16), CPBlocks.MAGENTA_PORTAL);
+        new Item.Settings().maxCount(16).registryKey(getKey("magenta_portal_catalyst")), CPBlocks.MAGENTA_PORTAL);
     public static final Item LIGHT_BLUE_PORTAL_CATALYST = new PortalCatalyst(
-        new Item.Settings().maxCount(16), CPBlocks.LIGHT_BLUE_PORTAL);
+        new Item.Settings().maxCount(16).registryKey(getKey("light_blue_portal_catalyst")), CPBlocks.LIGHT_BLUE_PORTAL);
     public static final Item YELLOW_PORTAL_CATALYST = new PortalCatalyst(
-        new Item.Settings().maxCount(16), CPBlocks.YELLOW_PORTAL);
+        new Item.Settings().maxCount(16).registryKey(getKey("yellow_portal_catalyst")), CPBlocks.YELLOW_PORTAL);
     public static final Item LIME_PORTAL_CATALYST = new PortalCatalyst(
-        new Item.Settings().maxCount(16), CPBlocks.LIME_PORTAL);
+        new Item.Settings().maxCount(16).registryKey(getKey("lime_portal_catalyst")), CPBlocks.LIME_PORTAL);
     public static final Item PINK_PORTAL_CATALYST = new PortalCatalyst(
-        new Item.Settings().maxCount(16), CPBlocks.PINK_PORTAL);
+        new Item.Settings().maxCount(16).registryKey(getKey("pink_portal_catalyst")), CPBlocks.PINK_PORTAL);
     public static final Item GRAY_PORTAL_CATALYST = new PortalCatalyst(
-        new Item.Settings().maxCount(16), CPBlocks.GRAY_PORTAL);
+        new Item.Settings().maxCount(16).registryKey(getKey("gray_portal_catalyst")), CPBlocks.GRAY_PORTAL);
     public static final Item LIGHT_GRAY_PORTAL_CATALYST = new PortalCatalyst(
-        new Item.Settings().maxCount(16), CPBlocks.LIGHT_GRAY_PORTAL);
+        new Item.Settings().maxCount(16).registryKey(getKey("light_gray_portal_catalyst")), CPBlocks.LIGHT_GRAY_PORTAL);
     public static final Item CYAN_PORTAL_CATALYST = new PortalCatalyst(
-        new Item.Settings().maxCount(16), CPBlocks.CYAN_PORTAL);
+        new Item.Settings().maxCount(16).registryKey(getKey("cyan_portal_catalyst")), CPBlocks.CYAN_PORTAL);
     public static final Item PURPLE_PORTAL_CATALYST = new PortalCatalyst(
-        new Item.Settings().maxCount(16), CPBlocks.PURPLE_PORTAL);
+        new Item.Settings().maxCount(16).registryKey(getKey("purple_portal_catalyst")), CPBlocks.PURPLE_PORTAL);
     public static final Item BLUE_PORTAL_CATALYST = new PortalCatalyst(
-        new Item.Settings().maxCount(16), CPBlocks.BLUE_PORTAL);
+        new Item.Settings().maxCount(16).registryKey(getKey("blue_portal_catalyst")), CPBlocks.BLUE_PORTAL);
     public static final Item BROWN_PORTAL_CATALYST = new PortalCatalyst(
-        new Item.Settings().maxCount(16), CPBlocks.BROWN_PORTAL);
+        new Item.Settings().maxCount(16).registryKey(getKey("brown_portal_catalyst")), CPBlocks.BROWN_PORTAL);
     public static final Item GREEN_PORTAL_CATALYST = new PortalCatalyst(
-        new Item.Settings().maxCount(16), CPBlocks.GREEN_PORTAL);
+        new Item.Settings().maxCount(16).registryKey(getKey("green_portal_catalyst")), CPBlocks.GREEN_PORTAL);
     public static final Item RED_PORTAL_CATALYST = new PortalCatalyst(
-        new Item.Settings().maxCount(16), CPBlocks.RED_PORTAL);
+        new Item.Settings().maxCount(16).registryKey(getKey("red_portal_catalyst")), CPBlocks.RED_PORTAL);
     public static final Item BLACK_PORTAL_CATALYST = new PortalCatalyst(
-        new Item.Settings().maxCount(16), CPBlocks.BLACK_PORTAL);
+        new Item.Settings().maxCount(16).registryKey(getKey("black_portal_catalyst")), CPBlocks.BLACK_PORTAL);
 
     // BlockItems
     public static final BlockItem HASTE_RUNE = new BlockItem(
-        CPBlocks.HASTE_RUNE_BLOCK, new Item.Settings().maxCount(1));
+        CPBlocks.HASTE_RUNE_BLOCK, new Item.Settings().maxCount(1).registryKey(getKey("haste_rune")));
     public static final BlockItem GATE_RUNE = new BlockItem(
-        CPBlocks.GATE_RUNE_BLOCK, new Item.Settings().maxCount(1));
+        CPBlocks.GATE_RUNE_BLOCK, new Item.Settings().maxCount(1).registryKey(getKey("gate_rune")));
     public static final BlockItem WEAK_ENHANCER_RUNE = new BlockItem(
-        CPBlocks.WEAK_ENHANCER_RUNE_BLOCK, new Item.Settings().maxCount(1));
+        CPBlocks.WEAK_ENHANCER_RUNE_BLOCK, new Item.Settings().maxCount(1).registryKey(getKey("weak_enhancer_rune")));
     public static final BlockItem STRONG_ENHANCER_RUNE = new BlockItem(
-        CPBlocks.STRONG_ENHANCER_RUNE_BLOCK, new Item.Settings().maxCount(1));
+        CPBlocks.STRONG_ENHANCER_RUNE_BLOCK, new Item.Settings().maxCount(1).registryKey(getKey("strong_enhancer_rune")));
     public static final BlockItem INFINITY_RUNE = new BlockItem(
-        CPBlocks.INFINITY_RUNE_BLOCK, new Item.Settings().maxCount(1));
+        CPBlocks.INFINITY_RUNE_BLOCK, new Item.Settings().maxCount(1).registryKey(getKey("infinity_rune")));
 
     public static void registerItems() {
         Registry.register(Registries.ITEM, Identifier.of(CustomPortals.MOD_ID, "white_portal_catalyst"),

@@ -6,15 +6,9 @@
         "PP#"
     ],
     "key": {
-        "#": {
-            "item": "customportals:strong_enhancer_rune"
-        },
-        "P": {
-            "item": "minecraft:popped_chorus_fruit"
-        },
-        "n": {
-            "item": "minecraft:netherite_ingot"
-        }
+        "#": "customportals:strong_enhancer_rune",
+        "P": "minecraft:popped_chorus_fruit",
+        "n": "minecraft:netherite_ingot"
     },
     "result": {
         "id": "customportals:infinity_rune",
