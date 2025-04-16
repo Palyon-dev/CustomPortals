@@ -57,22 +57,22 @@ public class PortalComponent implements BasePortalComponent {
 
     @Override
     public void readFromNbt(NbtCompound tag, RegistryWrapper.WrapperLookup registryLookup) {
-        NbtList portalData = tag.getList("portals", 10);
+        NbtList portalData = tag.getList("portals").get();
         for(int i = 0; i < portalData.size(); i++) {
-            NbtCompound curTag = portalData.getCompound(i);
-            String frameId = curTag.getString("frameId");
-            String dimensionId = curTag.getString("dimensionId");
-            BlockPos spawnPos = new BlockPos(curTag.getInt("xSpawn"), curTag.getInt("ySpawn"), curTag.getInt("zSpawn"));
-            MapColor color = MapColor.get(curTag.getInt("color"));
+            NbtCompound curTag = portalData.getCompound(i).get();
+            String frameId = curTag.getString("frameId").get();
+            String dimensionId = curTag.getString("dimensionId").get();
+            BlockPos spawnPos = new BlockPos(curTag.getInt("xSpawn").get(), curTag.getInt("ySpawn").get(), curTag.getInt("zSpawn").get());
+            MapColor color = MapColor.get(curTag.getInt("color").get());
             List<BlockPos> portalBlocks = new ArrayList<BlockPos>();
-            NbtList portalBlocksData = curTag.getList("blocks", 10);
+            NbtList portalBlocksData = curTag.getList("blocks").get();
             for(int j = 0; j < portalBlocksData.size(); j++) {
-                NbtCompound curBlockTag = portalBlocksData.getCompound(j);
-                portalBlocks.add(new BlockPos(curBlockTag.getInt("xPos"), curBlockTag.getInt("yPos"), curBlockTag.getInt("zPos")));
+                NbtCompound curBlockTag = portalBlocksData.getCompound(j).get();
+                portalBlocks.add(new BlockPos(curBlockTag.getInt("xPos").get(), curBlockTag.getInt("yPos").get(), curBlockTag.getInt("zPos").get()));
             }
 
-            int length = curTag.getInt("length");
-            int width = curTag.getInt("width");
+            int length = curTag.getInt("length").orElse(0);
+            int width = curTag.getInt("width").orElse(0);
             float offsetX, offsetZ;
 
             // for backwards compatibility with earlier versions
@@ -81,16 +81,17 @@ public class PortalComponent implements BasePortalComponent {
                 offsetZ = width == 0 ? 0.5f : width % 2 != 0 ? -0.5f : 0.0f;
             }
             else {
-                offsetX = curTag.getFloat("offsetX");
-                offsetZ = curTag.getFloat("offsetZ");
+                offsetX = curTag.getFloat("offsetX").get();
+                offsetZ = curTag.getFloat("offsetZ").get();
             }
 
-            int hasteRunes = curTag.getInt("haste");
-            int gateRunes = curTag.getInt("gate");
-            int weakEnhancerRunes = curTag.getInt("weak");
-            int strongEnhancerRunes = curTag.getInt("strong");
-            int infinityRunes = curTag.getInt("infinity");
-            UUID creatorId = curTag.getUuid("creatorId");
+            int hasteRunes = curTag.getInt("haste").get();
+            int gateRunes = curTag.getInt("gate").get();
+            int weakEnhancerRunes = curTag.getInt("weak").get();
+            int strongEnhancerRunes = curTag.getInt("strong").get();
+            int infinityRunes = curTag.getInt("infinity").get();
+
+            UUID creatorId = UUID.fromString(curTag.getString("creatorId").get());
             CustomPortal portal = new CustomPortal(frameId, dimensionId, color, spawnPos, portalBlocks, offsetX, offsetZ, creatorId,
                 hasteRunes, gateRunes, weakEnhancerRunes, strongEnhancerRunes, infinityRunes);
             registerPortal(portal);
@@ -116,7 +117,10 @@ public class PortalComponent implements BasePortalComponent {
             curTag.putInt("weak", curPortal.getWeakEnhancerRunes());
             curTag.putInt("strong", curPortal.getStrongEnhancerRunes());
             curTag.putInt("infinity", curPortal.getInfinityRunes());
-            if (curPortal.getCreatorId() != null) curTag.putUuid("creatorId", curPortal.getCreatorId());
+            if (curPortal.getCreatorId() != null) {
+                String id = curPortal.getCreatorId().toString();
+                curTag.putString("creatorId", id);
+            }
             NbtList portalBlockData = new NbtList();
             for (BlockPos blockPos : curPortal.getPortalBlocks()) {
                 NbtCompound blockTag = new NbtCompound();

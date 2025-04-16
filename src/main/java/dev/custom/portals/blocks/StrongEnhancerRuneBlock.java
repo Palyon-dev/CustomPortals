@@ -37,9 +37,4 @@ public class StrongEnhancerRuneBlock extends AbstractRuneBlock {
         if (!world.isClient)
             CustomPortals.PORTALS.get(world).syncWithAll(((ServerWorld)world).getServer());
     }
-
-    @Override
-    public void appendTooltip(ItemStack stack, Item.TooltipContext tooltipContext, List<Text> tooltip, TooltipType options) {
-        tooltip.add(Text.translatable("item.customportals.weak_enhancer_rune.tooltip", CPSettings.instance().rangeWithStrongEnhancer).formatted(Formatting.GRAY));
-    }
 }

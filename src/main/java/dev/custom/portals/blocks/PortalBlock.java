@@ -3,6 +3,7 @@ package dev.custom.portals.blocks;
 import dev.custom.portals.config.CPSettings;
 import dev.custom.portals.data.CustomPortal;
 import net.minecraft.block.*;
+import net.minecraft.entity.*;
 import net.minecraft.fluid.Fluid;
 import net.minecraft.registry.RegistryKey;
 import net.minecraft.server.MinecraftServer;
@@ -22,9 +23,6 @@ import net.fabricmc.api.Environment;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.BlockEntityTicker;
 import net.minecraft.block.entity.BlockEntityType;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.SpawnReason;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -210,7 +208,7 @@ public class PortalBlock extends Block implements BlockEntityProvider, Waterlogg
    }
 
    @Override
-   public void onEntityCollision(BlockState state, World world, BlockPos pos, Entity entity) {
+   public void onEntityCollision(BlockState state, World world, BlockPos pos, Entity entity, EntityCollisionHandler entityCollisionHandler) {
       if (!state.get(LIT))
          return;
       CustomPortal portal = CustomPortals.PORTALS.get(world).getPortalFromPos(pos);
@@ -231,7 +229,7 @@ public class PortalBlock extends Block implements BlockEntityProvider, Waterlogg
       if (!(Boolean)state.get(LIT))
          return;
       if (random.nextInt(100) == 0) {
-         world.playSound((double)pos.getX() + 0.5D, (double)pos.getY() + 0.5D, (double)pos.getZ() + 0.5D, SoundEvents.BLOCK_PORTAL_AMBIENT, SoundCategory.BLOCKS, 0.5F, random.nextFloat() * 0.4F + 0.8F, false);
+         world.playSoundClient((double)pos.getX() + 0.5D, (double)pos.getY() + 0.5D, (double)pos.getZ() + 0.5D, SoundEvents.BLOCK_PORTAL_AMBIENT, SoundCategory.BLOCKS, 0.5F, random.nextFloat() * 0.4F + 0.8F, false);
       }
       for(int i = 0; i < 4; ++i) {
          double d = (double)pos.getX() + random.nextDouble();
@@ -253,44 +251,44 @@ public class PortalBlock extends Block implements BlockEntityProvider, Waterlogg
             j = (double)(random.nextFloat() * 2.0F * (float)k);
          }
          switch(this.getDefaultMapColor().id) {
-            case 29: world.addParticle(CPParticles.BLACK_PORTAL_PARTICLE, d, e, f, g, h, j);
+            case 29: world.addParticleClient(CPParticles.BLACK_PORTAL_PARTICLE, d, e, f, g, h, j);
             break;
-            case 25: world.addParticle(CPParticles.BLUE_PORTAL_PARTICLE, d, e, f, g, h, j);
+            case 25: world.addParticleClient(CPParticles.BLUE_PORTAL_PARTICLE, d, e, f, g, h, j);
             break;
-            case 26: world.addParticle(CPParticles.BROWN_PORTAL_PARTICLE, d, e, f, g, h, j);
+            case 26: world.addParticleClient(CPParticles.BROWN_PORTAL_PARTICLE, d, e, f, g, h, j);
             break;
-            case 23: world.addParticle(CPParticles.CYAN_PORTAL_PARTICLE, d, e, f, g, h, j);
+            case 23: world.addParticleClient(CPParticles.CYAN_PORTAL_PARTICLE, d, e, f, g, h, j);
             break;
-            case 21: world.addParticle(CPParticles.GRAY_PORTAL_PARTICLE, d, e, f, g, h, j);
+            case 21: world.addParticleClient(CPParticles.GRAY_PORTAL_PARTICLE, d, e, f, g, h, j);
             break;
-            case 27: world.addParticle(CPParticles.GREEN_PORTAL_PARTICLE, d, e, f, g, h, j);
+            case 27: world.addParticleClient(CPParticles.GREEN_PORTAL_PARTICLE, d, e, f, g, h, j);
             break;
-            case 17: world.addParticle(CPParticles.LIGHT_BLUE_PORTAL_PARTICLE, d, e, f, g, h, j);
+            case 17: world.addParticleClient(CPParticles.LIGHT_BLUE_PORTAL_PARTICLE, d, e, f, g, h, j);
             break;
-            case 22: world.addParticle(CPParticles.LIGHT_GRAY_PORTAL_PARTICLE, d, e, f, g, h, j);
+            case 22: world.addParticleClient(CPParticles.LIGHT_GRAY_PORTAL_PARTICLE, d, e, f, g, h, j);
             break;
-            case 19: world.addParticle(CPParticles.LIME_PORTAL_PARTICLE, d, e, f, g, h, j);
+            case 19: world.addParticleClient(CPParticles.LIME_PORTAL_PARTICLE, d, e, f, g, h, j);
             break;
-            case 16: world.addParticle(CPParticles.MAGENTA_PORTAL_PARTICLE, d, e, f, g, h, j);
+            case 16: world.addParticleClient(CPParticles.MAGENTA_PORTAL_PARTICLE, d, e, f, g, h, j);
             break;
-            case 15: world.addParticle(CPParticles.ORANGE_PORTAL_PARTICLE, d, e, f, g, h, j);
+            case 15: world.addParticleClient(CPParticles.ORANGE_PORTAL_PARTICLE, d, e, f, g, h, j);
             break;
-            case 20: world.addParticle(CPParticles.PINK_PORTAL_PARTICLE, d, e, f, g, h, j);
+            case 20: world.addParticleClient(CPParticles.PINK_PORTAL_PARTICLE, d, e, f, g, h, j);
             break;
-            case 24: world.addParticle(ParticleTypes.PORTAL, d, e, f, g, h, j);
+            case 24: world.addParticleClient(ParticleTypes.PORTAL, d, e, f, g, h, j);
             break;
-            case 28: world.addParticle(CPParticles.RED_PORTAL_PARTICLE, d, e, f, g, h, j);
+            case 28: world.addParticleClient(CPParticles.RED_PORTAL_PARTICLE, d, e, f, g, h, j);
             break;
-            case 8: world.addParticle(CPParticles.WHITE_PORTAL_PARTICLE, d, e, f, g, h, j);
+            case 8: world.addParticleClient(CPParticles.WHITE_PORTAL_PARTICLE, d, e, f, g, h, j);
             break;
-            case 18: world.addParticle(CPParticles.YELLOW_PORTAL_PARTICLE, d, e, f, g, h, j);
+            case 18: world.addParticleClient(CPParticles.YELLOW_PORTAL_PARTICLE, d, e, f, g, h, j);
          }
       }
    
    }
 
    @Override
-   public boolean canFillWithFluid(@Nullable PlayerEntity playerEntity, BlockView blockView, BlockPos blockPos, BlockState blockState, Fluid fluid) {
+   public boolean canFillWithFluid(@Nullable LivingEntity livingEntity, BlockView blockView, BlockPos blockPos, BlockState blockState, Fluid fluid) {
       return false;
    }
 

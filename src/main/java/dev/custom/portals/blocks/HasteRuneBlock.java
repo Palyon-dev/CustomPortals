@@ -32,9 +32,4 @@ public class HasteRuneBlock extends AbstractRuneBlock {
         if (!world.isClient)
             CustomPortals.PORTALS.get(world).syncWithAll(((ServerWorld)world).getServer());
     }
-
-    @Override
-    public void appendTooltip(ItemStack itemStack, Item.TooltipContext context, List<Text> tooltip, TooltipType options) {
-        tooltip.add(Text.translatable("item.customportals.haste_rune.tooltip").formatted(Formatting.GRAY));
-    }
 }

@@ -29,7 +29,7 @@ public abstract class ClientPlayerEntityMixin extends AbstractClientPlayerEntity
     @Shadow
     private MinecraftClient client;
     @Shadow
-    public float prevNauseaIntensity;
+    public float lastNauseaIntensity;
     @Shadow
     public float nauseaIntensity;
 
@@ -42,7 +42,7 @@ public abstract class ClientPlayerEntityMixin extends AbstractClientPlayerEntity
         CustomPortal portal = ((EntityMixinAccess)this).getDestPortal();
         float f = 0.0F;
         if(((EntityMixinAccess)this).isInCustomPortal() && portal != null && this.portalManager != null) {
-            this.prevNauseaIntensity = this.nauseaIntensity;
+            this.lastNauseaIntensity = this.nauseaIntensity;
             if (this.client.currentScreen != null && !this.client.currentScreen.shouldPause() && !(this.client.currentScreen instanceof DeathScreen)) {
                 if (this.client.currentScreen instanceof HandledScreen) {
                     this.closeHandledScreen();
@@ -62,7 +62,7 @@ public abstract class ClientPlayerEntityMixin extends AbstractClientPlayerEntity
             this.tickPortalCooldown();
             ci.cancel();
         }
-        if(this.prevNauseaIntensity == 0.0F && ((EntityMixinAccess)this).getPortalColor() != 0) {
+        if(this.lastNauseaIntensity == 0.0F && ((EntityMixinAccess)this).getPortalColor() != 0) {
             ((EntityMixinAccess) this).setPortalColor(0);
         }
     }

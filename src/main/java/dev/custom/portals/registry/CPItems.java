@@ -1,7 +1,11 @@
 package dev.custom.portals.registry;
 
 import dev.custom.portals.CustomPortals;
+import dev.custom.portals.config.CPSettings;
 import dev.custom.portals.items.PortalCatalyst;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
+import net.fabricmc.fabric.api.client.item.v1.ItemTooltipCallback;
 import net.fabricmc.fabric.api.itemgroup.v1.ItemGroupEvents;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
@@ -9,6 +13,8 @@ import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
 import net.minecraft.registry.RegistryKey;
 import net.minecraft.registry.RegistryKeys;
+import net.minecraft.text.Text;
+import net.minecraft.util.Formatting;
 import net.minecraft.util.Identifier;
 
 public class CPItems {
@@ -119,6 +125,27 @@ public class CPItems {
             content.add(WEAK_ENHANCER_RUNE);
             content.add(STRONG_ENHANCER_RUNE);
             content.add(INFINITY_RUNE);
+        });
+    }
+
+    @Environment(EnvType.CLIENT)
+    public static void registerItemTooltips() {
+        ItemTooltipCallback.EVENT.register((itemStack, tooltipContext, tooltipType, list) -> {
+            if (itemStack.isOf(HASTE_RUNE)) {
+                list.add(Text.translatable("item.customportals.haste_rune.tooltip").formatted(Formatting.GRAY));
+            }
+            else if (itemStack.isOf(GATE_RUNE)) {
+                list.add(Text.translatable("item.customportals.gate_rune.tooltip").formatted(Formatting.GRAY));
+            }
+            else if (itemStack.isOf(WEAK_ENHANCER_RUNE)) {
+                list.add(Text.translatable("item.customportals.weak_enhancer_rune.tooltip", CPSettings.instance().rangeWithEnhancer).formatted(Formatting.GRAY));
+            }
+            else if (itemStack.isOf(STRONG_ENHANCER_RUNE)) {
+                list.add(Text.translatable("item.customportals.weak_enhancer_rune.tooltip", CPSettings.instance().rangeWithStrongEnhancer).formatted(Formatting.GRAY));
+            }
+            else if (itemStack.isOf(INFINITY_RUNE)) {
+                list.add(Text.translatable("item.customportals.infinity_rune.tooltip").formatted(Formatting.GRAY));
+            }
         });
     }
 }
