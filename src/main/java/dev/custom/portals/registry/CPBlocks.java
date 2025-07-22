@@ -6,14 +6,13 @@ import dev.custom.portals.CustomPortals;
 import dev.custom.portals.blocks.*;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.fabricmc.fabric.api.blockrenderlayer.v1.BlockRenderLayerMap;
-import net.fabricmc.fabric.api.client.item.v1.ItemTooltipCallback;
+import net.fabricmc.fabric.api.client.rendering.v1.BlockRenderLayerMap;
 import net.fabricmc.fabric.api.object.builder.v1.block.entity.FabricBlockEntityTypeBuilder;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.MapColor;
 import net.minecraft.block.entity.BlockEntityType;
-import net.minecraft.client.render.RenderLayer;
+import net.minecraft.client.render.BlockRenderLayer;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
 import net.minecraft.registry.RegistryKey;
@@ -136,26 +135,26 @@ public class CPBlocks {
 
         @Environment(EnvType.CLIENT)
         public static void setBlockRenderLayers() {
-                BlockRenderLayerMap.INSTANCE.putBlock(HASTE_RUNE_BLOCK, RenderLayer.getCutout());
-                BlockRenderLayerMap.INSTANCE.putBlock(GATE_RUNE_BLOCK, RenderLayer.getCutout());
-                BlockRenderLayerMap.INSTANCE.putBlock(WEAK_ENHANCER_RUNE_BLOCK, RenderLayer.getCutout());
-                BlockRenderLayerMap.INSTANCE.putBlock(STRONG_ENHANCER_RUNE_BLOCK, RenderLayer.getCutout());
-                BlockRenderLayerMap.INSTANCE.putBlock(INFINITY_RUNE_BLOCK, RenderLayer.getCutout());
-                BlockRenderLayerMap.INSTANCE.putBlock(BLACK_PORTAL, RenderLayer.getTranslucent());
-                BlockRenderLayerMap.INSTANCE.putBlock(BLUE_PORTAL, RenderLayer.getTranslucent());
-                BlockRenderLayerMap.INSTANCE.putBlock(BROWN_PORTAL, RenderLayer.getTranslucent());
-                BlockRenderLayerMap.INSTANCE.putBlock(CYAN_PORTAL, RenderLayer.getTranslucent());
-                BlockRenderLayerMap.INSTANCE.putBlock(GRAY_PORTAL, RenderLayer.getTranslucent());
-                BlockRenderLayerMap.INSTANCE.putBlock(GREEN_PORTAL, RenderLayer.getTranslucent());
-                BlockRenderLayerMap.INSTANCE.putBlock(LIGHT_BLUE_PORTAL, RenderLayer.getTranslucent());
-                BlockRenderLayerMap.INSTANCE.putBlock(LIGHT_GRAY_PORTAL, RenderLayer.getTranslucent());
-                BlockRenderLayerMap.INSTANCE.putBlock(LIME_PORTAL, RenderLayer.getTranslucent());
-                BlockRenderLayerMap.INSTANCE.putBlock(MAGENTA_PORTAL, RenderLayer.getTranslucent());
-                BlockRenderLayerMap.INSTANCE.putBlock(ORANGE_PORTAL, RenderLayer.getTranslucent());
-                BlockRenderLayerMap.INSTANCE.putBlock(PINK_PORTAL, RenderLayer.getTranslucent());
-                BlockRenderLayerMap.INSTANCE.putBlock(PURPLE_PORTAL, RenderLayer.getTranslucent());
-                BlockRenderLayerMap.INSTANCE.putBlock(RED_PORTAL, RenderLayer.getTranslucent());
-                BlockRenderLayerMap.INSTANCE.putBlock(WHITE_PORTAL, RenderLayer.getTranslucent());
-                BlockRenderLayerMap.INSTANCE.putBlock(YELLOW_PORTAL, RenderLayer.getTranslucent());
+                BlockRenderLayerMap.putBlock(HASTE_RUNE_BLOCK, BlockRenderLayer.CUTOUT);
+                BlockRenderLayerMap.putBlock(GATE_RUNE_BLOCK, BlockRenderLayer.CUTOUT);
+                BlockRenderLayerMap.putBlock(WEAK_ENHANCER_RUNE_BLOCK, BlockRenderLayer.CUTOUT);
+                BlockRenderLayerMap.putBlock(STRONG_ENHANCER_RUNE_BLOCK, BlockRenderLayer.CUTOUT);
+                BlockRenderLayerMap.putBlock(INFINITY_RUNE_BLOCK, BlockRenderLayer.CUTOUT);
+                BlockRenderLayerMap.putBlock(BLACK_PORTAL, BlockRenderLayer.TRANSLUCENT);
+                BlockRenderLayerMap.putBlock(BLUE_PORTAL, BlockRenderLayer.TRANSLUCENT);
+                BlockRenderLayerMap.putBlock(BROWN_PORTAL, BlockRenderLayer.TRANSLUCENT);
+                BlockRenderLayerMap.putBlock(CYAN_PORTAL, BlockRenderLayer.TRANSLUCENT);
+                BlockRenderLayerMap.putBlock(GRAY_PORTAL, BlockRenderLayer.TRANSLUCENT);
+                BlockRenderLayerMap.putBlock(GREEN_PORTAL, BlockRenderLayer.TRANSLUCENT);
+                BlockRenderLayerMap.putBlock(LIGHT_BLUE_PORTAL, BlockRenderLayer.TRANSLUCENT);
+                BlockRenderLayerMap.putBlock(LIGHT_GRAY_PORTAL, BlockRenderLayer.TRANSLUCENT);
+                BlockRenderLayerMap.putBlock(LIME_PORTAL, BlockRenderLayer.TRANSLUCENT);
+                BlockRenderLayerMap.putBlock(MAGENTA_PORTAL, BlockRenderLayer.TRANSLUCENT);
+                BlockRenderLayerMap.putBlock(ORANGE_PORTAL, BlockRenderLayer.TRANSLUCENT);
+                BlockRenderLayerMap.putBlock(PINK_PORTAL, BlockRenderLayer.TRANSLUCENT);
+                BlockRenderLayerMap.putBlock(PURPLE_PORTAL, BlockRenderLayer.TRANSLUCENT);
+                BlockRenderLayerMap.putBlock(RED_PORTAL, BlockRenderLayer.TRANSLUCENT);
+                BlockRenderLayerMap.putBlock(WHITE_PORTAL, BlockRenderLayer.TRANSLUCENT);
+                BlockRenderLayerMap.putBlock(YELLOW_PORTAL, BlockRenderLayer.TRANSLUCENT);
         }
 }

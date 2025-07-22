@@ -47,7 +47,7 @@ public abstract class ServerPlayerEntityMixin extends PlayerEntity {
     private int syncedFoodLevel;
 
     @Shadow
-    public abstract ServerWorld getServerWorld();
+    public abstract ServerWorld getWorld();
     @Shadow
     protected abstract void worldChanged(ServerWorld serverWorld);
     @Shadow
@@ -56,7 +56,7 @@ public abstract class ServerPlayerEntityMixin extends PlayerEntity {
     public abstract CommonPlayerSpawnInfo createCommonPlayerSpawnInfo(ServerWorld serverWorld);
 
     public ServerPlayerEntityMixin(MinecraftServer minecraftServer, ServerWorld serverWorld, GameProfile gameProfile) {
-        super(serverWorld, serverWorld.getSpawnPos(), serverWorld.getSpawnAngle(), gameProfile);
+        super(serverWorld, gameProfile);
     }
 
     /* This is necessary to avoid unwanted side effects from using the normal teleportTo(),
@@ -69,7 +69,7 @@ public abstract class ServerPlayerEntityMixin extends PlayerEntity {
         if (this.isRemoved())
             cir.setReturnValue(null);
         ServerWorld serverWorld = teleportTarget.world();
-        ServerWorld serverWorld2 = this.getServerWorld();
+        ServerWorld serverWorld2 = this.getWorld();
         RegistryKey<World> registryKey = serverWorld2.getRegistryKey();
         if (((EntityMixinAccess)this).isInCustomPortal()) {
             ServerPlayerEntity thisPlayer = (ServerPlayerEntity)(Object)this;

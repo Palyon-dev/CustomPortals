@@ -3,8 +3,11 @@ package dev.custom.portals.data;
 import java.util.List;
 import java.util.UUID;
 
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
 import dev.custom.portals.config.CPSettings;
 import net.minecraft.block.MapColor;
+import net.minecraft.text.ClickEvent;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3i;
 
@@ -30,6 +33,22 @@ public class CustomPortal {
     
     private CustomPortal linked;
 
+    public static final Codec<CustomPortal> CODEC = RecordCodecBuilder.create(instance -> instance.group(
+        Codec.STRING.fieldOf("frameId").forGetter(CustomPortal::getFrameId),
+        Codec.STRING.fieldOf("dimensionId").forGetter(CustomPortal::getDimensionId),
+        Codec.INT.fieldOf("color").forGetter(CustomPortal::getColorId),
+        BlockPos.CODEC.fieldOf("spawnPos").forGetter(CustomPortal::getSpawnPos),
+        BlockPos.CODEC.listOf().fieldOf("portalBlocks").forGetter(CustomPortal::getPortalBlocks),
+        Codec.FLOAT.fieldOf("offsetX").forGetter(CustomPortal::getOffsetX),
+        Codec.FLOAT.fieldOf("offsetZ").forGetter(CustomPortal::getOffsetZ),
+        Codec.STRING.fieldOf("creatorId").forGetter(CustomPortal::getCreatorIdAsString),
+        Codec.INT.fieldOf("hasteRunes").forGetter(CustomPortal::getHasteRunes),
+        Codec.INT.fieldOf("gateRunes").forGetter(CustomPortal::getGateRunes),
+        Codec.INT.fieldOf("weakEnhancerRunes").forGetter(CustomPortal::getWeakEnhancerRunes),
+        Codec.INT.fieldOf("strongEnhancerRunes").forGetter(CustomPortal::getStrongEnhancerRunes),
+        Codec.INT.fieldOf("infinityRunes").forGetter(CustomPortal::getInfinityRunes)
+    ).apply(instance, CustomPortal::new));
+
     public CustomPortal(final String frameId, final String dimensionId, final MapColor color, final BlockPos spawnPos,
                         final List<BlockPos> portalBlocks, final float offsetX, final float offsetZ, final UUID creatorId) {
         this.frameId = frameId;
@@ -45,6 +64,14 @@ public class CustomPortal {
         weakEnhancerRunes = 0;
         strongEnhancerRunes = 0;
         infinityRunes = 0;
+    }
+
+    public float getOffsetX() {
+        return offsetX;
+    }
+
+    public float getOffsetZ() {
+        return offsetZ;
     }
 
     public CustomPortal(final String frameId, final String dimensionId, final MapColor color, final BlockPos spawnPos,
@@ -65,6 +92,24 @@ public class CustomPortal {
         this.infinityRunes = infinityRunes;
     }
 
+    public CustomPortal(final String frameId, final String dimensionId, final int colorId, final BlockPos spawnPos,
+                        final List<BlockPos> portalBlocks, final float offsetX, final float offsetZ, final String creatorId, int hasteRunes, int gateRunes,
+                        int weakEnhancerRunes, int strongEnhancerRunes, int infinityRunes) {
+        this.frameId = frameId;
+        this.dimensionId = dimensionId;
+        this.color = MapColor.get(colorId);
+        this.spawnPos = spawnPos;
+        this.portalBlocks = portalBlocks;
+        this.offsetX = offsetX;
+        this.offsetZ = offsetZ;
+        this.creatorId = UUID.fromString(creatorId);
+        this.hasteRunes = hasteRunes;
+        this.gateRunes = gateRunes;
+        this.weakEnhancerRunes = weakEnhancerRunes;
+        this.strongEnhancerRunes = strongEnhancerRunes;
+        this.infinityRunes = infinityRunes;
+    }
+
     public String getFrameId() {
         return frameId;
     }
@@ -76,6 +121,8 @@ public class CustomPortal {
     public MapColor getColor() {
         return color;
     }
+
+    public int getColorId() { return color.id; }
 
     public CustomPortal getLinked() {
         return linked;
@@ -92,6 +139,8 @@ public class CustomPortal {
     public UUID getCreatorId() {
         return creatorId;
     }
+
+    public String getCreatorIdAsString() { return creatorId.toString(); }
 
     public boolean hasLinked() {
         return linked != null;

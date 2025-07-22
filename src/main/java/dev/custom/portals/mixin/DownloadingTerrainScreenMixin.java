@@ -3,10 +3,10 @@ package dev.custom.portals.mixin;
 import dev.custom.portals.blocks.PortalBlock;
 import dev.custom.portals.util.*;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
+import net.minecraft.client.gl.RenderPipelines;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.DownloadingTerrainScreen;
 import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.client.render.RenderLayer;
 import net.minecraft.client.util.NarratorManager;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -45,7 +45,7 @@ public abstract class DownloadingTerrainScreenMixin extends Screen {
                 ClientPlayNetworking.send(new ScreenTransitionPayload(true));
                 packetSent = true;
             }
-            drawContext.drawSpriteStretched(RenderLayer::getGuiOpaqueTexturedBackground, this.client.getBlockRenderManager().getModels().getModelParticleSprite(ClientUtil.transitionBackgroundSpriteModel.getDefaultState().with(PortalBlock.LIT, true)), 0, 0, drawContext.getScaledWindowWidth(), drawContext.getScaledWindowHeight());
+            drawContext.drawSpriteStretched(RenderPipelines.GUI_OPAQUE_TEX_BG, this.client.getBlockRenderManager().getModels().getModelParticleSprite(ClientUtil.transitionBackgroundSpriteModel.getDefaultState().with(PortalBlock.LIT, true)), 0, 0, drawContext.getScaledWindowWidth(), drawContext.getScaledWindowHeight());
             ci.cancel();
         }
     }

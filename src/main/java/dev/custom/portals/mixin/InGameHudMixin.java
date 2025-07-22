@@ -1,8 +1,8 @@
 package dev.custom.portals.mixin;
 
 import dev.custom.portals.util.PortalHelper;
+import net.minecraft.client.gl.RenderPipelines;
 import net.minecraft.client.gui.DrawContext;
-import net.minecraft.client.render.RenderLayer;
 import net.minecraft.util.math.ColorHelper;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -15,7 +15,6 @@ import dev.custom.portals.util.EntityMixinAccess;
 
 import org.spongepowered.asm.mixin.Final;
 
-import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.gui.hud.InGameHud;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.texture.Sprite;
@@ -41,7 +40,7 @@ public abstract class InGameHudMixin {
 
             int i = ColorHelper.getWhite(f);
             Sprite sprite = this.client.getBlockRenderManager().getModels().getModelParticleSprite(spriteModel.getDefaultState().with(PortalBlock.LIT, true));
-            drawContext.drawSpriteStretched(RenderLayer::getGuiTexturedOverlay, sprite, 0, 0, drawContext.getScaledWindowWidth(), drawContext.getScaledWindowHeight(), i);
+            drawContext.drawSpriteStretched(RenderPipelines.GUI_TEXTURED, sprite, 0, 0, drawContext.getScaledWindowWidth(), drawContext.getScaledWindowHeight(), i);
             ci.cancel();
         }
     }
