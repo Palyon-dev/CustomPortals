@@ -22,14 +22,14 @@ public class HasteRuneBlock extends AbstractRuneBlock {
     @Override
     public void registerOnPortal(CustomPortal portal, World world) {
         portal.addHaste();
-        if (!world.isClient)
+        if (!world.isClient())
             CustomPortals.PORTALS.get(world).syncWithAll(((ServerWorld)world).getServer());
     }
 
     @Override
     public void unregisterOnPortal(CustomPortal portal, World world) {
         portal.removeHaste();
-        if (!world.isClient)
+        if (!world.isClient())
             CustomPortals.PORTALS.get(world).syncWithAll(((ServerWorld)world).getServer());
     }
 }

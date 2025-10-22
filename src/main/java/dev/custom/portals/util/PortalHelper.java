@@ -226,7 +226,7 @@ public class PortalHelper {
                         ((AbstractRuneBlock)block).registerOnPortal(portal, world);
             }
         }
-        if(!world.isClient)
+        if(!world.isClient())
             CustomPortals.PORTALS.get(world).syncWithAll(((ServerWorld)world).getServer());
         return true;
     }

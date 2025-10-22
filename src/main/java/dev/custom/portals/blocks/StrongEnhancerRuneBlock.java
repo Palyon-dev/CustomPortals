@@ -24,7 +24,7 @@ public class StrongEnhancerRuneBlock extends AbstractRuneBlock {
     public void registerOnPortal(CustomPortal portal, World world) {
         portal.addStrongEnhancer();
         CustomPortals.PORTALS.get(world).tryWithAll(portal);
-        if (!world.isClient)
+        if (!world.isClient())
             CustomPortals.PORTALS.get(world).syncWithAll(((ServerWorld)world).getServer());
     }
     
@@ -34,7 +34,7 @@ public class StrongEnhancerRuneBlock extends AbstractRuneBlock {
         if (portal.hasLinked())
             CustomPortals.PORTALS.get(world).tryWithAll(portal.getLinked());
         CustomPortals.PORTALS.get(world).tryWithAll(portal);
-        if (!world.isClient)
+        if (!world.isClient())
             CustomPortals.PORTALS.get(world).syncWithAll(((ServerWorld)world).getServer());
     }
 }
