@@ -76,7 +76,7 @@ public class PortalBlock extends Block implements BlockEntityProvider, Waterlogg
          CustomPortal portal = CustomPortals.PORTALS.get(world).getPortalFromPos(blockPos);
          if (portal == null) return ActionResult.FAIL;
          portal.setSpawnPos(blockPos);
-         if (world.isClient)
+         if (world.isClient())
             playerEntity.sendMessage(Text.of("Set portal's spawn position to " + CustomPortals.blockPosToString(blockPos)), true);
          return ActionResult.SUCCESS;
       }
@@ -121,7 +121,7 @@ public class PortalBlock extends Block implements BlockEntityProvider, Waterlogg
       CustomPortal portal = CustomPortals.PORTALS.get(world).getPortalFromPos(pos);
       if(portal != null) {
          CustomPortals.PORTALS.get(world).unregisterPortal(portal);
-         if(!world.isClient)
+         if(!world.isClient())
             CustomPortals.PORTALS.get(world).syncWithAll(((ServerWorld)world).getServer());
       }
       return state;
@@ -179,7 +179,7 @@ public class PortalBlock extends Block implements BlockEntityProvider, Waterlogg
             if (newState.getBlock().getTranslationKey().equals(portal.getFrameId()))
                return super.getStateForNeighborUpdate(state, worldView, scheduledTickView, pos, direction, posFrom, newState, random);
             CustomPortals.PORTALS.get(world).unregisterPortal(portal);
-            if(!world.isClient)
+            if(!world.isClient())
                CustomPortals.PORTALS.get(world).syncWithAll(((ServerWorld)world).getServer());
             dropCatalyst(portal, world);
          }
@@ -208,7 +208,7 @@ public class PortalBlock extends Block implements BlockEntityProvider, Waterlogg
    }
 
    @Override
-   public void onEntityCollision(BlockState state, World world, BlockPos pos, Entity entity, EntityCollisionHandler entityCollisionHandler) {
+   public void onEntityCollision(BlockState state, World world, BlockPos pos, Entity entity, EntityCollisionHandler entityCollisionHandler, boolean bl) {
       if (!state.get(LIT))
          return;
       CustomPortal portal = CustomPortals.PORTALS.get(world).getPortalFromPos(pos);

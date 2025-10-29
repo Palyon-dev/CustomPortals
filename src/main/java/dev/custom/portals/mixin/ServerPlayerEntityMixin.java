@@ -1,10 +1,6 @@
 package dev.custom.portals.mixin;
 
-import java.util.Iterator;
-
 import com.mojang.authlib.GameProfile;
-
-import net.minecraft.entity.player.PlayerPosition;
 import net.minecraft.network.packet.s2c.play.*;
 import net.minecraft.registry.RegistryKey;
 import net.minecraft.util.math.BlockPos;
@@ -19,6 +15,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import dev.custom.portals.util.EntityMixinAccess;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityPosition;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.PlayerManager;
@@ -47,7 +44,7 @@ public abstract class ServerPlayerEntityMixin extends PlayerEntity {
     private int syncedFoodLevel;
 
     @Shadow
-    public abstract ServerWorld getWorld();
+    public abstract ServerWorld getEntityWorld();
     @Shadow
     protected abstract void worldChanged(ServerWorld serverWorld);
     @Shadow
@@ -69,7 +66,7 @@ public abstract class ServerPlayerEntityMixin extends PlayerEntity {
         if (this.isRemoved())
             cir.setReturnValue(null);
         ServerWorld serverWorld = teleportTarget.world();
-        ServerWorld serverWorld2 = this.getWorld();
+        ServerWorld serverWorld2 = this.getEntityWorld();
         RegistryKey<World> registryKey = serverWorld2.getRegistryKey();
         if (((EntityMixinAccess)this).isInCustomPortal()) {
             ServerPlayerEntity thisPlayer = (ServerPlayerEntity)(Object)this;
@@ -86,7 +83,7 @@ public abstract class ServerPlayerEntityMixin extends PlayerEntity {
             profiler.pop();
             profiler.push("placing");
             this.setServerWorld(serverWorld);
-            this.networkHandler.requestTeleport(PlayerPosition.fromTeleportTarget(teleportTarget), teleportTarget.comp_3183());
+            this.networkHandler.requestTeleport(EntityPosition.fromTeleportTarget(teleportTarget), teleportTarget.comp_3183());
             this.networkHandler.syncWithPlayerPosition();
             serverWorld.onDimensionChanged(thisPlayer);
             profiler.pop();

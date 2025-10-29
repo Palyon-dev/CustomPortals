@@ -17,7 +17,7 @@ public class PortalBlockEntity extends BlockEntity {
     }
     
     public static <T extends BlockEntity> void tick(World world, BlockPos pos, BlockState state, BlockEntity be) {
-        if (world.isClient)
+        if (world.isClient())
             return;
         CustomPortal portal = CustomPortals.PORTALS.get(world).getPortalFromPos(pos);
         if (portal != null) {

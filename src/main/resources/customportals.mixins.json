@@ -10,7 +10,7 @@
     "client": [
       "ClientPlayerEntityMixin",
       "InGameHudMixin",
-      "DownloadingTerrainScreenMixin"
+      "LevelLoadingScreenMixin"
     ],
     "server": [],
     "injectors": {

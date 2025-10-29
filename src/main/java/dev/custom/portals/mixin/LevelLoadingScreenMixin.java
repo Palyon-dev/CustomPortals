@@ -5,9 +5,10 @@ import dev.custom.portals.util.*;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.minecraft.client.gl.RenderPipelines;
 import net.minecraft.client.gui.DrawContext;
-import net.minecraft.client.gui.screen.DownloadingTerrainScreen;
 import net.minecraft.client.gui.screen.Screen;
+import net.minecraft.client.gui.screen.world.LevelLoadingScreen;
 import net.minecraft.client.util.NarratorManager;
+import net.minecraft.client.world.ClientChunkLoadProgress;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
@@ -17,24 +18,20 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import java.util.function.BooleanSupplier;
 
-@Mixin(DownloadingTerrainScreen.class)
-public abstract class DownloadingTerrainScreenMixin extends Screen {
-
+@Mixin(LevelLoadingScreen.class)
+public abstract class LevelLoadingScreenMixin extends Screen {
     @Shadow
-    private final BooleanSupplier shouldClose;
+    private LevelLoadingScreen.WorldEntryReason reason;
     @Shadow
-    private final DownloadingTerrainScreen.WorldEntryReason worldEntryReason;
-    @Shadow
-    private final long loadStartTime;
+    private ClientChunkLoadProgress chunkLoadProgress;
 
     @Unique
     private boolean packetSent = false;
 
-    public DownloadingTerrainScreenMixin(BooleanSupplier booleanSupplier, DownloadingTerrainScreen.WorldEntryReason worldEntryReason) {
+    public LevelLoadingScreenMixin(ClientChunkLoadProgress clientChunkLoadProgress, LevelLoadingScreen.WorldEntryReason worldEntryReason) {
         super(NarratorManager.EMPTY);
-        this.shouldClose = booleanSupplier;
-        this.worldEntryReason = worldEntryReason;
-        this.loadStartTime = System.currentTimeMillis();
+        this.chunkLoadProgress = clientChunkLoadProgress;
+        this.reason = worldEntryReason;
     }
 
     @Inject(method = "renderBackground", at = @At("HEAD"), cancellable = true)
